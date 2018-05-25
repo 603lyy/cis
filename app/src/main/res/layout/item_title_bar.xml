@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:id="@+id/back"
+        android:layout_width="70dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="37dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="返回"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_title_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="印知道"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/right_btn"
+        android:layout_width="35dp"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:src="@drawable/setting" />
+    </LinearLayout>
+
+</RelativeLayout>
