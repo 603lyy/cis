@@ -48,7 +48,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.BaseActivity" />
-        <activity android:name=".activity.TurnActivity"></activity>
+        <activity android:name=".activity.TurnActivity" />
+        <activity android:name=".activity.PatrolSettingActivity"></activity>
     </application>
 
 </manifest>
