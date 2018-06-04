@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.tencent.bugly.crashreport.CrashReport;
 import com.yaheen.cis.util.FreeHandSystemUtil;
+import com.yaheen.cis.util.map.BDMapUtils;
 
 import org.xutils.x;
 
@@ -62,6 +63,9 @@ public class BaseApp extends android.app.Application {
         //网络请求
         x.Ext.init(this);
         x.Ext.setDebug(false); //输出debug日志，开启会影响性能
+
+        //百度地图
+        BDMapUtils.initMap(getApplicationContext());
 
         //x5内核
 //        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {

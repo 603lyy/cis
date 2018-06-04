@@ -11,9 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yaheen.cis.R;
+import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends PermissionActivity {
 
     private LinearLayout llRPsd;
 
@@ -31,6 +32,8 @@ public class LoginActivity extends BaseActivity {
         setTitleContent(R.string.login_title);
 
         initView();
+
+        BDMapUtils.startLocation();
 
         llRPsd.setOnClickListener(new View.OnClickListener() {
             @Override

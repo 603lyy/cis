@@ -12,4 +12,10 @@
     <string name="turn_patrol_text">巡查</string>
     <string name="turn_record_text">巡查记录</string>
 
+    <string name="detail_finish">结束</string>
+    <string name="detail_sign">签到</string>
+    <string name="detail_search_problem">发现问题：</string>
+    <string name="detail_describe_problem">描述问题：</string>
+    <string name="detail_location">定位信息：</string>
+
 </resources>
