@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 import com.yaheen.cis.R;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
-public class MainActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity {
 
     private LinearLayout llRPsd;
 
@@ -60,23 +61,27 @@ public class MainActivity extends BaseActivity {
     }
 
     private void login() {
-        String name = etName.getText().toString();
-        String psd = etPsd.getText().toString();
+//        String name = etName.getText().toString();
+//        String psd = etPsd.getText().toString();
+//
+//        if(TextUtils.isEmpty(name)){
+//            showToast(R.string.login_username_empty);
+//            return;
+//        }
+//
+//        if(TextUtils.isEmpty(psd)){
+//            showToast(R.string.login_password_empty);
+//            return;
+//        }
+//
+//        //不记住密码则保存空字符串
+//        if(cbRPsd.isChecked()){
+//            DefaultPrefsUtil.setUserPassword(psd);
+//        }
+//        DefaultPrefsUtil.setUserName(name);
 
-        if(TextUtils.isEmpty(name)){
-            showToast(R.string.login_username_empty);
-            return;
-        }
-
-        if(TextUtils.isEmpty(psd)){
-            showToast(R.string.login_password_empty);
-            return;
-        }
-
-        if(cbRPsd.isChecked()){
-            DefaultPrefsUtil.setUserPassword(psd);
-        }
-        DefaultPrefsUtil.setUserName(name);
+        Intent intent = new Intent(this,PatrolSettingActivity.class);
+        startActivity(intent);
     }
 
     private void check() {

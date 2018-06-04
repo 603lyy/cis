@@ -7,20 +7,20 @@
     android:orientation="vertical"
     tools:context=".activity.PatrolSettingActivity">
 
-    <include layout="@layout/item_title_bar"/>
+    <include layout="@layout/item_title_bar" />
 
     <!--<ImageView-->
-        <!--android:id="@+id/iv_start"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/ic_loading_3"/>-->
+    <!--android:id="@+id/iv_start"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@drawable/ic_loading_3"/>-->
 
-    <android.support.v7.app.AlertController.RecycleListView
-        android:id="@+id/rlv_setting"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_setting"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    </android.support.v7.app.AlertController.RecycleListView>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

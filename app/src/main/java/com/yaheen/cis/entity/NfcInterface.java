@@ -1,4 +1,4 @@
-package com.yaheen.cis.base;
+package com.yaheen.cis.entity;
 
 public interface NfcInterface {
 

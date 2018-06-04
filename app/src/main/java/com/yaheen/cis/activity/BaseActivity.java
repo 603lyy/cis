@@ -20,10 +20,14 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initToolBar();
+    }
+
+    private void initToolBar() {
+        tvContent = findViewById(R.id.tv_title_content);
     }
 
     protected void setTitleContent(int content) {
-        tvContent = findViewById(R.id.tv_title_content);
         if (tvContent != null) {
             tvContent.setText(content);
         }

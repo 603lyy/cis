@@ -14,17 +14,12 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yaheen.cis.R;
-import com.yaheen.cis.base.NfcInterface;
-import com.yaheen.cis.util.ProgersssDialog;
+import com.yaheen.cis.entity.NfcInterface;
 import com.yaheen.cis.util.nfc.AESUtils;
 import com.yaheen.cis.util.nfc.Converter;
 import com.yaheen.cis.util.nfc.NfcVUtil;
-import com.yaheen.cis.util.toast.ToastUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
