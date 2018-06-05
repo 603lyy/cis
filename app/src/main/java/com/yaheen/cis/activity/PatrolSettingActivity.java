@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import com.yaheen.cis.activity.BaseActivity;
+import com.yaheen.cis.activity.base.BaseActivity;
 
 import org.json.JSONObject;
 

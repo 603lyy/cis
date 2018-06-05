@@ -1,4 +1,4 @@
-package com.yaheen.cis.activity;
+package com.yaheen.cis.activity.base;
 
 import android.app.PendingIntent;
 import android.content.Intent;

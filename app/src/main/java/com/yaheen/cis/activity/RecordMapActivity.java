@@ -1,10 +1,11 @@
 package com.yaheen.cis.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
@@ -15,23 +16,20 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.yaheen.cis.R;
-import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
-import com.yaheen.cis.adapter.PatrolSettingAdapter;
+import com.yaheen.cis.adapter.RecordMapAdapter;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 
-public class DetailActivity extends PermissionActivity {
+public class RecordMapActivity extends Activity {
 
-    private TextView tvLocation;
+    private RecyclerView rvRecordMap;
+
+    private RecordMapAdapter mapAdapter;
 
     private MapView mapView = null;
 
     private BaiduMap mBaiduMap;
-
-    private RecyclerView rvProblem;
-
-    private PatrolSettingAdapter problemAdapter;
 
     //判断地图是否是第一次定位
     boolean isFirstLoc = true;
@@ -39,40 +37,29 @@ public class DetailActivity extends PermissionActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_record_map);
 
-        initView();
-        initMapView();
+        rvRecordMap = findViewById(R.id.rv_record_map);
+        rvRecordMap.setLayoutManager(new LinearLayoutManager(this));
+
+        mapAdapter = new RecordMapAdapter();
+        mapAdapter.setHeaderView(getHeaderView());
+        mapAdapter.setDatas(DataServer.getSampleData(10));
+        rvRecordMap.setAdapter(mapAdapter);
     }
 
-    private void initView() {
-        tvLocation = findViewById(R.id.tv_location_describe);
+    private View getHeaderView() {
+        View view = getLayoutInflater().inflate(R.layout.header_record_map,
+                (ViewGroup) rvRecordMap.getParent(), false);
 
-        rvProblem = findViewById(R.id.rv_problem);
-        rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
-
-        problemAdapter = new PatrolSettingAdapter();
-        problemAdapter.setDatas(DataServer.getSampleData(10));
-        rvProblem.setAdapter(problemAdapter);
-
-        tvLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (BDMapUtils.getLocation() != null) {
-                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
-                }
-            }
-        });
-    }
-
-    private void initMapView() {
-        mapView = findViewById(R.id.detail_map_view);
-
+        mapView = view.findViewById(R.id.record_map_view);
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new locationListener());
+
+        return view;
     }
 
     private class locationListener implements MapViewLocationListener {

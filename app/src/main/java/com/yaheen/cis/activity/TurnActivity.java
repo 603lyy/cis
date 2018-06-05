@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.BaseActivity;
 
 public class TurnActivity extends BaseActivity {
 

@@ -1,4 +1,4 @@
-package com.yaheen.cis.activity;
+package com.yaheen.cis.activity.base;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,10 +1,12 @@
-package com.yaheen.cis.activity;
+package com.yaheen.cis.activity.base;
 
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+
+import com.yaheen.cis.activity.base.BaseActivity;
 
 import java.util.ArrayList;
 
