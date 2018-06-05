@@ -50,18 +50,20 @@
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.TurnActivity" />
         <activity android:name=".activity.PatrolSettingActivity" />
-        <activity android:name=".activity.DetailActivity"/>
+        <activity android:name=".activity.DetailActivity" />
 
-
-
-        <!--百度地图AK-->
+        <!-- 百度地图AK -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="g81he8wSMHud59cO8KdoveCEPcHa0DAr" >
-        </meta-data>
+            android:value="g81he8wSMHud59cO8KdoveCEPcHa0DAr"></meta-data>
 
-        <!--百度地图service-->
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"> </service>
+        <!-- 百度地图service -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
+
+        <activity android:name=".activity.RecordActivity"></activity>
     </application>
 
 </manifest>

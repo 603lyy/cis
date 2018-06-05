@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -21,14 +22,16 @@ public class TurnActivity extends BaseActivity {
         tvRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(TurnActivity.this,RecordActivity.class);
+                startActivity(intent);
             }
         });
 
         tvPatrol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(TurnActivity.this,PatrolSettingActivity.class);
+                startActivity(intent);
             }
         });
     }

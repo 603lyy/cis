@@ -19,4 +19,6 @@
     <string name="detail_location">定位信息：</string>
     <string name="detail_commit">上报</string>
 
+    <string name="record_detail">查看详情</string>
+
 </resources>

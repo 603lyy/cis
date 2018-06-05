@@ -83,7 +83,7 @@ public class LoginActivity extends PermissionActivity {
 //        }
 //        DefaultPrefsUtil.setUserName(name);
 
-        Intent intent = new Intent(this,PatrolSettingActivity.class);
+        Intent intent = new Intent(this,TurnActivity.class);
         startActivity(intent);
     }
 
