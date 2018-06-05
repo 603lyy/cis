@@ -17,5 +17,6 @@
     <string name="detail_search_problem">发现问题：</string>
     <string name="detail_describe_problem">描述问题：</string>
     <string name="detail_location">定位信息：</string>
+    <string name="detail_commit">上报</string>
 
 </resources>

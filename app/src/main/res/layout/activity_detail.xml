@@ -64,15 +64,15 @@
             android:paddingRight="20dp">
 
             <TextView
+                style="@style/Detail_Title_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Detail_Title_TextView"
-                android:text="@string/detail_search_problem"/>
+                android:text="@string/detail_search_problem" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_problem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -82,24 +82,24 @@
             android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
             android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
             <TextView
+                style="@style/Detail_Title_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Detail_Title_TextView"
-                android:text="@string/detail_describe_problem"/>
+                android:text="@string/detail_describe_problem" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:background="@color/colorHint"
+                android:layout_height="120dp"
                 android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:textSize="12dp"
+                android:background="@color/colorHint"
                 android:gravity="start"
-                android:layout_height="120dp" />
+                android:padding="5dp"
+                android:textSize="12dp" />
 
         </LinearLayout>
 
@@ -109,25 +109,43 @@
             android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
+            android:paddingBottom="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
             <TextView
+                style="@style/Detail_Title_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Detail_Title_TextView"
-                android:text="@string/detail_location"/>
+                android:text="@string/detail_location" />
 
             <TextView
                 android:id="@+id/tv_location_describe"
                 android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:drawableRight="@mipmap/ic_launcher"
-                android:textSize="12dp"
                 android:gravity="center_vertical"
-                android:layout_height="40dp" />
+                android:textSize="12dp" />
+
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/detail_map_view"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_commit"
+            style="@style/Detail_Toolbar_TextView"
+            android:layout_width="250dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/btn_red"
+            android:text="@string/detail_commit" />
 
     </LinearLayout>
 

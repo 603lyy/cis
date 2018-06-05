@@ -6,6 +6,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.yaheen.cis.util.FreeHandSystemUtil;
 import com.yaheen.cis.util.map.BDMapUtils;
@@ -66,6 +67,7 @@ public class BaseApp extends android.app.Application {
 
         //百度地图
         BDMapUtils.initMap(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
 
         //x5内核
 //        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
