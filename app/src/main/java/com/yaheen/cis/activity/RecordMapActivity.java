@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,13 +40,47 @@ public class RecordMapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_map);
 
+        initMapView();
         rvRecordMap = findViewById(R.id.rv_record_map);
         rvRecordMap.setLayoutManager(new LinearLayoutManager(this));
 
         mapAdapter = new RecordMapAdapter();
-        mapAdapter.setHeaderView(getHeaderView());
+//        mapAdapter.setHeaderView(getHeaderView());
         mapAdapter.setDatas(DataServer.getSampleData(10));
         rvRecordMap.setAdapter(mapAdapter);
+
+        rvRecordMap.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                //判断是当前layoutManager是否为LinearLayoutManager
+                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    //获取第一个可见view的位置
+                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+                    Log.i("lin", "onScrollStateChanged: " + firstItemPosition);
+                    if (firstItemPosition > 0) {
+                        mapView.onPause();
+                    } else {
+                        mapView.onResume();
+                    }
+                }
+            }
+        });
+    }
+
+    private void initMapView(){
+        mapView = findViewById(R.id.record_map_view);
+        mapView.showScaleControl(false);
+        mapView.showZoomControls(false);
+        mBaiduMap = mapView.getMap();
+        mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
+                MyLocationConfiguration.LocationMode.NORMAL, true, null));
+        BDMapUtils.setMapViewListener(new locationListener());
+        setLocationData(BDMapUtils.getLocation());
     }
 
     private View getHeaderView() {
@@ -53,13 +88,38 @@ public class RecordMapActivity extends Activity {
                 (ViewGroup) rvRecordMap.getParent(), false);
 
         mapView = view.findViewById(R.id.record_map_view);
+        mapView.showScaleControl(false);
+        mapView.showZoomControls(false);
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new locationListener());
+        setLocationData(BDMapUtils.getLocation());
 
         return view;
+    }
+
+    private void setLocationData(BDLocation mLoc) {
+
+        if (mLoc == null) {
+            return;
+        }
+
+        MyLocationData locData = new MyLocationData.Builder().direction(100)
+                .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
+
+        // 设置定位数据
+        mBaiduMap.setMyLocationData(locData);
+
+        if (isFirstLoc) {
+            isFirstLoc = false;
+            LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
+            MapStatus.Builder builder = new MapStatus.Builder();
+            //设置地图层级（4-21）
+            builder.target(ll).zoom(19.0f);
+            mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        }
     }
 
     private class locationListener implements MapViewLocationListener {
@@ -67,20 +127,22 @@ public class RecordMapActivity extends Activity {
         @Override
         public void changeLocation(BDLocation mLoc) {
 
-            MyLocationData locData = new MyLocationData.Builder().direction(100)
-                    .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
+            setLocationData(mLoc);
 
-            // 设置定位数据
-            mBaiduMap.setMyLocationData(locData);
-
-            if (isFirstLoc) {
-                isFirstLoc = false;
-                LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
-                MapStatus.Builder builder = new MapStatus.Builder();
-                //设置地图层级（4-21）
-                builder.target(ll).zoom(19.0f);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-            }
+//            MyLocationData locData = new MyLocationData.Builder().direction(100)
+//                    .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
+//
+//            // 设置定位数据
+//            mBaiduMap.setMyLocationData(locData);
+//
+//            if (isFirstLoc) {
+//                isFirstLoc = false;
+//                LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
+//                MapStatus.Builder builder = new MapStatus.Builder();
+//                //设置地图层级（4-21）
+//                builder.target(ll).zoom(19.0f);
+//                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+//            }
         }
     }
 

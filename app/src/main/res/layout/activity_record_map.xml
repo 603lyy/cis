@@ -4,7 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.RecordMapActivity">
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/record_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_record_map"
