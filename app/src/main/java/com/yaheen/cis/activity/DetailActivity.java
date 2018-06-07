@@ -2,6 +2,7 @@ package com.yaheen.cis.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
+import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 
@@ -31,7 +33,11 @@ public class DetailActivity extends PermissionActivity {
 
     private RecyclerView rvProblem;
 
+    private RecyclerView rvUrgency;
+
     private PatrolSettingAdapter problemAdapter;
+
+    private UrgencyAdapter urgencyAdapter;
 
     //判断地图是否是第一次定位
     boolean isFirstLoc = true;
@@ -42,6 +48,7 @@ public class DetailActivity extends PermissionActivity {
         setContentView(R.layout.activity_detail);
 
         initView();
+        initUrgency();
         initMapView();
     }
 
@@ -63,6 +70,18 @@ public class DetailActivity extends PermissionActivity {
                 }
             }
         });
+    }
+
+    private void initUrgency() {
+        rvUrgency = findViewById(R.id.rv_urgency);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvUrgency.setLayoutManager(layoutManager);
+
+        urgencyAdapter = new UrgencyAdapter();
+        urgencyAdapter.setDatas(DataServer.getSampleData(10));
+        rvUrgency.setAdapter(urgencyAdapter);
     }
 
     private void initMapView() {
