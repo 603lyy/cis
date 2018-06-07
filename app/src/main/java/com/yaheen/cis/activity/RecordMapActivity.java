@@ -18,7 +18,11 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Polyline;
+import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.RecordMapAdapter;
@@ -45,6 +49,8 @@ public class RecordMapActivity extends Activity {
 
     //判断地图是否是第一次定位
     boolean isFirstLoc = true;
+
+    private List<MyItem> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +86,19 @@ public class RecordMapActivity extends Activity {
                 }
             }
         });
+
+        mapAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //地图移动回定位位置
+                MapStatus ms;
+                ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(15).build();
+                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+            }
+        });
     }
 
-    private void initMapView(){
+    private void initMapView() {
         mapView = findViewById(R.id.record_map_view);
         mapView.showScaleControl(false);
         mapView.showZoomControls(false);
@@ -107,7 +123,6 @@ public class RecordMapActivity extends Activity {
             public boolean onClusterClick(Cluster<MyItem> cluster) {
                 Toast.makeText(RecordMapActivity.this,
                         "有" + cluster.getSize() + "个点", Toast.LENGTH_SHORT).show();
-
                 return false;
             }
         });
@@ -197,7 +212,7 @@ public class RecordMapActivity extends Activity {
         LatLng llF = new LatLng(39.886965, 116.441394);
         LatLng llG = new LatLng(39.996965, 116.411394);
 
-        List<MyItem> items = new ArrayList<MyItem>();
+        items = new ArrayList<MyItem>();
         items.add(new MyItem(llA));
         items.add(new MyItem(llB));
         items.add(new MyItem(llC));
@@ -208,6 +223,18 @@ public class RecordMapActivity extends Activity {
 
         mClusterManager.addItems(items);
 
+        //画直线
+        List<LatLng> points = new ArrayList<LatLng>();
+        points.add(llA);
+        points.add(llB);
+        points.add(llC);
+        points.add(llD);
+        points.add(llE);
+        points.add(llF);
+        points.add(llG);
+        OverlayOptions ooPolyline = new PolylineOptions().width(10)
+                .color(0xAAFF0000).points(points);
+        mBaiduMap.addOverlay(ooPolyline);
     }
 
     /**
