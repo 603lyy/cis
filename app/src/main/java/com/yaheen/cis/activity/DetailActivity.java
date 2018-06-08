@@ -21,10 +21,17 @@ import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
+import com.yaheen.cis.entity.QuestionBean;
+import com.yaheen.cis.entity.TypeBean;
+import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.time.TimeTransferUtils;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 public class DetailActivity extends PermissionActivity {
 
@@ -46,11 +53,15 @@ public class DetailActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
+    private String questionUrl = "http://192.168.199.111:8080/crs/eapi/findQuestionaireByTypeId.do";
+
     //判断地图是否是第一次定位
     boolean isFirstLoc = true;
 
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
+
+    private String recordId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +70,13 @@ public class DetailActivity extends PermissionActivity {
 
         startTime = System.currentTimeMillis();
 
+        recordId = getIntent().getStringExtra("recordId");
+
         initView();
         initUrgency();
         initMapView();
         initImgUpload();
+        getQuestionMsg();
     }
 
     private void initView() {
@@ -151,6 +165,37 @@ public class DetailActivity extends PermissionActivity {
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
             }
         }
+    }
+
+    private void getQuestionMsg() {
+        RequestParams requestParams = new RequestParams(questionUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("typeId", "402847f26390db7b016390df8bd90001");
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                QuestionBean data = gson.fromJson(result, QuestionBean.class);
+                if (data != null && data.isResult()) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override
