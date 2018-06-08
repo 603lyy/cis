@@ -2,16 +2,25 @@ package com.yaheen.cis.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
+import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.util.map.BDMapUtils;
+import com.yaheen.cis.util.nfc.AESUtils;
+import com.yaheen.cis.util.nfc.Base64;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 public class LoginActivity extends PermissionActivity {
 
@@ -21,7 +30,13 @@ public class LoginActivity extends PermissionActivity {
 
     private TextView tvLogin;
 
-    private EditText etName,etPsd;
+    private EditText etName, etPsd;
+
+    private Gson gson = new Gson();
+
+    private String url = "http://192.168.199.111:8080/crs/eapi/login.do";
+
+    private String key = "X2Am6tVLnwMMX8kVgdDk5w==";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +60,9 @@ public class LoginActivity extends PermissionActivity {
             @Override
             public void onClick(View view) {
                 login();
+
+//                Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
+//                startActivity(intent);
             }
         });
     }
@@ -63,27 +81,59 @@ public class LoginActivity extends PermissionActivity {
     }
 
     private void login() {
-//        String name = etName.getText().toString();
-//        String psd = etPsd.getText().toString();
-//
-//        if(TextUtils.isEmpty(name)){
-//            showToast(R.string.login_username_empty);
-//            return;
-//        }
-//
-//        if(TextUtils.isEmpty(psd)){
-//            showToast(R.string.login_password_empty);
-//            return;
-//        }
-//
-//        //不记住密码则保存空字符串
-//        if(cbRPsd.isChecked()){
-//            DefaultPrefsUtil.setUserPassword(psd);
-//        }
-//        DefaultPrefsUtil.setUserName(name);
 
-        Intent intent = new Intent(this,TurnActivity.class);
-        startActivity(intent);
+        final String name = etName.getText().toString();
+        final String psd = etPsd.getText().toString();
+
+        if (TextUtils.isEmpty(name)) {
+            showToast(R.string.login_username_empty);
+            return;
+        }
+
+        if (TextUtils.isEmpty(psd)) {
+            showToast(R.string.login_password_empty);
+            return;
+        }
+
+        RequestParams requestParams = new RequestParams(url);
+        requestParams.addQueryStringParameter("username", name);
+        requestParams.addQueryStringParameter("password", Base64.encode(AESUtils.encrypt(psd, key)));
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                LoginBean data = gson.fromJson(result, LoginBean.class);
+                if (data != null && data.isResult()) {
+                    //不记住密码则保存空字符串
+                    if (cbRPsd.isChecked()) {
+                        DefaultPrefsUtil.setUserPassword(psd);
+                    }
+                    DefaultPrefsUtil.setUserName(name);
+                    DefaultPrefsUtil.setToken(data.getToken());
+
+                    Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
+                    startActivity(intent);
+                } else {
+                    showToast(R.string.login_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void check() {

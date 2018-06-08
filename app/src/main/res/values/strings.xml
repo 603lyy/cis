@@ -8,6 +8,7 @@
     <string name="login_text">登录</string>
     <string name="login_username_empty">用户名不能为空</string>
     <string name="login_password_empty">密码不能为空</string>
+    <string name="login_fail">登录失败</string>
 
     <string name="turn_patrol_text">巡查</string>
     <string name="turn_record_text">巡查记录</string>
