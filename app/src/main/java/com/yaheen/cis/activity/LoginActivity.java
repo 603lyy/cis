@@ -32,8 +32,6 @@ public class LoginActivity extends PermissionActivity {
 
     private EditText etName, etPsd;
 
-    private Gson gson = new Gson();
-
     private String url = "http://192.168.199.111:8080/crs/eapi/login.do";
 
     private String key = "X2Am6tVLnwMMX8kVgdDk5w==";
@@ -59,8 +57,8 @@ public class LoginActivity extends PermissionActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showLoadingDialog();
                 login();
-
 //                Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
 //                startActivity(intent);
             }
@@ -104,16 +102,20 @@ public class LoginActivity extends PermissionActivity {
             public void onSuccess(String result) {
 
                 LoginBean data = gson.fromJson(result, LoginBean.class);
-                if (data != null && data.isResult()) {
-                    //不记住密码则保存空字符串
-                    if (cbRPsd.isChecked()) {
-                        DefaultPrefsUtil.setUserPassword(psd);
-                    }
-                    DefaultPrefsUtil.setUserName(name);
-                    DefaultPrefsUtil.setToken(data.getToken());
+                if (data != null) {
+                    if (data.isResult()) {
+                        //不记住密码则保存空字符串
+                        if (cbRPsd.isChecked()) {
+                            DefaultPrefsUtil.setUserPassword(psd);
+                        }
+                        DefaultPrefsUtil.setUserName(name);
+                        DefaultPrefsUtil.setToken(data.getToken());
 
-                    Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
-                    startActivity(intent);
+                        Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
+                        startActivity(intent);
+                    } else {
+                        showToast(data.getMsg());
+                    }
                 } else {
                     showToast(R.string.login_fail);
                 }
@@ -131,7 +133,7 @@ public class LoginActivity extends PermissionActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }

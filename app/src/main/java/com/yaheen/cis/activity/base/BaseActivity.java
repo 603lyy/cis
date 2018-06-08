@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.yaheen.cis.R;
 import com.yaheen.cis.util.ProgersssDialog;
 import com.yaheen.cis.util.toast.ToastUtils;
@@ -16,6 +17,8 @@ public class BaseActivity extends AppCompatActivity {
 
     //标题栏title内容
     private TextView tvContent;
+
+    protected Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

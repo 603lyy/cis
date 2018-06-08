@@ -12,6 +12,16 @@ public class LoginBean {
     private String token;
     private String expiresTime;
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    private String msg;
+
     public boolean isResult() {
         return result;
     }
