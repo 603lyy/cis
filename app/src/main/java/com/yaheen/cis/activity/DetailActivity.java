@@ -18,14 +18,17 @@ import com.baidu.mapapi.model.LatLng;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
+import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
+import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
+import com.yaheen.cis.util.time.TimeTransferUtils;
 
 public class DetailActivity extends PermissionActivity {
 
-    private TextView tvLocation;
+    private TextView tvLocation, tvTime;
 
     private MapView mapView = null;
 
@@ -35,24 +38,35 @@ public class DetailActivity extends PermissionActivity {
 
     private RecyclerView rvUrgency;
 
+    private RecyclerView rvImg;
+
     private PatrolSettingAdapter problemAdapter;
 
     private UrgencyAdapter urgencyAdapter;
 
+    private ImgUploadAdapter uploadAdapter;
+
     //判断地图是否是第一次定位
     boolean isFirstLoc = true;
+
+    //记录开始巡查的时间戳,方便计算时间
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        startTime = System.currentTimeMillis();
+
         initView();
         initUrgency();
         initMapView();
+        initImgUpload();
     }
 
     private void initView() {
+        tvTime = findViewById(R.id.tv_time);
         tvLocation = findViewById(R.id.tv_location_describe);
 
         rvProblem = findViewById(R.id.rv_problem);
@@ -70,6 +84,17 @@ public class DetailActivity extends PermissionActivity {
                 }
             }
         });
+
+        CountDownTimerUtils.getCountDownTimer()
+                .setMillisInFuture(24 * 60 * 60 * 1000)
+                .setCountDownInterval(1000)
+                .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+                    @Override
+                    public void onTick(long pMillisUntilFinished) {
+                        long time = System.currentTimeMillis() - startTime - 28800000L;
+                        tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
+                    }
+                }).start();
     }
 
     private void initUrgency() {
@@ -82,6 +107,18 @@ public class DetailActivity extends PermissionActivity {
         urgencyAdapter = new UrgencyAdapter();
         urgencyAdapter.setDatas(DataServer.getSampleData(10));
         rvUrgency.setAdapter(urgencyAdapter);
+    }
+
+    private void initImgUpload() {
+        rvImg = findViewById(R.id.rv_img);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvImg.setLayoutManager(layoutManager);
+
+        uploadAdapter = new ImgUploadAdapter();
+        uploadAdapter.setDatas(DataServer.getSampleData(10));
+        rvImg.setAdapter(uploadAdapter);
     }
 
     private void initMapView() {
