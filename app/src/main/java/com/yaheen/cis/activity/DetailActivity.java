@@ -73,7 +73,7 @@ public class DetailActivity extends PermissionActivity {
         rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
 
         problemAdapter = new PatrolSettingAdapter();
-        problemAdapter.setDatas(DataServer.getSampleData(10));
+//        problemAdapter.setDatas(DataServer.getSampleData(10));
         rvProblem.setAdapter(problemAdapter);
 
         tvLocation.setOnClickListener(new View.OnClickListener() {
