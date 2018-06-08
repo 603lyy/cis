@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.baidu.location.BDLocation;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
+import com.yaheen.cis.entity.StartPatrolBean;
 import com.yaheen.cis.entity.TypeBean;
+import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import org.xutils.common.Callback;
@@ -25,7 +28,9 @@ public class PatrolSettingActivity extends BaseActivity {
 
     PatrolSettingAdapter settingAdapter;
 
-    private String url = "http://192.168.199.111:8080/crs/eapi/findTypeByUserId.do";
+    private String typeUrl = "http://192.168.199.111:8080/crs/eapi/findTypeByUserId.do";
+
+    private String startUrl = "http://192.168.199.111:8080/crs/eapi/startPatrol.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +56,7 @@ public class PatrolSettingActivity extends BaseActivity {
         ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
-                startActivity(intent);
+                startPatrol();
             }
         });
         return view;
@@ -60,7 +64,7 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private void getTypeList() {
 
-        RequestParams requestParams = new RequestParams(url);
+        RequestParams requestParams = new RequestParams(typeUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
@@ -86,6 +90,44 @@ public class PatrolSettingActivity extends BaseActivity {
             @Override
             public void onFinished() {
                 cancelLoadingDialog();
+            }
+        });
+    }
+
+    private void startPatrol() {
+        BDLocation location = BDMapUtils.getLocation();
+        RequestParams requestParams = new RequestParams(startUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("longitude", location.getLongitude() + "");
+        requestParams.addQueryStringParameter("latitude", location.getLatitude() + "");
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                StartPatrolBean data = gson.fromJson(result, StartPatrolBean.class);
+                if (data != null && data.isResult()) {
+                    Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
+                    intent.putExtra("recordId", data.getRecordId());
+                    startActivity(intent);
+                } else {
+                    showToast(R.string.setting_start_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }
