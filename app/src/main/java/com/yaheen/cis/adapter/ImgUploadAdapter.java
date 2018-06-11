@@ -12,7 +12,7 @@ import java.util.List;
 public class ImgUploadAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
     public ImgUploadAdapter() {
-        super(R.layout.item_urgency);
+        super(R.layout.item_upload_img);
     }
 
     public void setDatas(@Nullable List<Status> data) {

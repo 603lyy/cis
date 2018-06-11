@@ -56,7 +56,10 @@ public class PatrolSettingActivity extends BaseActivity {
         ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startPatrol();
+//                startPatrol();
+                Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
+//                intent.putExtra("recordId", data.getRecordId());
+                startActivity(intent);
             }
         });
         return view;

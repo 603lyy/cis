@@ -26,4 +26,7 @@
 
     <string name="record_detail">查看详情</string>
 
+    <string name="photo_album">相册</string>
+    <string name="take_photo">拍照</string>
+
 </resources>

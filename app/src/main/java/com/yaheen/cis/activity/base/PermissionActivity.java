@@ -55,6 +55,11 @@ public class PermissionActivity extends BaseActivity {
                 permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
 
+            // 相机权限
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
+
             /*
              * 电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
              */
@@ -63,6 +68,8 @@ public class PermissionActivity extends BaseActivity {
             }
 
             if (permissions.size() > 0) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
             }
         }

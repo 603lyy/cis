@@ -1,10 +1,15 @@
 package com.yaheen.cis.activity;
 
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -15,6 +20,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
@@ -23,17 +29,29 @@ import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
+import com.yaheen.cis.util.img.ImgUploadHelper;
+import com.yaheen.cis.util.img.UpLoadImgListener;
+import com.yaheen.cis.util.img.UriUtil;
+import com.yaheen.cis.util.img.upLoadImg;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.time.TimeTransferUtils;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.File;
+import java.util.List;
+
 public class DetailActivity extends PermissionActivity {
+
+    private final int REQUEST_CODE_CHOOSE = 1001;
 
     private TextView tvLocation, tvTime;
 
@@ -93,9 +111,51 @@ public class DetailActivity extends PermissionActivity {
         tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (BDMapUtils.getLocation() != null) {
-                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
-                }
+//                if (BDMapUtils.getLocation() != null) {
+//                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
+//                }
+                ImgUploadHelper.showUserAvatarUploadDialog(DetailActivity.this, new UpLoadImgListener() {
+                    @Override
+                    public void upLoad(List<Uri> list) {
+
+                        if (list.size() <= 0) {
+                            return;
+                        }
+
+                        String imgPath = UriUtil.getPath(DetailActivity.this, list.get(0));
+
+                        if (TextUtils.isEmpty(imgPath)) {
+                            return;
+                        }
+
+                        RequestParams params = new RequestParams("http://192.168.199.119:8080/crs/eapi/uploadPhoto.do" +
+                                "?token=" + DefaultPrefsUtil.getToken());
+                        params.setMultipart(true);
+                        params.addBodyParameter("originImage", new File(imgPath));
+                        x.http().post(params, new Callback.CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+
+                            }
+                        });
+                    }
+                });
+
             }
         });
 
@@ -196,6 +256,20 @@ public class DetailActivity extends PermissionActivity {
 
             }
         });
+    }
+
+    private class UpLoadImgs implements upLoadImg {
+
+        @Override
+        public void upLoad(List<Uri> list) {
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ImgUploadHelper.onActivityResult(this, requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
