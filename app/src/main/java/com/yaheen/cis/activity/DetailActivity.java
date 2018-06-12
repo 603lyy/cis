@@ -27,6 +27,7 @@ import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
+import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
@@ -60,7 +61,7 @@ public class DetailActivity extends PermissionActivity {
 
     private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
 
-    private PatrolSettingAdapter problemAdapter;
+    private ProblemAdapter problemAdapter;
 
     private PatrolTypeAdapter typeAdapter;
 
@@ -70,7 +71,7 @@ public class DetailActivity extends PermissionActivity {
 
     private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
 
-    private String typeStr;
+    private String typeStr, questionStr;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
@@ -90,6 +91,9 @@ public class DetailActivity extends PermissionActivity {
     //问题类型实体
     private TypeBean typeData;
 
+    //问题实体
+    private QuestionBean qData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +102,13 @@ public class DetailActivity extends PermissionActivity {
         showLoadingDialog();
         startTime = System.currentTimeMillis();
         typeStr = getIntent().getStringExtra("type");
-        typeData = gson.fromJson(typeStr,TypeBean.class);
+        questionStr = getIntent().getStringExtra("question");
+        qData = gson.fromJson(questionStr, QuestionBean.class);
+        typeData = gson.fromJson(typeStr, TypeBean.class);
 
         initView();
         initPatrol();
+        initQuestion();
         initUrgency();
         initMapView();
         initImgUpload();
@@ -111,13 +118,6 @@ public class DetailActivity extends PermissionActivity {
     private void initView() {
         tvTime = findViewById(R.id.tv_time);
         tvLocation = findViewById(R.id.tv_location_describe);
-
-        rvProblem = findViewById(R.id.rv_problem);
-        rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
-
-        problemAdapter = new PatrolSettingAdapter();
-//        problemAdapter.setDatas(DataServer.getSampleData(10));
-        rvProblem.setAdapter(problemAdapter);
 
         tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +151,17 @@ public class DetailActivity extends PermissionActivity {
         typeAdapter = new PatrolTypeAdapter();
         typeAdapter.setDatas(typeData.getTypeArr());
         rvPatrol.setAdapter(typeAdapter);
+    }
+
+    private void initQuestion() {
+        rvProblem = findViewById(R.id.rv_problem);
+        rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
+
+        problemAdapter = new ProblemAdapter();
+        if (!TextUtils.isEmpty(typeStr)) {
+            problemAdapter.setDatas(qData.getTypeArr());
+        }
+        rvProblem.setAdapter(problemAdapter);
     }
 
     private void initUrgency() {

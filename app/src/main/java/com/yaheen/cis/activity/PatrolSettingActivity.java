@@ -15,6 +15,7 @@ import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
+import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.StartPatrolBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.map.BDMapUtils;
@@ -34,7 +35,7 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private String startUrl = "http://192.168.199.118:8080/crs/eapi/startPatrol.do";
 
-    private TypeBean data;
+    private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class PatrolSettingActivity extends BaseActivity {
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                data = gson.fromJson(result, TypeBean.class);
+                TypeBean data = gson.fromJson(result, TypeBean.class);
                 if (data != null && data.isResult()) {
                     settingAdapter.setDatas(data.getTypeArr());
                     settingAdapter.notifyDataSetChanged();
@@ -119,14 +120,46 @@ public class PatrolSettingActivity extends BaseActivity {
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                StartPatrolBean data1 = gson.fromJson(result, StartPatrolBean.class);
-                if (data1 != null && data1.isResult()) {
+                StartPatrolBean data = gson.fromJson(result, StartPatrolBean.class);
+                if (data != null && data.isResult()) {
+                    getQuestion();
+                } else {
+                    showToast(R.string.setting_start_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    private void getQuestion() {
+        RequestParams requestParams = new RequestParams(questionUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("typeId", settingAdapter.getTypeBean().getTypeArr().get(0).getId());
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                QuestionBean data = gson.fromJson(result, QuestionBean.class);
+                if (data != null && data.isResult()) {
                     String typeStr = gson.toJson(settingAdapter.getTypeBean());
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
                     intent.putExtra("type", typeStr);
+                    intent.putExtra("question", result);
                     startActivity(intent);
-                } else {
-                    showToast(R.string.setting_start_fail);
                 }
             }
 
