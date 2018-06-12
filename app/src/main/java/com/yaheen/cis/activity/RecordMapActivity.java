@@ -24,18 +24,25 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.RecordMapAdapter;
+import com.yaheen.cis.entity.RecordEventBean;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.cluster.Cluster;
 import com.yaheen.cis.util.map.cluster.ClusterItem;
 import com.yaheen.cis.util.map.cluster.ClusterManager;
 import com.yaheen.cis.util.map.MapViewLocationListener;
+import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordMapActivity extends Activity {
+public class RecordMapActivity extends PermissionActivity {
 
     private RecyclerView rvRecordMap;
 
@@ -47,45 +54,26 @@ public class RecordMapActivity extends Activity {
 
     private ClusterManager<MyItem> mClusterManager;
 
-    //判断地图是否是第一次定位
-    boolean isFirstLoc = true;
-
     private List<MyItem> items;
+
+    private String eventUrl = "http://192.168.199.118:8080/crs/eapi/eventList.do";
+
+    private String recordId;
+
+    //判断地图是否是第一次定位
+    private boolean isFirstLoc = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_map);
 
+        recordId = getIntent().getStringExtra("recordId");
+        showLoadingDialog();
+
         initMapView();
-        rvRecordMap = findViewById(R.id.rv_record_map);
-        rvRecordMap.setLayoutManager(new LinearLayoutManager(this));
-
-        mapAdapter = new RecordMapAdapter();
-//        mapAdapter.setHeaderView(getHeaderView());
-        mapAdapter.setDatas(DataServer.getSampleData(10));
-        rvRecordMap.setAdapter(mapAdapter);
-
-        rvRecordMap.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                //判断是当前layoutManager是否为LinearLayoutManager
-                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-                if (layoutManager instanceof LinearLayoutManager) {
-                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
-                    //获取第一个可见view的位置
-                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
-                    Log.i("lin", "onScrollStateChanged: " + firstItemPosition);
-                    if (firstItemPosition > 0) {
-                        mapView.onPause();
-                    } else {
-                        mapView.onResume();
-                    }
-                }
-            }
-        });
+        initRecordView();
+        getRecordEventList();
 
         mapAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -132,6 +120,70 @@ public class RecordMapActivity extends Activity {
                 Toast.makeText(RecordMapActivity.this,
                         "点击单个Item", Toast.LENGTH_SHORT).show();
                 return false;
+            }
+        });
+    }
+
+    private void initRecordView() {
+        rvRecordMap = findViewById(R.id.rv_record_map);
+        rvRecordMap.setLayoutManager(new LinearLayoutManager(this));
+
+        mapAdapter = new RecordMapAdapter();
+//        mapAdapter.setDatas(DataServer.getSampleData(10));
+        rvRecordMap.setAdapter(mapAdapter);
+
+        rvRecordMap.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                //判断是当前layoutManager是否为LinearLayoutManager
+                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    //获取第一个可见view的位置
+                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+                    Log.i("lin", "onScrollStateChanged: " + firstItemPosition);
+                    if (firstItemPosition > 0) {
+                        mapView.onPause();
+                    } else {
+                        mapView.onResume();
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void getRecordEventList() {
+        RequestParams requestParams = new RequestParams(eventUrl);
+        requestParams.addQueryStringParameter("recordId", recordId);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                RecordEventBean data = gson.fromJson(result,RecordEventBean.class);
+                if(data!=null&&data.isResult()){
+                    mapAdapter.setDatas(data.getEventList());
+                    mapAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                cancelLoadingDialog();
             }
         });
     }

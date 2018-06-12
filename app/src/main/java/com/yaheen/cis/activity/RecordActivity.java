@@ -27,6 +27,8 @@ public class RecordActivity extends PermissionActivity {
 
     private String recordUrl = "http://192.168.199.118:8080/crs/eapi/recordList.do";
 
+    private String recordId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,8 @@ public class RecordActivity extends PermissionActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(RecordActivity.this, RecordMapActivity.class);
+                recordId = recordAdapter.getData().get(position).getId();
+                intent.putExtra("recordId", recordId);
                 startActivity(intent);
             }
         });
