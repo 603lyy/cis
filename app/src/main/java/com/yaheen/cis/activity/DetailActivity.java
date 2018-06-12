@@ -1,7 +1,6 @@
 package com.yaheen.cis.activity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,38 +20,37 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
-import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
+import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
-import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
-import com.yaheen.cis.util.img.upLoadImg;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.time.TimeTransferUtils;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends PermissionActivity {
 
     private final int REQUEST_CODE_CHOOSE = 1001;
+
+    private Gson gson = new Gson();
 
     private TextView tvLocation, tvTime;
 
@@ -71,15 +70,24 @@ public class DetailActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = "http://192.168.199.111:8080/crs/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
+
+    private String recordId;
 
     //判断地图是否是第一次定位
-    boolean isFirstLoc = true;
+    private boolean isFirstLoc = true;
 
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
 
-    private String recordId;
+    //被选择的图片路径列表
+    private List<Uri> selectUriList;
+
+    //图片上传列表的数据列表
+    private List<String> adapterPathList = new ArrayList<>();
+
+    //已上传图片的ID的拼接
+    private String imgIdStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,47 +122,6 @@ public class DetailActivity extends PermissionActivity {
 //                if (BDMapUtils.getLocation() != null) {
 //                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
 //                }
-                ImgUploadHelper.showUserAvatarUploadDialog(DetailActivity.this, new UpLoadImgListener() {
-                    @Override
-                    public void upLoad(List<Uri> list) {
-
-                        if (list.size() <= 0) {
-                            return;
-                        }
-
-                        String imgPath = UriUtil.getPath(DetailActivity.this, list.get(0));
-
-                        if (TextUtils.isEmpty(imgPath)) {
-                            return;
-                        }
-
-                        RequestParams params = new RequestParams("http://192.168.199.119:8080/crs/eapi/uploadPhoto.do" +
-                                "?token=" + DefaultPrefsUtil.getToken());
-                        params.setMultipart(true);
-                        params.addBodyParameter("originImage", new File(imgPath));
-                        x.http().post(params, new Callback.CommonCallback<String>() {
-                            @Override
-                            public void onSuccess(String result) {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable ex, boolean isOnCallback) {
-
-                            }
-
-                            @Override
-                            public void onCancelled(CancelledException cex) {
-
-                            }
-
-                            @Override
-                            public void onFinished() {
-
-                            }
-                        });
-                    }
-                });
 
             }
         });
@@ -190,8 +157,8 @@ public class DetailActivity extends PermissionActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImg.setLayoutManager(layoutManager);
 
-        uploadAdapter = new ImgUploadAdapter();
-        uploadAdapter.setDatas(DataServer.getSampleData(10));
+        uploadAdapter = new ImgUploadAdapter(this);
+        uploadAdapter.addFooterView(getImgFooterView());
         rvImg.setAdapter(uploadAdapter);
     }
 
@@ -203,6 +170,20 @@ public class DetailActivity extends PermissionActivity {
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new locationListener());
+    }
+
+    private View getImgFooterView() {
+        View view = getLayoutInflater().inflate(R.layout.footer_img_upload,
+                (ViewGroup) rvImg.getParent(), false);
+        ImageView ivAdd = view.findViewById(R.id.iv_add);
+
+        ivAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgUploadHelper.showUserAvatarUploadDialog(DetailActivity.this, imgListener);
+            }
+        });
+        return view;
     }
 
     private class locationListener implements MapViewLocationListener {
@@ -225,7 +206,21 @@ public class DetailActivity extends PermissionActivity {
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
             }
         }
+
     }
+
+    private UpLoadImgListener imgListener = new UpLoadImgListener() {
+        @Override
+        public void upLoad(List<Uri> list) {
+            showLoadingDialog();
+
+            if (list.size() <= 0) {
+                return;
+            }
+            selectUriList = list;
+            upLoadImg(list.get(0));
+        }
+    };
 
     private void getQuestionMsg() {
         RequestParams requestParams = new RequestParams(questionUrl);
@@ -258,12 +253,61 @@ public class DetailActivity extends PermissionActivity {
         });
     }
 
-    private class UpLoadImgs implements upLoadImg {
+    private void upLoadImg(final Uri uri) {
 
-        @Override
-        public void upLoad(List<Uri> list) {
+        final String imgPath = UriUtil.getPath(DetailActivity.this, uri);
 
+        if (TextUtils.isEmpty(imgPath)) {
+            return;
         }
+
+        RequestParams params = new RequestParams("http://192.168.199.118:8080/crs/eapi/uploadPhoto.do" +
+                "?token=" + DefaultPrefsUtil.getToken());
+        params.setMultipart(true);
+        params.addBodyParameter("originImage", new File(imgPath));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
+                if (data != null) {
+                    //删除已请求上传图片的路径
+                    selectUriList.remove(uri);
+
+                    if (data.isResult()) {
+                        adapterPathList.add(imgPath);
+                        uploadAdapter.setDatas(adapterPathList);
+                        uploadAdapter.notifyDataSetChanged();
+                        if (TextUtils.isEmpty(imgIdStr)) {
+                            imgIdStr = data.getFileId();
+                        } else {
+                            imgIdStr = imgIdStr + "," + data.getFileId();
+                        }
+                    }
+
+                    //图片路径不为空，继续上传剩余图片
+                    if (selectUriList.size() > 0) {
+                        upLoadImg(selectUriList.get(0));
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                if (selectUriList.size() <= 0) {
+                    cancelLoadingDialog();
+                }
+            }
+        });
     }
 
     @Override

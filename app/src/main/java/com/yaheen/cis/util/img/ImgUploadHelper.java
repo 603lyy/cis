@@ -20,6 +20,7 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -34,40 +35,29 @@ public class ImgUploadHelper {
 
     private static final int RESULT_REQUEST_CODE = 2;
 
+    private static String basePath = Environment.getExternalStorageDirectory().toString();
+
+    private static String patrolImgPath = basePath + "/cis/.PatrolImg/patrol_temp.jpg";
+
     //相册多选URI列表
-    private static List<Uri> mSelected;
+    private static List<Uri> mSelected = new ArrayList<>();
 
     private static UpLoadImgListener imgListener;
 
     /**
      * 显示用户头像上传对话框
      */
-    public static void showUserAvatarUploadDialog(final BaseActivity activity,UpLoadImgListener upLoadImgListener) {
-        imgListener = upLoadImgListener;
-
+    public static void showUserAvatarUploadDialog(final BaseActivity activity, UpLoadImgListener upLoadImgListener) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_img_upload, null);
         final Dialog dialog = new AlertDialog.Builder(activity).setView(view).show();
-
         View tv_photo = dialog.findViewById(R.id.tv_photo);
         View tv_camera = dialog.findViewById(R.id.tv_camera);
+
+        imgListener = upLoadImgListener;
+
         tv_photo.setOnClickListener(new OnRepeatClickListener() {
             @Override
             public void onRepeatClick(View v) {
-//                try {
-//                    Intent intentFromGallery = new Intent();
-//                    intentFromGallery.addCategory(Intent.CATEGORY_OPENABLE);
-//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-//                        intentFromGallery.setAction(Intent.ACTION_OPEN_DOCUMENT);
-//                    } else {
-//                        intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-//                    }
-//                    intentFromGallery.setType("image/*"); // 设置文件类型
-//                    activity.startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                dialog.dismiss();
-
                 Matisse.from(activity)
                         .choose(MimeType.allOf()) // 选择 mime 的类型
                         .countable(true)
@@ -85,14 +75,7 @@ public class ImgUploadHelper {
             @Override
             public void onRepeatClick(View v) {
                 Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
-//                        Uri.fromFile(new File(UserInfoUtil.getUserAvatarPathTemp())));
-                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
-//                        Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString()+"/Yiniu/avatar_temp.jpg")));
-                        FileProvider.getUriForFile(activity, "com.yaheen.cis.fileprovider",
-                                new File(Environment.getExternalStorageDirectory().toString() +
-                                        "/Yiniu/.UserInfo/avatar_temp.jpg"))
-                );
+                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFileProvider(activity));
                 activity.startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
                 dialog.dismiss();
             }
@@ -114,6 +97,7 @@ public class ImgUploadHelper {
         switch (requestCode) {
             case IMAGE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    mSelected.clear();
                     mSelected = Matisse.obtainResult(data);
                     imgListener.upLoad(mSelected);
                 }
@@ -126,6 +110,9 @@ public class ImgUploadHelper {
 //                                new File(Environment.getExternalStorageDirectory().toString() +
 //                                        "/Yiniu/.UserInfo/avatar_temp.jpg"))
 //                );
+                mSelected.clear();
+                mSelected.add(getUriForFileProvider(activity));
+                imgListener.upLoad(mSelected);
                 break;
             case RESULT_REQUEST_CODE:
                 if (data != null)
@@ -133,6 +120,11 @@ public class ImgUploadHelper {
                 break;
         }
 
+    }
+
+    public static Uri getUriForFileProvider(BaseActivity activity) {
+        return FileProvider.getUriForFile(activity, "com.yaheen.cis.fileprovider",
+                new File(patrolImgPath));
     }
 
     /**
