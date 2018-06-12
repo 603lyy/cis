@@ -1,6 +1,8 @@
 package com.yaheen.cis.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.CheckBox;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -9,6 +11,7 @@ import com.yaheen.cis.R;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProblemAdapter extends BaseQuickAdapter<QuestionBean.TypeArrBean, BaseViewHolder> {
@@ -24,8 +27,42 @@ public class ProblemAdapter extends BaseQuickAdapter<QuestionBean.TypeArrBean, B
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, QuestionBean.TypeArrBean item) {
+    protected void convert(BaseViewHolder helper, final QuestionBean.TypeArrBean item) {
         checkBox = helper.getView(R.id.cb_problem);
         helper.setText(R.id.cb_problem, item.getName());
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //已经是选中状态
+                if (item.isSelected()) {
+                    item.setSelected(false);
+                } else {
+                    item.setSelected(true);
+                }
+            }
+        });
+    }
+
+    //返回选中问题的ID字符串
+    public String getQuestionStr() {
+        String str = "";
+
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).isSelected()) {
+                if (TextUtils.isEmpty(str)) {
+                    str = mData.get(i).getId();
+                } else {
+                    str = str + "," + mData.get(i).getId();
+                }
+            }
+        }
+        return str;
+    }
+
+    public void resetData() {
+        for (int i = 0; i < mData.size(); i++) {
+            mData.get(i).setSelected(false);
+        }
     }
 }

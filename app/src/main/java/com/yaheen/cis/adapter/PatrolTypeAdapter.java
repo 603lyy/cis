@@ -27,5 +27,9 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
     protected void convert(BaseViewHolder helper, TypeBean.TypeArrBean item) {
         checkBox = helper.getView(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());
+
+        if (helper.getAdapterPosition() == 0) {
+            checkBox.setChecked(true);
+        }
     }
 }

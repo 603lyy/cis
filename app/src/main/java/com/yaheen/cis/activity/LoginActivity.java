@@ -32,7 +32,7 @@ public class LoginActivity extends PermissionActivity {
 
     private EditText etName, etPsd;
 
-    private String url = "http://192.168.199.119:8080/crs/eapi/login.do";
+    private String url = "http://192.168.199.118:8080/crs/eapi/login.do";
 
     private String key = "X2Am6tVLnwMMX8kVgdDk5w==";
 

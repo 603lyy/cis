@@ -58,6 +58,15 @@ public class QuestionBean {
         private String id;
         private String name;
         private String describe;
+        private boolean isSelected = false;
+
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public String getId() {
             return id;

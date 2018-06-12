@@ -37,6 +37,8 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
 
+    private String recordId="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +124,7 @@ public class PatrolSettingActivity extends BaseActivity {
             public void onSuccess(String result) {
                 StartPatrolBean data = gson.fromJson(result, StartPatrolBean.class);
                 if (data != null && data.isResult()) {
+                    recordId = data.getRecordId();
                     getQuestion();
                 } else {
                     showToast(R.string.setting_start_fail);
@@ -159,6 +162,7 @@ public class PatrolSettingActivity extends BaseActivity {
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
                     intent.putExtra("type", typeStr);
                     intent.putExtra("question", result);
+                    intent.putExtra("recordId", recordId);
                     startActivity(intent);
                 }
             }

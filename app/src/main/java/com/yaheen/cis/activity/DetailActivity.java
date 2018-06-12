@@ -21,6 +21,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
@@ -31,6 +32,7 @@ import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
+import com.yaheen.cis.entity.ReportBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.UpLoadImgListener;
@@ -53,7 +55,7 @@ public class DetailActivity extends PermissionActivity {
 
     private final int REQUEST_CODE_CHOOSE = 1001;
 
-    private TextView tvLocation, tvTime;
+    private TextView tvLocation, tvTime, tvCommit;
 
     private MapView mapView = null;
 
@@ -71,7 +73,11 @@ public class DetailActivity extends PermissionActivity {
 
     private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
 
-    private String typeStr, questionStr;
+    private String uploadImgUrl = "http://192.168.199.118:8080/crs/eapi/uploadPhoto.do";
+
+    private String reportUrl = "http://192.168.199.118:8080/crs/eapi/report.do";
+
+    private String typeStr, questionStr, recordId;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
@@ -88,6 +94,9 @@ public class DetailActivity extends PermissionActivity {
     //图片上传列表的数据列表
     private List<String> adapterPathList = new ArrayList<>();
 
+    //已上传图片的ID列表
+    private List<String> uploadIdList = new ArrayList<>();
+
     //问题类型实体
     private TypeBean typeData;
 
@@ -98,13 +107,20 @@ public class DetailActivity extends PermissionActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        tvCommit = findViewById(R.id.tv_commit);
 
         showLoadingDialog();
         startTime = System.currentTimeMillis();
         typeStr = getIntent().getStringExtra("type");
+        recordId = getIntent().getStringExtra("recordId");
         questionStr = getIntent().getStringExtra("question");
         qData = gson.fromJson(questionStr, QuestionBean.class);
         typeData = gson.fromJson(typeStr, TypeBean.class);
+
+        //记录ID不可为空
+        if (TextUtils.isEmpty(recordId)) {
+            finish();
+        }
 
         initView();
         initPatrol();
@@ -112,7 +128,14 @@ public class DetailActivity extends PermissionActivity {
         initUrgency();
         initMapView();
         initImgUpload();
-        getQuestionMsg();
+//        getQuestionMsg();
+
+        tvCommit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendReport();
+            }
+        });
     }
 
     private void initView() {
@@ -122,9 +145,9 @@ public class DetailActivity extends PermissionActivity {
         tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (BDMapUtils.getLocation() != null) {
-//                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
-//                }
+                if (BDMapUtils.getLocation() != null) {
+                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
+                }
 
             }
         });
@@ -212,42 +235,6 @@ public class DetailActivity extends PermissionActivity {
         return view;
     }
 
-    private class locationListener implements MapViewLocationListener {
-
-        @Override
-        public void changeLocation(BDLocation mLoc) {
-
-            MyLocationData locData = new MyLocationData.Builder().direction(100)
-                    .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
-
-            // 设置定位数据
-            mBaiduMap.setMyLocationData(locData);
-
-            if (isFirstLoc) {
-                isFirstLoc = false;
-                LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
-                MapStatus.Builder builder = new MapStatus.Builder();
-                //设置地图层级（4-21）
-                builder.target(ll).zoom(19.0f);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-            }
-        }
-
-    }
-
-    private UpLoadImgListener imgListener = new UpLoadImgListener() {
-        @Override
-        public void upLoad(List<Uri> list) {
-            showLoadingDialog();
-
-            if (list.size() <= 0) {
-                return;
-            }
-            selectUriList = list;
-            upLoadImg(list.get(0));
-        }
-    };
-
     private void getQuestionMsg() {
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
@@ -287,10 +274,10 @@ public class DetailActivity extends PermissionActivity {
             return;
         }
 
-        RequestParams params = new RequestParams("http://192.168.199.118:8080/crs/eapi/uploadPhoto.do" +
-                "?token=" + DefaultPrefsUtil.getToken());
-        params.setMultipart(true);
+        RequestParams params = new RequestParams(uploadImgUrl);
+        params.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         params.addBodyParameter("originImage", new File(imgPath));
+        params.setMultipart(true);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -300,6 +287,7 @@ public class DetailActivity extends PermissionActivity {
                     selectUriList.remove(uri);
 
                     if (data.isResult()) {
+                        uploadIdList.add(data.getFileId());
                         adapterPathList.add(imgPath);
                         uploadAdapter.setDatas(adapterPathList);
                         uploadAdapter.notifyDataSetChanged();
@@ -334,6 +322,108 @@ public class DetailActivity extends PermissionActivity {
                 }
             }
         });
+    }
+
+    private void sendReport() {
+
+        String s = "";
+
+        for (int i = 0; i < uploadIdList.size(); i++) {
+            if (i == 0) {
+                s = uploadIdList.get(i);
+            } else {
+                s = s + "," + uploadIdList.get(i);
+            }
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("typeId", typeData.getTypeArr().get(0).getId());
+        jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
+        jsonObject.addProperty("emergency", "1");
+        jsonObject.addProperty("describe", "好大火啊啊啊啊啊");
+        jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
+        jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
+        jsonObject.addProperty("webFileids", s);
+
+
+        RequestParams requestParams = new RequestParams(reportUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("recordId", recordId);
+        requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ReportBean data = gson.fromJson(result, ReportBean.class);
+                if (data != null && data.isResult()) {
+                    showToast(R.string.detail_commit_success);
+                    clearData();
+                } else {
+                    showToast(R.string.detail_commit_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private class locationListener implements MapViewLocationListener {
+
+        @Override
+        public void changeLocation(BDLocation mLoc) {
+
+            MyLocationData locData = new MyLocationData.Builder().direction(100)
+                    .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
+
+            // 设置定位数据
+            mBaiduMap.setMyLocationData(locData);
+
+            if (isFirstLoc) {
+                isFirstLoc = false;
+                LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
+                MapStatus.Builder builder = new MapStatus.Builder();
+                //设置地图层级（4-21）
+                builder.target(ll).zoom(19.0f);
+                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+            }
+        }
+
+    }
+
+    private UpLoadImgListener imgListener = new UpLoadImgListener() {
+        @Override
+        public void upLoad(List<Uri> list) {
+            showLoadingDialog();
+
+            if (list.size() <= 0) {
+                return;
+            }
+            selectUriList = list;
+            upLoadImg(list.get(0));
+        }
+    };
+
+    //上报成功后重置数据
+    private void clearData() {
+        uploadIdList.clear();
+        selectUriList.clear();
+        adapterPathList.clear();
+        problemAdapter.resetData();
+        uploadAdapter.setDatas(null);
     }
 
     @Override
