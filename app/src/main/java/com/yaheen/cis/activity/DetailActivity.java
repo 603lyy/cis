@@ -20,13 +20,13 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
-import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
@@ -34,6 +34,7 @@ import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
 import com.yaheen.cis.entity.TypeBean;
+import com.yaheen.cis.entity.UploadLocationListBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
@@ -55,7 +56,7 @@ public class DetailActivity extends PermissionActivity {
 
     private final int REQUEST_CODE_CHOOSE = 1001;
 
-    private TextView tvLocation, tvTime, tvCommit;
+    private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
     private MapView mapView = null;
 
@@ -77,6 +78,8 @@ public class DetailActivity extends PermissionActivity {
 
     private String reportUrl = "http://192.168.199.118:8080/crs/eapi/report.do";
 
+    private String endUrl = "http://192.168.199.118:8080/crs/eapi/endPatrol.do";
+
     private String typeStr, questionStr, recordId;
 
     //已上传图片的ID的拼接
@@ -97,6 +100,9 @@ public class DetailActivity extends PermissionActivity {
     //已上传图片的ID列表
     private List<String> uploadIdList = new ArrayList<>();
 
+    //定时上传的坐标点列表
+    private List<UploadLocationListBean.LocationBean> locationList = new ArrayList<>();
+
     //问题类型实体
     private TypeBean typeData;
 
@@ -108,6 +114,7 @@ public class DetailActivity extends PermissionActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         tvCommit = findViewById(R.id.tv_commit);
+        tvFinish = findViewById(R.id.tv_finish);
 
         showLoadingDialog();
         startTime = System.currentTimeMillis();
@@ -134,6 +141,13 @@ public class DetailActivity extends PermissionActivity {
             @Override
             public void onClick(View view) {
                 sendReport();
+            }
+        });
+
+        tvFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endPatrol();
             }
         });
     }
@@ -381,6 +395,55 @@ public class DetailActivity extends PermissionActivity {
         });
     }
 
+    private void endPatrol() {
+
+//        JsonArray jsonArray = new JsonArray();
+//        jsonArray.add();
+
+        UploadLocationListBean.LocationBean bean = new UploadLocationListBean.LocationBean();
+        UploadLocationListBean listBean = new UploadLocationListBean();
+
+        bean.setLatitude(BDMapUtils.getLocation().getLatitude() + "");
+        bean.setLongitude(BDMapUtils.getLocation().getLongitude() + "");
+        locationList.add(bean);
+        locationList.add(bean);
+        listBean.setLocationArr(locationList);
+
+        RequestParams requestParams = new RequestParams(endUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("recordId", recordId);
+        requestParams.addQueryStringParameter("data",gson.toJson(locationList));
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ReportBean data = gson.fromJson(result, ReportBean.class);
+                if (data != null && data.isResult()) {
+                    showToast(R.string.detail_commit_success);
+                    clearData();
+                } else {
+                    showToast(R.string.detail_commit_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private class locationListener implements MapViewLocationListener {
 
         @Override
@@ -424,6 +487,7 @@ public class DetailActivity extends PermissionActivity {
         adapterPathList.clear();
         problemAdapter.resetData();
         uploadAdapter.setDatas(null);
+        problemAdapter.notifyDataSetChanged();
     }
 
     @Override
