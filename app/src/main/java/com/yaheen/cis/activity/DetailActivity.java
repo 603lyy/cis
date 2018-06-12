@@ -26,9 +26,11 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolSettingAdapter;
+import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
+import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
@@ -50,21 +52,17 @@ public class DetailActivity extends PermissionActivity {
 
     private final int REQUEST_CODE_CHOOSE = 1001;
 
-    private Gson gson = new Gson();
-
     private TextView tvLocation, tvTime;
 
     private MapView mapView = null;
 
     private BaiduMap mBaiduMap;
 
-    private RecyclerView rvProblem;
-
-    private RecyclerView rvUrgency;
-
-    private RecyclerView rvImg;
+    private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
 
     private PatrolSettingAdapter problemAdapter;
+
+    private PatrolTypeAdapter typeAdapter;
 
     private UrgencyAdapter urgencyAdapter;
 
@@ -72,7 +70,10 @@ public class DetailActivity extends PermissionActivity {
 
     private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
 
-    private String recordId;
+    private String typeStr;
+
+    //已上传图片的ID的拼接
+    private String imgIdStr = "";
 
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
@@ -86,19 +87,21 @@ public class DetailActivity extends PermissionActivity {
     //图片上传列表的数据列表
     private List<String> adapterPathList = new ArrayList<>();
 
-    //已上传图片的ID的拼接
-    private String imgIdStr = "";
+    //问题类型实体
+    private TypeBean typeData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        showLoadingDialog();
         startTime = System.currentTimeMillis();
-
-        recordId = getIntent().getStringExtra("recordId");
+        typeStr = getIntent().getStringExtra("type");
+        typeData = gson.fromJson(typeStr,TypeBean.class);
 
         initView();
+        initPatrol();
         initUrgency();
         initMapView();
         initImgUpload();
@@ -136,6 +139,18 @@ public class DetailActivity extends PermissionActivity {
                         tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
                     }
                 }).start();
+    }
+
+    private void initPatrol() {
+        rvPatrol = findViewById(R.id.rv_patrol);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvPatrol.setLayoutManager(layoutManager);
+
+        typeAdapter = new PatrolTypeAdapter();
+        typeAdapter.setDatas(typeData.getTypeArr());
+        rvPatrol.setAdapter(typeAdapter);
     }
 
     private void initUrgency() {

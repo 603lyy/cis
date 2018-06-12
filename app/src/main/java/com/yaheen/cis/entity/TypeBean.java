@@ -1,8 +1,9 @@
 package com.yaheen.cis.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TypeBean {
+public class TypeBean implements Serializable {
 
     /**
      * result : true
@@ -56,6 +57,15 @@ public class TypeBean {
 
         private String id;
         private String name;
+        private boolean selected;
+
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
 
         public String getId() {
             return id;

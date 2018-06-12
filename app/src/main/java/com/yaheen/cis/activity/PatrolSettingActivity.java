@@ -6,9 +6,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.baidu.location.BDLocation;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.adapter.DataServer;
@@ -24,28 +26,33 @@ import org.xutils.x;
 
 public class PatrolSettingActivity extends BaseActivity {
 
-    RecyclerView rvSetting;
+    private RecyclerView rvSetting;
 
-    PatrolSettingAdapter settingAdapter;
+    private PatrolSettingAdapter settingAdapter;
 
-    private String typeUrl = "http://192.168.199.111:8080/crs/eapi/findTypeByUserId.do";
+    private String typeUrl = "http://192.168.199.118:8080/crs/eapi/findTypeByUserId.do";
 
-    private String startUrl = "http://192.168.199.111:8080/crs/eapi/startPatrol.do";
+    private String startUrl = "http://192.168.199.118:8080/crs/eapi/startPatrol.do";
+
+    private TypeBean data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patrol_setting);
 
+        showLoadingDialog();
+        initSettingView();
+        getTypeList();
+    }
+
+    private void initSettingView() {
         rvSetting = findViewById(R.id.rv_setting);
         rvSetting.setLayoutManager(new GridLayoutManager(this, 3));
 
         settingAdapter = new PatrolSettingAdapter();
         settingAdapter.addHeaderView(getHeaderView());
         rvSetting.setAdapter(settingAdapter);
-
-        showLoadingDialog();
-        getTypeList();
     }
 
     private View getHeaderView() {
@@ -56,10 +63,8 @@ public class PatrolSettingActivity extends BaseActivity {
         ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startPatrol();
-                Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
-//                intent.putExtra("recordId", data.getRecordId());
-                startActivity(intent);
+                showLoadingDialog();
+                startPatrol();
             }
         });
         return view;
@@ -73,7 +78,7 @@ public class PatrolSettingActivity extends BaseActivity {
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                TypeBean data = gson.fromJson(result, TypeBean.class);
+                data = gson.fromJson(result, TypeBean.class);
                 if (data != null && data.isResult()) {
                     settingAdapter.setDatas(data.getTypeArr());
                     settingAdapter.notifyDataSetChanged();
@@ -98,6 +103,12 @@ public class PatrolSettingActivity extends BaseActivity {
     }
 
     private void startPatrol() {
+
+        if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
+            cancelLoadingDialog();
+            return;
+        }
+
         BDLocation location = BDMapUtils.getLocation();
         RequestParams requestParams = new RequestParams(startUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
@@ -108,10 +119,11 @@ public class PatrolSettingActivity extends BaseActivity {
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                StartPatrolBean data = gson.fromJson(result, StartPatrolBean.class);
-                if (data != null && data.isResult()) {
+                StartPatrolBean data1 = gson.fromJson(result, StartPatrolBean.class);
+                if (data1 != null && data1.isResult()) {
+                    String typeStr = gson.toJson(settingAdapter.getTypeBean());
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
-                    intent.putExtra("recordId", data.getRecordId());
+                    intent.putExtra("type", typeStr);
                     startActivity(intent);
                 } else {
                     showToast(R.string.setting_start_fail);
@@ -130,7 +142,7 @@ public class PatrolSettingActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }

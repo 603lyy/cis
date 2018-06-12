@@ -17,6 +17,7 @@
 
     <string name="detail_finish">结束</string>
     <string name="detail_sign">签到</string>
+    <string name="detail_patrol_type">巡查类型：</string>
     <string name="detail_search_problem">发现问题：</string>
     <string name="detail_describe_problem">描述问题：</string>
     <string name="detail_urgency">紧急程度：</string>

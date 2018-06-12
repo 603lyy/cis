@@ -1,6 +1,8 @@
 package com.yaheen.cis.entity;
 
-public class ImgUploadBean {
+import java.io.Serializable;
+
+public class ImgUploadBean implements Serializable {
 
     /**
      * result : true
