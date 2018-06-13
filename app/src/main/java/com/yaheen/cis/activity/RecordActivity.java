@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
@@ -23,6 +24,8 @@ public class RecordActivity extends PermissionActivity {
 
     private RecyclerView rvRecord;
 
+    private TextView tvTime,tvDuration,tvType,tvDescribe,tvDetail;
+
     private RecordAdapter recordAdapter;
 
     private String recordUrl = "http://192.168.199.119:8080/crs/eapi/recordList.do";
@@ -37,6 +40,10 @@ public class RecordActivity extends PermissionActivity {
         showLoadingDialog();
         setBackVisible(false);
 
+        tvTime = findViewById(R.id.tv_time);
+        tvType = findViewById(R.id.tv_type);
+        tvDescribe = findViewById(R.id.tv_describe);
+        tvDuration = findViewById(R.id.tv_duration);
         rvRecord = findViewById(R.id.rv_record);
         rvRecord.setLayoutManager(new LinearLayoutManager(this));
 

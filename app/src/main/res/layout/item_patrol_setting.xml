@@ -11,6 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="131313"
+        android:paddingLeft="5dp"
+        android:textColor="@color/white"
+        style="@style/CheckBoxWhite"
+        android:shadowColor="@color/white"
         android:textSize="18dp" />
 </LinearLayout>
