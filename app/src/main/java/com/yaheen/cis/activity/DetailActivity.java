@@ -251,8 +251,7 @@ public class DetailActivity extends PermissionActivity {
     private void initImgUpload() {
         rvImg = findViewById(R.id.rv_img);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
         rvImg.setLayoutManager(layoutManager);
 
         uploadAdapter = new ImgUploadAdapter(this);

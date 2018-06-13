@@ -33,10 +33,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="20dp"
+                android:gravity="center"
                 android:text="时间"
                 android:textColor="@color/red_2"
-                android:gravity="center"/>
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/tv_sign"
@@ -68,8 +68,8 @@
                 android:id="@+id/rv_patrol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 
@@ -79,10 +79,10 @@
             android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="15dp"
             android:paddingBottom="13dp"
-            android:paddingRight="20dp">
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="15dp">
 
             <TextView
                 style="@style/Detail_Title_TextView"
@@ -92,9 +92,9 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_problem"
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
 
         </LinearLayout>
 
@@ -105,9 +105,9 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingBottom="15dp"
-            android:paddingTop="15dp"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:paddingRight="20dp"
+            android:paddingTop="15dp">
 
             <TextView
                 style="@style/Detail_Title_TextView"
@@ -119,10 +119,10 @@
                 android:id="@+id/et_describe"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:maxEms="6"
                 android:layout_marginTop="10dp"
                 android:background="@color/colorHint"
                 android:gravity="start"
+                android:maxEms="6"
                 android:padding="5dp"
                 android:textSize="12dp" />
 
@@ -160,7 +160,8 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:paddingRight="20dp"
+            android:paddingTop="20dp">
 
             <TextView
                 style="@style/Detail_Title_TextView"
@@ -168,13 +169,20 @@
                 android:layout_height="wrap_content"
                 android:text="@string/detail_img_upload" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_img"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal" />
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -183,9 +191,7 @@
             android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:paddingBottom="20dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:padding="20dp">
 
             <TextView
                 style="@style/Detail_Title_TextView"
@@ -198,7 +204,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
-                android:drawableRight="@mipmap/ic_launcher"
+                android:drawableRight="@drawable/ic_loaction"
                 android:gravity="center_vertical"
                 android:textSize="12dp" />
 
