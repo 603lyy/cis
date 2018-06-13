@@ -35,6 +35,7 @@ public class RecordActivity extends PermissionActivity {
         setContentView(R.layout.activity_record);
 
         showLoadingDialog();
+        setBackVisible(false);
 
         rvRecord = findViewById(R.id.rv_record);
         rvRecord.setLayoutManager(new LinearLayoutManager(this));

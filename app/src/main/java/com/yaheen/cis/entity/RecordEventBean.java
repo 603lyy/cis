@@ -7,11 +7,13 @@ public class RecordEventBean {
     /**
      * result : true
      * eventList : [{"id":"402847f663f35e1d0163f3c17b690033","longitude":"113.403244","latitude":"23.131214","emergency":"3","describe":"好大火啊啊啊啊啊"}]
+     * recordObject : {"startLongitude":"113.404437","startLatitude":"23.131203","endLongitude":"113.403246","endLatitude":"23.131215"}
      * code : 1004
      * msg : 成功
      */
 
     private boolean result;
+    private RecordObjectBean recordObject;
     private int code;
     private String msg;
     private List<EventListBean> eventList;
@@ -22,6 +24,14 @@ public class RecordEventBean {
 
     public void setResult(boolean result) {
         this.result = result;
+    }
+
+    public RecordObjectBean getRecordObject() {
+        return recordObject;
+    }
+
+    public void setRecordObject(RecordObjectBean recordObject) {
+        this.recordObject = recordObject;
     }
 
     public int getCode() {
@@ -48,13 +58,59 @@ public class RecordEventBean {
         this.eventList = eventList;
     }
 
+    public static class RecordObjectBean {
+        /**
+         * startLongitude : 113.404437
+         * startLatitude : 23.131203
+         * endLongitude : 113.403246
+         * endLatitude : 23.131215
+         */
+
+        private String startLongitude;
+        private String startLatitude;
+        private String endLongitude;
+        private String endLatitude;
+
+        public String getStartLongitude() {
+            return startLongitude;
+        }
+
+        public void setStartLongitude(String startLongitude) {
+            this.startLongitude = startLongitude;
+        }
+
+        public String getStartLatitude() {
+            return startLatitude;
+        }
+
+        public void setStartLatitude(String startLatitude) {
+            this.startLatitude = startLatitude;
+        }
+
+        public String getEndLongitude() {
+            return endLongitude;
+        }
+
+        public void setEndLongitude(String endLongitude) {
+            this.endLongitude = endLongitude;
+        }
+
+        public String getEndLatitude() {
+            return endLatitude;
+        }
+
+        public void setEndLatitude(String endLatitude) {
+            this.endLatitude = endLatitude;
+        }
+    }
+
     public static class EventListBean {
         /**
          * id : 402847f663f35e1d0163f3c17b690033
          * longitude : 113.403244
          * latitude : 23.131214
          * emergency : 3
-         * describe : 好大火
+         * describe : 好大火啊啊啊啊啊
          */
 
         private String id;

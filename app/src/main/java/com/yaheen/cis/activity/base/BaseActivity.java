@@ -2,6 +2,8 @@ package com.yaheen.cis.activity.base;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -17,6 +19,8 @@ public class BaseActivity extends AppCompatActivity {
 
     //标题栏title内容
     private TextView tvContent;
+
+    private LinearLayout llBack;
 
     protected Gson gson = new Gson();
 
@@ -34,6 +38,17 @@ public class BaseActivity extends AppCompatActivity {
         tvContent = findViewById(R.id.tv_title_content);
         if (tvContent != null) {
             tvContent.setText(content);
+        }
+    }
+
+    protected void setBackVisible(boolean visible){
+        llBack = findViewById(R.id.back);
+        if (llBack != null) {
+            if(visible){
+                llBack.setVisibility(View.VISIBLE);
+            }else {
+                llBack.setVisibility(View.GONE);
+            }
         }
     }
 

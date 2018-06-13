@@ -31,6 +31,12 @@ public class ProblemAdapter extends BaseQuickAdapter<QuestionBean.TypeArrBean, B
         checkBox = helper.getView(R.id.cb_problem);
         helper.setText(R.id.cb_problem, item.getName());
 
+        if(item.isSelected()){
+            checkBox.setChecked(true);
+        }else {
+            checkBox.setChecked(false);
+        }
+
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
