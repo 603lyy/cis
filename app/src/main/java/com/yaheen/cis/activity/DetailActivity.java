@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -179,15 +181,31 @@ public class DetailActivity extends PermissionActivity {
     }
 
     private void initPatrol() {
-        rvPatrol = findViewById(R.id.rv_patrol);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvPatrol = findViewById(R.id.rv_patrol);
         rvPatrol.setLayoutManager(layoutManager);
 
         typeAdapter = new PatrolTypeAdapter();
         typeAdapter.setDatas(typeData.getTypeArr());
         rvPatrol.setAdapter(typeAdapter);
+
+        typeAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                //不是被选中的巡查类型，改为选中状态,其他改为未选中状态
+                if(!typeAdapter.getData().get(position).isSelected()){
+                    for (int i = 0; i < typeAdapter.getData().size(); i++) {
+                        if(i==position){
+                            typeAdapter.getData().get(i).setSelected(true);
+                        }else {
+                            typeAdapter.getData().get(i).setSelected(false);
+                        }
+                    }
+                }
+                typeAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initQuestion() {

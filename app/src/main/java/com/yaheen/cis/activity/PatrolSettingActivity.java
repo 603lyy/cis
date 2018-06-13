@@ -108,6 +108,7 @@ public class PatrolSettingActivity extends BaseActivity {
     private void startPatrol() {
 
         if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
+            showToast(R.string.setting_start_select);
             cancelLoadingDialog();
             return;
         }

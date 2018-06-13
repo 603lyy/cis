@@ -33,8 +33,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="时间" />
+                android:textSize="20dp"
+                android:text="时间"
+                android:textColor="@color/red_2"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/tv_sign"
@@ -64,7 +66,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_patrol"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp" />

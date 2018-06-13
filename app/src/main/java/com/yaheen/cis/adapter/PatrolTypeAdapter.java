@@ -1,6 +1,7 @@
 package com.yaheen.cis.adapter;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.CheckBox;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +16,8 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
 
     private CheckBox checkBox;
 
+    private int changeTime = 0;
+
     public PatrolTypeAdapter() {
         super(R.layout.item_patrol_type);
     }
@@ -26,10 +29,26 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
     @Override
     protected void convert(BaseViewHolder helper, TypeBean.TypeArrBean item) {
         checkBox = helper.getView(R.id.cb_type);
+        helper.addOnClickListener(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());
 
-        if (helper.getAdapterPosition() == 0) {
+        if (changeTime < getData().size() - 1 && helper.getAdapterPosition() != 0) {
+            item.setSelected(false);
+            changeTime++;
+        }
+
+        if (item.isSelected()) {
             checkBox.setChecked(true);
+        } else {
+            checkBox.setChecked(false);
+        }
+
+        if(item.getName().equals("国土")){
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
+        }else if(item.getName().equals("禁毒")){
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
+        }else {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
         }
     }
 }
