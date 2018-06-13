@@ -7,20 +7,54 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yaheen.cis.R;
 import com.yaheen.cis.entity.Status;
+import com.yaheen.cis.entity.UrgencyBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class UrgencyAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class UrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseViewHolder> {
 
     public UrgencyAdapter() {
         super(R.layout.item_urgency);
+        List<UrgencyBean> list = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            UrgencyBean bean = new UrgencyBean();
+            bean.setId(i + "");
+            bean.setSelect(false);
+            list.add(bean);
+        }
+        setNewData(list);
     }
 
-    public void setDatas(@Nullable List<Status> data) {
+    public void setDatas(@Nullable List<UrgencyBean> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(BaseViewHolder helper, UrgencyBean item) {
+        if (helper.getAdapterPosition() == 0) {
+            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_recode);
+            helper.setText(R.id.tv_urgency, R.string.detail_urgency_record);
+        } else if (helper.getAdapterPosition() == 1) {
+            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_normal);
+            helper.setText(R.id.tv_urgency, R.string.detail_urgency_normal);
+        } else if (helper.getAdapterPosition() == 2) {
+            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_suspicious);
+            helper.setText(R.id.tv_urgency, R.string.detail_urgency_suspicious);
+        } else if (helper.getAdapterPosition() == 3) {
+            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgent);
+            helper.setText(R.id.tv_urgency, R.string.detail_urgency_urgent);
+        }
+
+    }
+
+    public String geUrgencyId() {
+        String id = "";
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).isSelect()) {
+                id = mData.get(i).getId();
+            }
+        }
+        return id;
     }
 }

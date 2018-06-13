@@ -199,7 +199,7 @@ public class EventActivity extends PermissionActivity {
         rvUrgency.setLayoutManager(layoutManager);
 
         urgencyAdapter = new UrgencyAdapter();
-        urgencyAdapter.setDatas(DataServer.getSampleData(10));
+//        urgencyAdapter.setDatas(DataServer.getSampleData(10));
         rvUrgency.setAdapter(urgencyAdapter);
     }
 

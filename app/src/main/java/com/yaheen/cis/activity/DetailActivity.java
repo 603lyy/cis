@@ -229,8 +229,23 @@ public class DetailActivity extends PermissionActivity {
         rvUrgency.setLayoutManager(layoutManager);
 
         urgencyAdapter = new UrgencyAdapter();
-        urgencyAdapter.setDatas(DataServer.getSampleData(10));
         rvUrgency.setAdapter(urgencyAdapter);
+
+        urgencyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if(!urgencyAdapter.getData().get(position).isSelect()){
+                    for (int i = 0; i < urgencyAdapter.getData().size(); i++) {
+                        if (i == position) {
+                            urgencyAdapter.getData().get(i).setSelect(true);
+                        } else {
+                            urgencyAdapter.getData().get(i).setSelect(false);
+                        }
+                    }
+                }
+                urgencyAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initImgUpload() {
@@ -363,6 +378,10 @@ public class DetailActivity extends PermissionActivity {
 
     private void sendReport() {
 
+        if(TextUtils.isEmpty(urgencyAdapter.geUrgencyId())){
+            return;
+        }
+
         String s = "";
 
         for (int i = 0; i < uploadIdList.size(); i++) {
@@ -376,7 +395,7 @@ public class DetailActivity extends PermissionActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("typeId", typeData.getTypeArr().get(0).getId());
         jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
-        jsonObject.addProperty("emergency", "1");
+        jsonObject.addProperty("emergency", urgencyAdapter.geUrgencyId());
         jsonObject.addProperty("describe", "好大火啊啊啊啊啊");
         jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
         jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());

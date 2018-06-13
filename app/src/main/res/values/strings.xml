@@ -27,6 +27,10 @@
     <string name="detail_commit">上报</string>
     <string name="detail_commit_success">上报成功</string>
     <string name="detail_commit_fail">上报失败</string>
+    <string name="detail_urgency_record">记录</string>
+    <string name="detail_urgency_normal">正常</string>
+    <string name="detail_urgency_suspicious">可疑</string>
+    <string name="detail_urgency_urgent">紧急</string>
 
     <string name="record_detail">查看详情</string>
     <string name="record_title_content">巡查记录</string>
