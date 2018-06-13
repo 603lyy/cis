@@ -29,7 +29,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.NFC" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -77,7 +76,8 @@
         <activity android:name=".activity.PatrolSettingActivity" />
         <activity android:name=".activity.DetailActivity" />
         <activity android:name=".activity.RecordActivity" />
-        <activity android:name=".activity.RecordMapActivity"></activity>
+        <activity android:name=".activity.RecordMapActivity" />
+        <activity android:name=".activity.EventActivity"></activity>
     </application>
 
 </manifest>

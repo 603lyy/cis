@@ -1,6 +1,7 @@
 package com.yaheen.cis.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,9 +82,13 @@ public class RecordMapActivity extends PermissionActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 //地图移动回定位位置
-                MapStatus ms;
-                ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(15).build();
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+//                MapStatus ms;
+//                ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(15).build();
+//                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+                Intent intent = new Intent(RecordMapActivity.this, EventActivity.class);
+                intent.putExtra("recordId", recordId);
+                intent.putExtra("eventId", mapAdapter.getData().get(position).getId());
+                startActivity(intent);
             }
         });
     }
@@ -166,8 +171,8 @@ public class RecordMapActivity extends PermissionActivity {
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                RecordEventBean data = gson.fromJson(result,RecordEventBean.class);
-                if(data!=null&&data.isResult()){
+                RecordEventBean data = gson.fromJson(result, RecordEventBean.class);
+                if (data != null && data.isResult()) {
                     mapAdapter.setDatas(data.getEventList());
                     mapAdapter.notifyDataSetChanged();
                 }

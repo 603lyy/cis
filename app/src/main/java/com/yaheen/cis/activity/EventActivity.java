@@ -2,6 +2,7 @@ package com.yaheen.cis.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,9 +21,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
@@ -38,10 +37,10 @@ import com.yaheen.cis.entity.UploadLocationListBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
-import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
-import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
+import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.time.TimeTransferUtils;
 
 import org.xutils.common.Callback;
@@ -52,7 +51,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailActivity extends PermissionActivity {
+public class EventActivity extends PermissionActivity {
 
     private final int REQUEST_CODE_CHOOSE = 1001;
 
@@ -72,7 +71,7 @@ public class DetailActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = "http://192.168.199.119:8080/crs/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "http://192.168.199.119:8080/crs/eapi/eventDetail.do";
 
     private String uploadImgUrl = "http://192.168.199.119:8080/crs/eapi/uploadPhoto.do";
 
@@ -80,7 +79,7 @@ public class DetailActivity extends PermissionActivity {
 
     private String endUrl = "http://192.168.199.119:8080/crs/eapi/endPatrol.do";
 
-    private String typeStr, questionStr, recordId;
+    private String typeStr, questionStr, recordId,eventId;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
@@ -112,13 +111,14 @@ public class DetailActivity extends PermissionActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_event);
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
 
         showLoadingDialog();
         startTime = System.currentTimeMillis();
         typeStr = getIntent().getStringExtra("type");
+        eventId = getIntent().getStringExtra("eventId");
         recordId = getIntent().getStringExtra("recordId");
         questionStr = getIntent().getStringExtra("question");
         qData = gson.fromJson(questionStr, QuestionBean.class);
@@ -130,11 +130,12 @@ public class DetailActivity extends PermissionActivity {
         }
 
         initView();
-        initPatrol();
-        initQuestion();
-        initUrgency();
+        getEventInfo();
+//        initPatrol();
+//        initQuestion();
+//        initUrgency();
         initMapView();
-        initImgUpload();
+//        initImgUpload();
 //        getQuestionMsg();
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
@@ -165,17 +166,6 @@ public class DetailActivity extends PermissionActivity {
 
             }
         });
-
-        CountDownTimerUtils.getCountDownTimer()
-                .setMillisInFuture(24 * 60 * 60 * 1000)
-                .setCountDownInterval(1000)
-                .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                    @Override
-                    public void onTick(long pMillisUntilFinished) {
-                        long time = System.currentTimeMillis() - startTime - 28800000L;
-                        tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
-                    }
-                }).start();
     }
 
     private void initPatrol() {
@@ -243,10 +233,40 @@ public class DetailActivity extends PermissionActivity {
         ivAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgUploadHelper.showUserAvatarUploadDialog(DetailActivity.this, imgListener);
+                ImgUploadHelper.showUserAvatarUploadDialog(EventActivity.this, imgListener);
             }
         });
         return view;
+    }
+
+    private void getEventInfo(){
+        RequestParams requestParams = new RequestParams(questionUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("recordId", recordId);
+        requestParams.addQueryStringParameter("eventId", eventId);
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getQuestionMsg() {
@@ -282,7 +302,7 @@ public class DetailActivity extends PermissionActivity {
 
     private void upLoadImg(final Uri uri) {
 
-        final String imgPath = UriUtil.getPath(DetailActivity.this, uri);
+        final String imgPath = UriUtil.getPath(EventActivity.this, uri);
 
         if (TextUtils.isEmpty(imgPath)) {
             return;
