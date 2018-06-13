@@ -5,40 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="100dp"
     tools:context=".activity.LoginActivity">
 
-    <include layout="@layout/item_title_bar" />
+    <!--<include layout="@layout/item_title_bar" />-->
 
     <EditText
         android:id="@+id/et_username"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_primary_round"
         android:hint="@string/login_username_hint"
-        android:maxEms="20" />
+        android:maxEms="20"
+        android:paddingLeft="10dp" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edit_text_primary_round"
         android:hint="@string/login_password_hint"
         android:inputType="textPassword"
-        android:maxEms="16" />
+        android:maxEms="16"
+        android:paddingLeft="10dp" />
 
     <LinearLayout
         android:id="@+id/ll_remember_password"
         android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="-5dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/cb_remember_password"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:paddingLeft="5dp"
             android:checked="true"
+            android:paddingLeft="5dp"
+            android:textSize="16dp"
             android:text="@string/login_remember_password" />
 
     </LinearLayout>
@@ -47,11 +55,11 @@
         android:id="@+id/tv_login"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/btn_blue_round"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
         android:text="@string/login_text"
         android:textColor="@color/white"
         android:textSize="18dp" />

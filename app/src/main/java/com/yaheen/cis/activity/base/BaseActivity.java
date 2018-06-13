@@ -31,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void setTitleContent(int content) {
+        tvContent = findViewById(R.id.tv_title_content);
         if (tvContent != null) {
             tvContent.setText(content);
         }
