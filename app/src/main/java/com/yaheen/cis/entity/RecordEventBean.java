@@ -6,7 +6,7 @@ public class RecordEventBean {
 
     /**
      * result : true
-     * eventList : [{"id":"402847f663f35e1d0163f3c17b690033","longitude":"113.403244","latitude":"23.131214","emergency":"1"}]
+     * eventList : [{"id":"402847f663f35e1d0163f3c17b690033","longitude":"113.403244","latitude":"23.131214","emergency":"3","describe":"好大火啊啊啊啊啊"}]
      * code : 1004
      * msg : 成功
      */
@@ -53,13 +53,15 @@ public class RecordEventBean {
          * id : 402847f663f35e1d0163f3c17b690033
          * longitude : 113.403244
          * latitude : 23.131214
-         * emergency : 1
+         * emergency : 3
+         * describe : 好大火
          */
 
         private String id;
         private String longitude;
         private String latitude;
         private String emergency;
+        private String describe;
 
         public String getId() {
             return id;
@@ -91,6 +93,14 @@ public class RecordEventBean {
 
         public void setEmergency(String emergency) {
             this.emergency = emergency;
+        }
+
+        public String getDescribe() {
+            return describe;
+        }
+
+        public void setDescribe(String describe) {
+            this.describe = describe;
         }
     }
 }

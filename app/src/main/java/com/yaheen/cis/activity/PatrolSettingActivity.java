@@ -31,11 +31,11 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private PatrolSettingAdapter settingAdapter;
 
-    private String typeUrl = "http://192.168.199.118:8080/crs/eapi/findTypeByUserId.do";
+    private String typeUrl = "http://192.168.199.119:8080/crs/eapi/findTypeByUserId.do";
 
-    private String startUrl = "http://192.168.199.118:8080/crs/eapi/startPatrol.do";
+    private String startUrl = "http://192.168.199.119:8080/crs/eapi/startPatrol.do";
 
-    private String questionUrl = "http://192.168.199.118:8080/crs/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "http://192.168.199.119:8080/crs/eapi/findQuestionaireByTypeId.do";
 
     private String recordId="";
 

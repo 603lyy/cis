@@ -22,8 +22,10 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.MapActivity;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.RecordMapAdapter;
@@ -56,7 +58,7 @@ public class RecordMapActivity extends PermissionActivity {
 
     private List<MyItem> items;
 
-    private String eventUrl = "http://192.168.199.118:8080/crs/eapi/eventList.do";
+    private String eventUrl = "http://192.168.199.119:8080/crs/eapi/eventList.do";
 
     private String recordId;
 
