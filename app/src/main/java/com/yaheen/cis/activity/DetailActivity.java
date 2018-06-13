@@ -194,14 +194,16 @@ public class DetailActivity extends PermissionActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 //不是被选中的巡查类型，改为选中状态,其他改为未选中状态
-                if(!typeAdapter.getData().get(position).isSelected()){
+                if (!typeAdapter.getData().get(position).isSelected()) {
                     for (int i = 0; i < typeAdapter.getData().size(); i++) {
-                        if(i==position){
+                        if (i == position) {
                             typeAdapter.getData().get(i).setSelected(true);
-                        }else {
+                        } else {
                             typeAdapter.getData().get(i).setSelected(false);
                         }
                     }
+                    showLoadingDialog();
+                    getQuestionMsg(typeAdapter.getData().get(position).getId());
                 }
                 typeAdapter.notifyDataSetChanged();
             }
@@ -267,10 +269,10 @@ public class DetailActivity extends PermissionActivity {
         return view;
     }
 
-    private void getQuestionMsg() {
+    private void getQuestionMsg(String typeId) {
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("typeId", "402847f26390db7b016390df8bd90001");
+        requestParams.addQueryStringParameter("typeId", typeId);
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
@@ -278,6 +280,9 @@ public class DetailActivity extends PermissionActivity {
             public void onSuccess(String result) {
                 QuestionBean data = gson.fromJson(result, QuestionBean.class);
                 if (data != null && data.isResult()) {
+                    problemAdapter.setDatas(data.getTypeArr());
+                    problemAdapter.notifyDataSetChanged();
+                    clearData();
                 }
             }
 
@@ -293,7 +298,7 @@ public class DetailActivity extends PermissionActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }
@@ -430,7 +435,7 @@ public class DetailActivity extends PermissionActivity {
         RequestParams requestParams = new RequestParams(endUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("recordId", recordId);
-        requestParams.addQueryStringParameter("data",gson.toJson(locationList));
+        requestParams.addQueryStringParameter("data", gson.toJson(locationList));
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
