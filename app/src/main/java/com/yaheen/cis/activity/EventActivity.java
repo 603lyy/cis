@@ -21,14 +21,19 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.JsonObject;
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.MapActivity;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
+import com.yaheen.cis.adapter.EventImgAdapter;
+import com.yaheen.cis.adapter.EventProblemAdapter;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
+import com.yaheen.cis.entity.EventDetailBean;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
@@ -51,78 +56,41 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventActivity extends PermissionActivity {
+public class EventActivity extends MapActivity {
 
     private final int REQUEST_CODE_CHOOSE = 1001;
 
-    private TextView tvLocation, tvTime, tvCommit, tvFinish;
+    private TextView tvLocation, tvType, tvDescribe, tvUrgency;
+
+    private ImageView ivUrgency;
 
     private MapView mapView = null;
 
     private BaiduMap mBaiduMap;
 
-    private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
+    private RecyclerView rvProblem, rvImg;
 
-    private ProblemAdapter problemAdapter;
-
-    private PatrolTypeAdapter typeAdapter;
+    private EventProblemAdapter problemAdapter;
 
     private UrgencyAdapter urgencyAdapter;
 
-    private ImgUploadAdapter uploadAdapter;
+    private EventImgAdapter imgAdapter;
 
     private String questionUrl = "http://192.168.199.108:8080/crs/eapi/eventDetail.do";
 
-    private String uploadImgUrl = "http://192.168.199.108:8080/crs/eapi/uploadPhoto.do";
-
-    private String reportUrl = "http://192.168.199.108:8080/crs/eapi/report.do";
-
-    private String endUrl = "http://192.168.199.108:8080/crs/eapi/endPatrol.do";
-
-    private String typeStr, questionStr, recordId,eventId;
-
-    //已上传图片的ID的拼接
-    private String imgIdStr = "";
+    private String  recordId, eventId;
 
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
-
-    //记录开始巡查的时间戳,方便计算时间
-    private long startTime;
-
-    //被选择的图片路径列表
-    private List<Uri> selectUriList;
-
-    //图片上传列表的数据列表
-    private List<String> adapterPathList = new ArrayList<>();
-
-    //已上传图片的ID列表
-    private List<String> uploadIdList = new ArrayList<>();
-
-    //定时上传的坐标点列表
-    private List<UploadLocationListBean.LocationBean> locationList = new ArrayList<>();
-
-    //问题类型实体
-    private TypeBean typeData;
-
-    //问题实体
-    private QuestionBean qData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        tvCommit = findViewById(R.id.tv_commit);
-        tvFinish = findViewById(R.id.tv_finish);
 
         showLoadingDialog();
-        startTime = System.currentTimeMillis();
-        typeStr = getIntent().getStringExtra("type");
         eventId = getIntent().getStringExtra("eventId");
         recordId = getIntent().getStringExtra("recordId");
-        questionStr = getIntent().getStringExtra("question");
-        qData = gson.fromJson(questionStr, QuestionBean.class);
-        typeData = gson.fromJson(typeStr, TypeBean.class);
 
         //记录ID不可为空
         if (TextUtils.isEmpty(recordId)) {
@@ -130,77 +98,25 @@ public class EventActivity extends PermissionActivity {
         }
 
         initView();
-        getEventInfo();
-//        initPatrol();
-//        initQuestion();
-//        initUrgency();
         initMapView();
-//        initImgUpload();
-//        getQuestionMsg();
-
-        tvCommit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendReport();
-            }
-        });
-
-        tvFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                endPatrol();
-            }
-        });
+        initQuestion();
+        initImgUpload();
+        getEventInfo();
     }
 
     private void initView() {
-        tvTime = findViewById(R.id.tv_time);
+        tvType = findViewById(R.id.tv_type);
+        ivUrgency = findViewById(R.id.iv_urgency);
+        tvUrgency = findViewById(R.id.tv_urgency);
+        tvDescribe = findViewById(R.id.tv_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
-
-        tvLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (BDMapUtils.getLocation() != null) {
-                    tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
-                }
-
-            }
-        });
-    }
-
-    private void initPatrol() {
-        rvPatrol = findViewById(R.id.rv_patrol);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvPatrol.setLayoutManager(layoutManager);
-
-        typeAdapter = new PatrolTypeAdapter();
-        typeAdapter.setDatas(typeData.getTypeArr());
-        rvPatrol.setAdapter(typeAdapter);
     }
 
     private void initQuestion() {
         rvProblem = findViewById(R.id.rv_problem);
         rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
-
-        problemAdapter = new ProblemAdapter();
-        if (!TextUtils.isEmpty(typeStr)) {
-            problemAdapter.setDatas(qData.getTypeArr());
-        }
+        problemAdapter = new EventProblemAdapter();
         rvProblem.setAdapter(problemAdapter);
-    }
-
-    private void initUrgency() {
-        rvUrgency = findViewById(R.id.rv_urgency);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvUrgency.setLayoutManager(layoutManager);
-
-        urgencyAdapter = new UrgencyAdapter();
-//        urgencyAdapter.setDatas(DataServer.getSampleData(10));
-        rvUrgency.setAdapter(urgencyAdapter);
     }
 
     private void initImgUpload() {
@@ -210,9 +126,8 @@ public class EventActivity extends PermissionActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImg.setLayoutManager(layoutManager);
 
-        uploadAdapter = new ImgUploadAdapter(this);
-        uploadAdapter.addFooterView(getImgFooterView());
-        rvImg.setAdapter(uploadAdapter);
+        imgAdapter = new EventImgAdapter(this);
+        rvImg.setAdapter(imgAdapter);
     }
 
     private void initMapView() {
@@ -222,24 +137,9 @@ public class EventActivity extends PermissionActivity {
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
-        BDMapUtils.setMapViewListener(new LocationListener());
     }
 
-    private View getImgFooterView() {
-        View view = getLayoutInflater().inflate(R.layout.footer_img_upload,
-                (ViewGroup) rvImg.getParent(), false);
-        ImageView ivAdd = view.findViewById(R.id.iv_add);
-
-        ivAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImgUploadHelper.showUserAvatarUploadDialog(EventActivity.this, imgListener);
-            }
-        });
-        return view;
-    }
-
-    private void getEventInfo(){
+    private void getEventInfo() {
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("recordId", recordId);
@@ -249,37 +149,16 @@ public class EventActivity extends PermissionActivity {
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void getQuestionMsg() {
-        RequestParams requestParams = new RequestParams(questionUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("typeId", "402847f26390db7b016390df8bd90001");
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                QuestionBean data = gson.fromJson(result, QuestionBean.class);
+                EventDetailBean data = gson.fromJson(result, EventDetailBean.class);
                 if (data != null && data.isResult()) {
+                    tvType.setText(data.getTbEvent().getType());
+                    tvDescribe.setText(data.getTbEvent().getDescribe());
+                    emergencyTransfer(data.getTbEvent().getEmergency());
+                    imgAdapter.setDatas(data.getTbEvent().getFileArr());
+                    problemAdapter.setDatas(data.getTbEvent().getQuestionnaireArr());
+                    searchButtonProcess(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
+                    setLocationData(Float.valueOf(data.getTbEvent().getLatitude()),
+                            Float.valueOf(data.getTbEvent().getLongitude()));
                 }
             }
 
@@ -295,219 +174,49 @@ public class EventActivity extends PermissionActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }
 
-    private void upLoadImg(final Uri uri) {
+    private void setLocationData(float lat, float lon) {
 
-        final String imgPath = UriUtil.getPath(EventActivity.this, uri);
+        MyLocationData locData = new MyLocationData.Builder().direction(100)
+                .latitude(lat).longitude(lon).build();
 
-        if (TextUtils.isEmpty(imgPath)) {
-            return;
+        // 设置定位数据
+        mBaiduMap.setMyLocationData(locData);
+
+        if (isFirstLoc) {
+            isFirstLoc = false;
+            LatLng ll = new LatLng(lat, lon);
+            MapStatus.Builder builder = new MapStatus.Builder();
+            //设置地图层级（4-21）
+            builder.target(ll).zoom(17.0f);
+            mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
-
-        RequestParams params = new RequestParams(uploadImgUrl);
-        params.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        params.addBodyParameter("originImage", new File(imgPath));
-        params.setMultipart(true);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
-                if (data != null) {
-                    //删除已请求上传图片的路径
-                    selectUriList.remove(uri);
-
-                    if (data.isResult()) {
-                        uploadIdList.add(data.getFileId());
-                        adapterPathList.add(imgPath);
-                        uploadAdapter.setDatas(adapterPathList);
-                        uploadAdapter.notifyDataSetChanged();
-                        if (TextUtils.isEmpty(imgIdStr)) {
-                            imgIdStr = data.getFileId();
-                        } else {
-                            imgIdStr = imgIdStr + "," + data.getFileId();
-                        }
-                    }
-
-                    //图片路径不为空，继续上传剩余图片
-                    if (selectUriList.size() > 0) {
-                        upLoadImg(selectUriList.get(0));
-                    }
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                if (selectUriList.size() <= 0) {
-                    cancelLoadingDialog();
-                }
-            }
-        });
     }
 
-    private void sendReport() {
-
-        String s = "";
-
-        for (int i = 0; i < uploadIdList.size(); i++) {
-            if (i == 0) {
-                s = uploadIdList.get(i);
-            } else {
-                s = s + "," + uploadIdList.get(i);
-            }
+    private void emergencyTransfer(String emergency) {
+        if (emergency.equals("0")) {
+            ivUrgency.setBackgroundResource(R.drawable.ic_recode);
+            tvUrgency.setText(R.string.detail_urgency_record);
+        } else if (emergency.equals("1")) {
+            ivUrgency.setBackgroundResource(R.drawable.ic_normal);
+            tvUrgency.setText(R.string.detail_urgency_normal);
+        } else if (emergency.equals("2")) {
+            ivUrgency.setBackgroundResource(R.drawable.ic_suspicious);
+            tvUrgency.setText(R.string.detail_urgency_suspicious);
+        } else if (emergency.equals("3")) {
+            ivUrgency.setBackgroundResource(R.drawable.ic_urgent);
+            tvUrgency.setText(R.string.detail_urgency_urgent);
         }
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("typeId", typeData.getTypeArr().get(0).getId());
-        jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
-        jsonObject.addProperty("emergency", "1");
-        jsonObject.addProperty("describe", "好大火啊啊啊啊啊");
-        jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
-        jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
-        jsonObject.addProperty("webFileids", s);
-
-
-        RequestParams requestParams = new RequestParams(reportUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("recordId", recordId);
-        requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ReportBean data = gson.fromJson(result, ReportBean.class);
-                if (data != null && data.isResult()) {
-                    showToast(R.string.detail_commit_success);
-                    clearData();
-                } else {
-                    showToast(R.string.detail_commit_fail);
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
     }
 
-    private void endPatrol() {
-
-//        JsonArray jsonArray = new JsonArray();
-//        jsonArray.add();
-
-        UploadLocationListBean.LocationBean bean = new UploadLocationListBean.LocationBean();
-        UploadLocationListBean listBean = new UploadLocationListBean();
-
-        bean.setLatitude(BDMapUtils.getLocation().getLatitude() + "");
-        bean.setLongitude(BDMapUtils.getLocation().getLongitude() + "");
-        locationList.add(bean);
-        locationList.add(bean);
-        listBean.setLocationArr(locationList);
-
-        RequestParams requestParams = new RequestParams(endUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("recordId", recordId);
-        requestParams.addQueryStringParameter("data",gson.toJson(locationList));
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ReportBean data = gson.fromJson(result, ReportBean.class);
-                if (data != null && data.isResult()) {
-                    showToast(R.string.detail_commit_success);
-                    clearData();
-                } else {
-                    showToast(R.string.detail_commit_fail);
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private class LocationListener implements MapViewLocationListener {
-
-        @Override
-        public void changeLocation(BDLocation mLoc) {
-
-            MyLocationData locData = new MyLocationData.Builder().direction(100)
-                    .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
-
-            // 设置定位数据
-            mBaiduMap.setMyLocationData(locData);
-
-            if (isFirstLoc) {
-                isFirstLoc = false;
-                LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
-                MapStatus.Builder builder = new MapStatus.Builder();
-                //设置地图层级（4-21）
-                builder.target(ll).zoom(19.0f);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-            }
-        }
-
-    }
-
-    private UpLoadImgListener imgListener = new UpLoadImgListener() {
-        @Override
-        public void upLoad(List<Uri> list) {
-            showLoadingDialog();
-
-            if (list.size() <= 0) {
-                return;
-            }
-            selectUriList = list;
-            upLoadImg(list.get(0));
-        }
-    };
-
-    //上报成功后重置数据
-    private void clearData() {
-        uploadIdList.clear();
-        selectUriList.clear();
-        adapterPathList.clear();
-        problemAdapter.resetData();
-        uploadAdapter.setDatas(null);
-        problemAdapter.notifyDataSetChanged();
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+        super.onGetReverseGeoCodeResult(result);
+        tvLocation.setText(result.getAddress());
     }
 
     @Override
