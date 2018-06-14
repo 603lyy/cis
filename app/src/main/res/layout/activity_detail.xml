@@ -177,7 +177,6 @@
                     android:id="@+id/rv_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:orientation="horizontal" />
 
@@ -202,8 +201,7 @@
             <TextView
                 android:id="@+id/tv_location_describe"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="30dp"
                 android:drawableRight="@drawable/ic_loaction"
                 android:gravity="center_vertical"
                 android:textSize="12dp" />
@@ -221,9 +219,11 @@
             style="@style/Detail_Toolbar_TextView"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="30dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:layout_gravity="center"
-            android:background="@drawable/btn_red"
+            android:background="@drawable/btn_upload"
             android:gravity="center"
             android:text="@string/detail_commit" />
 

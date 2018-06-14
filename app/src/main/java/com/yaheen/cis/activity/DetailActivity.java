@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,6 +61,8 @@ public class DetailActivity extends PermissionActivity {
 
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
+    private EditText etDescribe;
+
     private MapView mapView = null;
 
     private BaiduMap mBaiduMap;
@@ -74,13 +77,13 @@ public class DetailActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = "http://192.168.199.119:8080/crs/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "http://192.168.199.108:8080/crs/eapi/findQuestionaireByTypeId.do";
 
-    private String uploadImgUrl = "http://192.168.199.119:8080/crs/eapi/uploadPhoto.do";
+    private String uploadImgUrl = "http://192.168.199.108:8080/crs/eapi/uploadPhoto.do";
 
-    private String reportUrl = "http://192.168.199.119:8080/crs/eapi/report.do";
+    private String reportUrl = "http://192.168.199.108:8080/crs/eapi/report.do";
 
-    private String endUrl = "http://192.168.199.119:8080/crs/eapi/endPatrol.do";
+    private String endUrl = "http://192.168.199.108:8080/crs/eapi/endPatrol.do";
 
     private String typeStr, questionStr, recordId;
 
@@ -149,13 +152,14 @@ public class DetailActivity extends PermissionActivity {
         tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                endPatrol();
+                finishPatrol();
             }
         });
     }
 
     private void initView() {
         tvTime = findViewById(R.id.tv_time);
+        etDescribe = findViewById(R.id.et_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
 
         tvLocation.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +238,7 @@ public class DetailActivity extends PermissionActivity {
         urgencyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(!urgencyAdapter.getData().get(position).isSelect()){
+                if (!urgencyAdapter.getData().get(position).isSelect()) {
                     for (int i = 0; i < urgencyAdapter.getData().size(); i++) {
                         if (i == position) {
                             urgencyAdapter.getData().get(i).setSelect(true);
@@ -251,7 +255,7 @@ public class DetailActivity extends PermissionActivity {
     private void initImgUpload() {
         rvImg = findViewById(R.id.rv_img);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         rvImg.setLayoutManager(layoutManager);
 
         uploadAdapter = new ImgUploadAdapter(this);
@@ -261,6 +265,7 @@ public class DetailActivity extends PermissionActivity {
 
     private void initMapView() {
         mapView = findViewById(R.id.detail_map_view);
+        tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
@@ -377,9 +382,22 @@ public class DetailActivity extends PermissionActivity {
 
     private void sendReport() {
 
-        if(TextUtils.isEmpty(urgencyAdapter.geUrgencyId())){
+        if (TextUtils.isEmpty(urgencyAdapter.geUrgencyId())) {
+            showToast(R.string.detail_urgency_empty);
             return;
         }
+
+//        if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
+//            showToast(R.string.detail_urgency_empty);
+//            return;
+//        }
+
+        if (TextUtils.isEmpty(etDescribe.getText())) {
+            showToast(R.string.detail_describe_empty);
+            return;
+        }
+
+        showLoadingDialog();
 
         String s = "";
 
@@ -395,7 +413,7 @@ public class DetailActivity extends PermissionActivity {
         jsonObject.addProperty("typeId", typeData.getTypeArr().get(0).getId());
         jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
         jsonObject.addProperty("emergency", urgencyAdapter.geUrgencyId());
-        jsonObject.addProperty("describe", "好大火啊啊啊啊啊");
+        jsonObject.addProperty("describe", etDescribe.getText().toString());
         jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
         jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
         jsonObject.addProperty("webFileids", s);
@@ -431,29 +449,23 @@ public class DetailActivity extends PermissionActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }
 
-    private void endPatrol() {
-
-//        JsonArray jsonArray = new JsonArray();
-//        jsonArray.add();
+    private void finishPatrol() {
+        showLoadingDialog();
 
         UploadLocationListBean.LocationBean bean = new UploadLocationListBean.LocationBean();
-        UploadLocationListBean listBean = new UploadLocationListBean();
-
         bean.setLatitude(BDMapUtils.getLocation().getLatitude() + "");
         bean.setLongitude(BDMapUtils.getLocation().getLongitude() + "");
         locationList.add(bean);
-        locationList.add(bean);
-        listBean.setLocationArr(locationList);
 
         RequestParams requestParams = new RequestParams(endUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("data", gson.toJson(locationList));
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
@@ -461,10 +473,10 @@ public class DetailActivity extends PermissionActivity {
             public void onSuccess(String result) {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
-                    showToast(R.string.detail_commit_success);
-                    clearData();
+                    showToast(R.string.detail_finish_success);
+                    finish();
                 } else {
-                    showToast(R.string.detail_commit_fail);
+                    showToast(R.string.detail_finish_fail);
                 }
             }
 
@@ -480,7 +492,7 @@ public class DetailActivity extends PermissionActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }

@@ -28,7 +28,7 @@ public class RecordActivity extends PermissionActivity {
 
     private RecordAdapter recordAdapter;
 
-    private String recordUrl = "http://192.168.199.119:8080/crs/eapi/recordList.do";
+    private String recordUrl = "http://192.168.199.108:8080/crs/eapi/recordList.do";
 
     private String recordId;
 

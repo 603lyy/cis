@@ -31,6 +31,11 @@
     <string name="detail_urgency_normal">正常</string>
     <string name="detail_urgency_suspicious">可疑</string>
     <string name="detail_urgency_urgent">紧急</string>
+    <string name="detail_urgency_empty">请选择紧急程度</string>
+    <string name="detail_describe_empty">请填写问题的描述</string>
+    <string name="detail_question_empty">请选择问题</string>
+    <string name="detail_finish_fail">结束巡查失败，请重新结束</string>
+    <string name="detail_finish_success">结束巡查成功</string>
 
     <string name="record_detail">查看详情</string>
     <string name="record_title_content">巡查记录</string>
