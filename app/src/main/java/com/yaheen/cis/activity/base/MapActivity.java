@@ -1,27 +1,37 @@
 package com.yaheen.cis.activity.base;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.MassTransitRouteResult;
+import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
+import com.baidu.mapapi.search.route.PlanNode;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
 
-public class MapActivity extends PermissionActivity implements OnGetGeoCoderResultListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MapActivity extends PermissionActivity implements OnGetGeoCoderResultListener,
+        OnGetRoutePlanResultListener {
 
     // 搜索模块
     private GeoCoder mSearch = null;
+
+    //路线规划模块
+    private RoutePlanSearch planSearch = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +40,16 @@ public class MapActivity extends PermissionActivity implements OnGetGeoCoderResu
         // 初始化搜索模块，注册事件监听
         mSearch = GeoCoder.newInstance();
         mSearch.setOnGetGeoCodeResultListener(this);
+
+        // 初始化搜索模块，注册事件监听
+        planSearch = RoutePlanSearch.newInstance();
+        planSearch.setOnGetRoutePlanResultListener(this);
     }
 
     /**
      * 发起搜索
      */
-    public void searchButtonProcess(String lat, String lon) {
+    public void searchAddress(String lat, String lon) {
         LatLng ptCenter = new LatLng((Float.valueOf(lat)), (Float.valueOf(lon)));
         // 反Geo搜索
         mSearch.reverseGeoCode(new ReverseGeoCodeOption()
@@ -72,9 +86,49 @@ public class MapActivity extends PermissionActivity implements OnGetGeoCoderResu
         }
     }
 
+    public void searchRoute() {
+        PlanNode stNode = PlanNode.withCityNameAndPlaceName("北京", "天安门");
+        PlanNode enNode = PlanNode.withCityNameAndPlaceName("北京", "正阳门");
+        PlanNode passNode = PlanNode.withCityNameAndPlaceName("北京", "国家大剧院");
+        List<PlanNode> planNodes = new ArrayList<>();
+        planNodes.add(passNode);
+        planSearch.drivingSearch((new DrivingRoutePlanOption())
+                .from(stNode).to(enNode).passBy(planNodes));
+    }
+
+    @Override
+    public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
+
+    }
+
+    @Override
+    public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
+
+    }
+
+    @Override
+    public void onGetMassTransitRouteResult(MassTransitRouteResult massTransitRouteResult) {
+
+    }
+
+    @Override
+    public void onGetDrivingRouteResult(DrivingRouteResult result) {
+    }
+
+    @Override
+    public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
+
+    }
+
+    @Override
+    public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mSearch.destroy();
+        planSearch.destroy();
     }
 }

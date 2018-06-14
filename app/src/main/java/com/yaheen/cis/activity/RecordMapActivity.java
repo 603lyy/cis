@@ -1,6 +1,5 @@
 package com.yaheen.cis.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +22,10 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
@@ -36,6 +38,9 @@ import com.yaheen.cis.util.map.cluster.Cluster;
 import com.yaheen.cis.util.map.cluster.ClusterItem;
 import com.yaheen.cis.util.map.cluster.ClusterManager;
 import com.yaheen.cis.util.map.MapViewLocationListener;
+import com.yaheen.cis.util.map.route.DrivingRouteOverlay;
+import com.yaheen.cis.util.map.route.OverlayManager;
+import com.yaheen.cis.util.map.route.WalkingRouteOverlay;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import org.xutils.common.Callback;
@@ -45,7 +50,7 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordMapActivity extends PermissionActivity {
+public class RecordMapActivity extends MapActivity {
 
     private RecyclerView rvRecordMap;
 
@@ -56,6 +61,10 @@ public class RecordMapActivity extends PermissionActivity {
     private BaiduMap mBaiduMap;
 
     private ClusterManager<MyItem> mClusterManager;
+
+    private RouteLine route = null;
+
+    private OverlayManager routeOverlay = null;
 
     private List<MyItem> items;
 
@@ -316,6 +325,32 @@ public class RecordMapActivity extends PermissionActivity {
             return BitmapDescriptorFactory
                     .fromResource(R.drawable.icon_gcoding);
         }
+    }
+
+    @Override
+    public void onGetWalkingRouteResult(WalkingRouteResult result) {
+        super.onGetWalkingRouteResult(result);
+
+        route = result.getRouteLines().get(0);
+        WalkingRouteOverlay overlay = new WalkingRouteOverlay(mBaiduMap);
+        routeOverlay = overlay;
+        mBaiduMap.setOnMarkerClickListener(overlay);
+        overlay.setData(result.getRouteLines().get(0));
+        overlay.addToMap();
+        overlay.zoomToSpan();
+    }
+
+    @Override
+    public void onGetDrivingRouteResult(DrivingRouteResult result) {
+        super.onGetDrivingRouteResult(result);
+
+        route = result.getRouteLines().get(0);
+        DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
+        routeOverlay = overlay;
+        mBaiduMap.setOnMarkerClickListener(overlay);
+        overlay.setData(result.getRouteLines().get(0));
+        overlay.addToMap();
+        overlay.zoomToSpan();
     }
 
     @Override

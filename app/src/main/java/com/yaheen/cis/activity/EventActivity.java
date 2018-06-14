@@ -1,19 +1,14 @@
 package com.yaheen.cis.activity;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -22,39 +17,18 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.google.gson.JsonObject;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
-import com.yaheen.cis.activity.base.PermissionActivity;
-import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.EventImgAdapter;
 import com.yaheen.cis.adapter.EventProblemAdapter;
-import com.yaheen.cis.adapter.ImgUploadAdapter;
-import com.yaheen.cis.adapter.PatrolTypeAdapter;
-import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.EventDetailBean;
-import com.yaheen.cis.entity.ImgUploadBean;
-import com.yaheen.cis.entity.QuestionBean;
-import com.yaheen.cis.entity.ReportBean;
-import com.yaheen.cis.entity.TypeBean;
-import com.yaheen.cis.entity.UploadLocationListBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
-import com.yaheen.cis.util.img.UpLoadImgListener;
-import com.yaheen.cis.util.img.UriUtil;
-import com.yaheen.cis.util.map.BDMapUtils;
-import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
-import com.yaheen.cis.util.time.CountDownTimerUtils;
-import com.yaheen.cis.util.time.TimeTransferUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EventActivity extends MapActivity {
 
@@ -71,8 +45,6 @@ public class EventActivity extends MapActivity {
     private RecyclerView rvProblem, rvImg;
 
     private EventProblemAdapter problemAdapter;
-
-    private UrgencyAdapter urgencyAdapter;
 
     private EventImgAdapter imgAdapter;
 
@@ -156,7 +128,7 @@ public class EventActivity extends MapActivity {
                     emergencyTransfer(data.getTbEvent().getEmergency());
                     imgAdapter.setDatas(data.getTbEvent().getFileArr());
                     problemAdapter.setDatas(data.getTbEvent().getQuestionnaireArr());
-                    searchButtonProcess(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
+                    searchAddress(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
                     setLocationData(Float.valueOf(data.getTbEvent().getLatitude()),
                             Float.valueOf(data.getTbEvent().getLongitude()));
                 }
