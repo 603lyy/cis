@@ -9,6 +9,7 @@
         android:id="@+id/iv_urgency"
         android:layout_gravity="center"
         android:layout_width="25dp"
+        android:background="@drawable/ic_urgency_normal"
         android:layout_height="25dp" />
 
     <TextView
@@ -16,6 +17,5 @@
         android:layout_width="wrap_content"
         android:layout_gravity="center"
         android:textSize="14dp"
-        android:layout_height="wrap_content"
-        android:text="记录" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

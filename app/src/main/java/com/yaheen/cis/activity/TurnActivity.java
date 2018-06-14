@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
+import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.dialog.DialogCallback;
+import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 
 public class TurnActivity extends BaseActivity {
 
@@ -33,6 +37,20 @@ public class TurnActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(TurnActivity.this,PatrolSettingActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showDialog(TurnActivity.this, "确定要退出该APP吗？", new DialogCallback() {
+            @Override
+            public void callback() {
+                BaseApp.exit();
+            }
+        }, new IDialogCancelCallback() {
+            @Override
+            public void cancelCallback() {
             }
         });
     }

@@ -10,9 +10,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.LoginBean;
+import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.dialog.DialogCallback;
+import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.AESUtils;
 import com.yaheen.cis.util.nfc.Base64;
@@ -145,5 +149,19 @@ public class LoginActivity extends PermissionActivity {
         } else {
             cbRPsd.setChecked(true);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
+            @Override
+            public void callback() {
+                BaseApp.exit();
+            }
+        }, new IDialogCancelCallback() {
+            @Override
+            public void cancelCallback() {
+            }
+        });
     }
 }

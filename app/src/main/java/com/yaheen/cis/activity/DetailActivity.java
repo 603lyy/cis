@@ -57,8 +57,6 @@ import java.util.List;
 
 public class DetailActivity extends PermissionActivity {
 
-    private final int REQUEST_CODE_CHOOSE = 1001;
-
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
     private EditText etDescribe;
@@ -121,7 +119,6 @@ public class DetailActivity extends PermissionActivity {
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
 
-        showLoadingDialog();
         startTime = System.currentTimeMillis();
         typeStr = getIntent().getStringExtra("type");
         recordId = getIntent().getStringExtra("recordId");
@@ -140,7 +137,6 @@ public class DetailActivity extends PermissionActivity {
         initUrgency();
         initMapView();
         initImgUpload();
-//        getQuestionMsg();
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override

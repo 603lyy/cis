@@ -33,16 +33,32 @@ public class UrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, UrgencyBean item) {
         if (helper.getAdapterPosition() == 0) {
-            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_recode);
+            if (item.isSelect()) {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_recode);
+            } else {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgency_normal);
+            }
             helper.setText(R.id.tv_urgency, R.string.detail_urgency_record);
         } else if (helper.getAdapterPosition() == 1) {
-            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_normal);
+            if (item.isSelect()) {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_normal);
+            } else {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgency_normal);
+            }
             helper.setText(R.id.tv_urgency, R.string.detail_urgency_normal);
         } else if (helper.getAdapterPosition() == 2) {
-            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_suspicious);
+            if (item.isSelect()) {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_suspicious);
+            } else {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgency_normal);
+            }
             helper.setText(R.id.tv_urgency, R.string.detail_urgency_suspicious);
         } else if (helper.getAdapterPosition() == 3) {
-            helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgent);
+            if (item.isSelect()) {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgent);
+            } else {
+                helper.setBackgroundRes(R.id.iv_urgency, R.drawable.ic_urgency_normal);
+            }
             helper.setText(R.id.tv_urgency, R.string.detail_urgency_urgent);
         }
 
