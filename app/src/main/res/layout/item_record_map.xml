@@ -9,20 +9,32 @@
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_address"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_situation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_describe"
         android:layout_width="match_parent"
+        android:textSize="16dp"
         android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorHint"
+        android:textSize="16dp" />
 </LinearLayout>

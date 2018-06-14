@@ -32,11 +32,13 @@ public class TimeTransferUtils {
         return timeString;
     }
 
-    public static boolean isTimeOver() {
-        if (System.currentTimeMillis() < mDate) {
-            return false;
-        }
-        return true;
+    //时间戳转字符串
+    public static String getYMDHMSStrTime(String timeStamp) {
+        String timeString = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+        long l = Long.valueOf(timeStamp);
+        timeString = sdf.format(new Date(l));//单位秒
+        return timeString;
     }
 
 }

@@ -6,8 +6,8 @@ public class RecordEventBean {
 
     /**
      * result : true
-     * eventList : [{"id":"402847f663f35e1d0163f3c17b690033","longitude":"113.403244","latitude":"23.131214","emergency":"3","describe":"好大火啊啊啊啊啊"}]
-     * recordObject : {"startLongitude":"113.404437","startLatitude":"23.131203","endLongitude":"113.403246","endLatitude":"23.131215"}
+     * eventList : [{"id":"402847ec63fc0b920163fc131b8e0007","time":"2018-06-14 10:15:00","longitude":"113.40793","latitude":"23.131159","emergency":"3","describe":"好大火啊啊啊啊啊"},{"id":"402847ec63fc0b920163fc1299b80005","time":"2018-06-14 10:14:27","longitude":"113.40473","latitude":"23.131159","emergency":"2","describe":"好大火啊啊啊啊啊"}]
+     * recordObject : {"startLongitude":"113.404734","startLatitude":"23.131158","endLongitude":"113.404734","endLatitude":"23.131158"}
      * code : 1004
      * msg : 成功
      */
@@ -60,10 +60,10 @@ public class RecordEventBean {
 
     public static class RecordObjectBean {
         /**
-         * startLongitude : 113.404437
-         * startLatitude : 23.131203
-         * endLongitude : 113.403246
-         * endLatitude : 23.131215
+         * startLongitude : 113.404734
+         * startLatitude : 23.131158
+         * endLongitude : 113.404734
+         * endLatitude : 23.131158
          */
 
         private String startLongitude;
@@ -106,14 +106,16 @@ public class RecordEventBean {
 
     public static class EventListBean {
         /**
-         * id : 402847f663f35e1d0163f3c17b690033
-         * longitude : 113.403244
-         * latitude : 23.131214
+         * id : 402847ec63fc0b920163fc131b8e0007
+         * time : 2018-06-14 10:15:00
+         * longitude : 113.40793
+         * latitude : 23.131159
          * emergency : 3
          * describe : 好大火啊啊啊啊啊
          */
 
         private String id;
+        private String time;
         private String longitude;
         private String latitude;
         private String emergency;
@@ -125,6 +127,14 @@ public class RecordEventBean {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
         }
 
         public String getLongitude() {

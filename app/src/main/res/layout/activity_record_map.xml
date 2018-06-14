@@ -12,8 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="300dp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:background="@color/colorHint"
+        android:gravity="center"
+        android:text="@string/record_event_title"
+        android:textSize="16dp"
+        android:layout_height="40dp" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_record_map"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

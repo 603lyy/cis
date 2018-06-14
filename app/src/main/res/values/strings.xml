@@ -39,6 +39,8 @@
 
     <string name="record_detail">查看详情</string>
     <string name="record_title_content">巡查记录</string>
+    <string name="record_event_title">事件记录</string>
+    <string name="record_event_emergency">紧急程度：%s</string>
 
     <string name="photo_album">相册</string>
     <string name="take_photo">拍照</string>
