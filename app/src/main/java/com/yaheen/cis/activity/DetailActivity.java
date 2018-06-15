@@ -26,6 +26,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
@@ -38,6 +39,9 @@ import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.entity.UploadLocationListBean;
+import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.dialog.DialogCallback;
+import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
@@ -60,6 +64,8 @@ public class DetailActivity extends PermissionActivity {
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
     private EditText etDescribe;
+
+    private ImageView ivDelete;
 
     private MapView mapView = null;
 
@@ -274,11 +280,23 @@ public class DetailActivity extends PermissionActivity {
         View view = getLayoutInflater().inflate(R.layout.footer_img_upload,
                 (ViewGroup) rvImg.getParent(), false);
         ImageView ivAdd = view.findViewById(R.id.iv_add);
+        ivDelete = view.findViewById(R.id.iv_delete);
 
         ivAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ImgUploadHelper.showUserAvatarUploadDialog(DetailActivity.this, imgListener);
+            }
+        });
+
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadIdList.clear();
+                selectUriList.clear();
+                adapterPathList.clear();
+                uploadAdapter.setDatas(adapterPathList);
+                ivDelete.setVisibility(View.GONE);
             }
         });
         return view;
@@ -348,6 +366,12 @@ public class DetailActivity extends PermissionActivity {
                         } else {
                             imgIdStr = imgIdStr + "," + data.getFileId();
                         }
+                    }
+
+                    if (uploadIdList != null && uploadIdList.size() > 0) {
+                        ivDelete.setVisibility(View.VISIBLE);
+                    } else {
+                        ivDelete.setVisibility(View.GONE);
                     }
 
                     //图片路径不为空，继续上传剩余图片
@@ -567,5 +591,20 @@ public class DetailActivity extends PermissionActivity {
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mBaiduMap.setMyLocationEnabled(false);
         mapView.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        DialogUtils.showDialog(DetailActivity.this, "是否要结束本次巡查？", new DialogCallback() {
+            @Override
+            public void callback() {
+                finishPatrol();
+            }
+        }, new IDialogCancelCallback() {
+            @Override
+            public void cancelCallback() {
+            }
+        });
     }
 }
