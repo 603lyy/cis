@@ -4,9 +4,10 @@ import java.util.List;
 
 public class RecordBean {
 
+
     /**
      * result : true
-     * recordArr : [{"id":"402847f663f35e1d0163f36ce65b0021","startTime":"2018-06-12 17:56:29","endTime":"2018-06-12 17:57:02"},{"id":"402847f663f35e1d0163f36b06a90019","startTime":"2018-06-12 17:54:27","endTime":"2018-06-12 17:55:31"},{"id":"402847f663f35e1d0163f366d6ab0011","startTime":"2018-06-12 17:49:52","endTime":"2018-06-12 17:50:00"},{"id":"402847f663f35e1d0163f35fcdfe0003","startTime":"2018-06-12 17:42:11","endTime":"2018-06-12 17:48:51"}]
+     * recordArr : [{"id":"402847ec63fd07d20163fd792bba003c","startTime":"2018-06-14 16:46:05","timeDiffrence":"08:00:07","typeArr":["国土","消防","禁毒"]},{"id":"402847ec63fd07d20163fd7743c40037","startTime":"2018-06-14 16:44:00","timeDiffrence":"08:01:53","typeArr":["国土","消防","禁毒"]},{"id":"402847ec63fc0b920163fc1224940004","startTime":"2018-06-14 10:13:56","timeDiffrence":"08:01:09","typeArr":["国土","消防","禁毒"]}]
      * code : 1004
      * msg : 查询成功
      */
@@ -50,14 +51,16 @@ public class RecordBean {
 
     public static class RecordArrBean {
         /**
-         * id : 402847f663f35e1d0163f36ce65b0021
-         * startTime : 2018-06-12 17:56:29
-         * endTime : 2018-06-12 17:57:02
+         * id : 402847ec63fd07d20163fd792bba003c
+         * startTime : 2018-06-14 16:46:05
+         * timeDiffrence : 08:00:07
+         * typeArr : ["国土","消防","禁毒"]
          */
 
         private String id;
         private String startTime;
-        private String endTime;
+        private String timeDiffrence;
+        private List<String> typeArr;
 
         public String getId() {
             return id;
@@ -75,12 +78,20 @@ public class RecordBean {
             this.startTime = startTime;
         }
 
-        public String getEndTime() {
-            return endTime;
+        public String getTimeDiffrence() {
+            return timeDiffrence;
         }
 
-        public void setEndTime(String endTime) {
-            this.endTime = endTime;
+        public void setTimeDiffrence(String timeDiffrence) {
+            this.timeDiffrence = timeDiffrence;
+        }
+
+        public List<String> getTypeArr() {
+            return typeArr;
+        }
+
+        public void setTypeArr(List<String> typeArr) {
+            this.typeArr = typeArr;
         }
     }
 }

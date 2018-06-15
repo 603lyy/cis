@@ -6,8 +6,6 @@ import java.util.Date;
 
 public class TimeTransferUtils {
 
-    private static long mDate = 1530374400000L;
-
     //字符串转时间戳
     public static String getHMSTime(String timeString) {
         String timeStamp = null;

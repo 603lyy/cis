@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">综合整治</string>
+    <string name="app_exit">确定要退出该APP吗？</string>
 
     <string name="login_title">登录</string>
     <string name="login_username_hint">用户名</string>
@@ -41,6 +42,9 @@
     <string name="record_title_content">巡查记录</string>
     <string name="record_event_title">事件记录</string>
     <string name="record_event_emergency">紧急程度：%s</string>
+    <string name="record_patrol_time">巡查时间：%s</string>
+    <string name="record_patrol_duration">巡查时长：%s</string>
+    <string name="record_patrol_type">巡查类型：%s</string>
 
     <string name="photo_album">相册</string>
     <string name="take_photo">拍照</string>

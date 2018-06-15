@@ -18,27 +18,24 @@
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
-            android:text="12:21"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tv_duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="时长"
             android:layout_marginTop="3dp" />
 
         <TextView
             android:id="@+id/tv_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="国土"
             android:layout_marginTop="3dp" />
 
         <TextView
             android:id="@+id/tv_describe"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:text="描述"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp" />
 
