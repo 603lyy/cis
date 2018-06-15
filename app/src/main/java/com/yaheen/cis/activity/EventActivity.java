@@ -170,16 +170,16 @@ public class EventActivity extends MapActivity {
     }
 
     private void emergencyTransfer(String emergency) {
-        if (emergency.equals("0")) {
+        if (emergency.equals("1")) {
             ivUrgency.setBackgroundResource(R.drawable.ic_recode);
             tvUrgency.setText(R.string.detail_urgency_record);
-        } else if (emergency.equals("1")) {
+        } else if (emergency.equals("2")) {
             ivUrgency.setBackgroundResource(R.drawable.ic_normal);
             tvUrgency.setText(R.string.detail_urgency_normal);
-        } else if (emergency.equals("2")) {
+        } else if (emergency.equals("3")) {
             ivUrgency.setBackgroundResource(R.drawable.ic_suspicious);
             tvUrgency.setText(R.string.detail_urgency_suspicious);
-        } else if (emergency.equals("3")) {
+        } else if (emergency.equals("4")) {
             ivUrgency.setBackgroundResource(R.drawable.ic_urgent);
             tvUrgency.setText(R.string.detail_urgency_urgent);
         }

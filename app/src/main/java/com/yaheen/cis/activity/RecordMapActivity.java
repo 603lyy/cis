@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
@@ -108,15 +110,17 @@ public class RecordMapActivity extends MapActivity {
         mapView.showZoomControls(false);
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+        mBaiduMap.hideSDKLayer();
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
-        BDMapUtils.setMapViewListener(new locationListener());
-        setLocationData(BDMapUtils.getLocation());
+//        BDMapUtils.setMapViewListener(new locationListener());
+//        setLocationData(BDMapUtils.getLocation());
 
         // 定义点聚合管理类ClusterManager
         mClusterManager = new ClusterManager<MyItem>(this, mBaiduMap);
         // 添加Marker点
-        addMarkers();
+//        addMarkers();
         // 设置地图监听，当地图状态发生改变时，进行点聚合运算
         mBaiduMap.setOnMapStatusChangeListener(mClusterManager);
         // 设置maker点击时的响应
@@ -133,8 +137,12 @@ public class RecordMapActivity extends MapActivity {
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
             public boolean onClusterItemClick(MyItem item) {
-                Toast.makeText(RecordMapActivity.this,
-                        "点击单个Item", Toast.LENGTH_SHORT).show();
+                if (!TextUtils.isEmpty(item.eventId)) {
+                    Intent intent = new Intent(RecordMapActivity.this, EventActivity.class);
+                    intent.putExtra("recordId", recordId);
+                    intent.putExtra("eventId", item.eventId);
+                    startActivity(intent);
+                }
                 return false;
             }
         });
@@ -184,6 +192,8 @@ public class RecordMapActivity extends MapActivity {
                 if (data != null && data.isResult()) {
                     mapAdapter.setDatas(data.getEventList());
                     mapAdapter.notifyDataSetChanged();
+                    addMarkers(data.getRecordObject(), data.getEventList());
+//                    searchRoute(data.getRecordObject(), data.getEventList());
                 }
             }
 
@@ -216,26 +226,26 @@ public class RecordMapActivity extends MapActivity {
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new locationListener());
-        setLocationData(BDMapUtils.getLocation());
+//        setLocationData(BDMapUtils.getLocation());
 
         return view;
     }
 
-    private void setLocationData(BDLocation mLoc) {
+    private void setLocationData(LatLng mLoc) {
 
         if (mLoc == null) {
             return;
         }
 
         MyLocationData locData = new MyLocationData.Builder().direction(100)
-                .latitude(39.914935).longitude(116.403119).build();
+                .latitude(mLoc.latitude).longitude(mLoc.longitude).build();
 
         // 设置定位数据
         mBaiduMap.setMyLocationData(locData);
 
         if (isFirstLoc) {
             isFirstLoc = false;
-            LatLng ll = new LatLng(39.914935, 116.403119);
+            LatLng ll = new LatLng(mLoc.latitude, mLoc.longitude);
             MapStatus.Builder builder = new MapStatus.Builder();
             //设置地图层级（4-21）
             builder.target(ll).zoom(17.0f);
@@ -248,61 +258,52 @@ public class RecordMapActivity extends MapActivity {
         @Override
         public void changeLocation(BDLocation mLoc) {
 
-            setLocationData(mLoc);
-
-//            MyLocationData locData = new MyLocationData.Builder().direction(100)
-//                    .latitude(mLoc.getLatitude()).longitude(mLoc.getLongitude()).build();
-//
-//            // 设置定位数据
-//            mBaiduMap.setMyLocationData(locData);
-//
-//            if (isFirstLoc) {
-//                isFirstLoc = false;
-//                LatLng ll = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
-//                MapStatus.Builder builder = new MapStatus.Builder();
-//                //设置地图层级（4-21）
-//                builder.target(ll).zoom(19.0f);
-//                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-//            }
+//            setLocationData(mLoc);
         }
     }
 
     /**
      * 向地图添加Marker点
      */
-    public void addMarkers() {
-        // 添加Marker点
-        LatLng llA = new LatLng(39.963175, 116.400244);
-        LatLng llB = new LatLng(39.942821, 116.369199);
-        LatLng llC = new LatLng(39.939723, 116.425541);
-        LatLng llD = new LatLng(39.906965, 116.401394);
-        LatLng llE = new LatLng(39.956965, 116.331394);
-        LatLng llF = new LatLng(39.886965, 116.441394);
-        LatLng llG = new LatLng(39.996965, 116.411394);
+    public void addMarkers(RecordEventBean.RecordObjectBean rBean, List<RecordEventBean.EventListBean> eventList) {
 
-        items = new ArrayList<MyItem>();
-        items.add(new MyItem(llA));
-        items.add(new MyItem(llB));
-        items.add(new MyItem(llC));
-        items.add(new MyItem(llD));
-        items.add(new MyItem(llE));
-        items.add(new MyItem(llF));
-        items.add(new MyItem(llG));
+        items = new ArrayList<>();
+        //画直线
+        List<LatLng> points = new ArrayList<LatLng>();
+
+        LatLng stLatLng = new LatLng(
+                Float.valueOf(rBean.getStartLatitude()), Float.valueOf(rBean.getStartLongitude()));
+        LatLng enLatLng = new LatLng(
+                Float.valueOf(rBean.getEndLatitude()), Float.valueOf(rBean.getEndLongitude()));
+
+        String eventId = "";
+
+        for (int i = 0; i < eventList.size() + 2; i++) {
+            LatLng latLng;
+            if (i == 0) {
+                latLng = enLatLng;
+                eventId = "";
+            } else if (i == eventList.size() + 1) {
+                latLng = stLatLng;
+                eventId = "";
+            } else {
+                latLng = new LatLng(
+                        Float.valueOf(eventList.get(i - 1).getLatitude()),
+                        Float.valueOf(eventList.get(i - 1).getLongitude()));
+                eventId = eventList.get(i - 1).getId();
+            }
+            items.add(new MyItem(latLng, eventId));
+            points.add(latLng);
+        }
+
 
         mClusterManager.addItems(items);
 
-        //画直线
-        List<LatLng> points = new ArrayList<LatLng>();
-        points.add(llA);
-        points.add(llB);
-        points.add(llC);
-        points.add(llD);
-        points.add(llE);
-        points.add(llF);
-        points.add(llG);
         OverlayOptions ooPolyline = new PolylineOptions().width(10)
                 .color(0xAAFF0000).points(points);
         mBaiduMap.addOverlay(ooPolyline);
+        setLocationData(stLatLng);
+        mBaiduMap.showSDKLayer();
     }
 
     /**
@@ -311,8 +312,11 @@ public class RecordMapActivity extends MapActivity {
     public class MyItem implements ClusterItem {
         private final LatLng mPosition;
 
-        public MyItem(LatLng latLng) {
+        private final String eventId;
+
+        public MyItem(LatLng latLng, String eventId) {
             mPosition = latLng;
+            this.eventId = eventId;
         }
 
         @Override
@@ -328,29 +332,24 @@ public class RecordMapActivity extends MapActivity {
     }
 
     @Override
-    public void onGetWalkingRouteResult(WalkingRouteResult result) {
-        super.onGetWalkingRouteResult(result);
-
-        route = result.getRouteLines().get(0);
-        WalkingRouteOverlay overlay = new WalkingRouteOverlay(mBaiduMap);
-        routeOverlay = overlay;
-        mBaiduMap.setOnMarkerClickListener(overlay);
-        overlay.setData(result.getRouteLines().get(0));
-        overlay.addToMap();
-        overlay.zoomToSpan();
+    public void searchRoute(RecordEventBean.RecordObjectBean rBean, List<RecordEventBean.EventListBean> eventList) {
+        super.searchRoute(rBean, eventList);
     }
 
     @Override
     public void onGetDrivingRouteResult(DrivingRouteResult result) {
         super.onGetDrivingRouteResult(result);
 
-        route = result.getRouteLines().get(0);
-        DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
-        routeOverlay = overlay;
-        mBaiduMap.setOnMarkerClickListener(overlay);
-        overlay.setData(result.getRouteLines().get(0));
-        overlay.addToMap();
-        overlay.zoomToSpan();
+        if (result.getRouteLines().size() > 0) {
+            route = result.getRouteLines().get(0);
+            DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
+            routeOverlay = overlay;
+            mBaiduMap.setOnMarkerClickListener(overlay);
+            overlay.setData(result.getRouteLines().get(0));
+            overlay.addToMap();
+            overlay.zoomToSpan();
+            mBaiduMap.setMyLocationEnabled(false);
+        }
     }
 
     @Override
