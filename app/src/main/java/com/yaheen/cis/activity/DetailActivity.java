@@ -3,6 +3,8 @@ package com.yaheen.cis.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -154,7 +156,7 @@ public class DetailActivity extends PermissionActivity {
         tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishPatrol();
+                onBackPressed();
             }
         });
     }
@@ -336,9 +338,15 @@ public class DetailActivity extends PermissionActivity {
         });
     }
 
-    private void upLoadImg(final Uri uri) {
+    private void upLoadImg(final Uri uri, final boolean isTakePhoto) {
 
-        final String imgPath = UriUtil.getPath(DetailActivity.this, uri);
+        final String imgPath;
+
+        if (!isTakePhoto) {
+            imgPath = UriUtil.getPath(DetailActivity.this, uri);
+        } else {
+            imgPath = ImgUploadHelper.getPhotoPath();
+        }
 
         if (TextUtils.isEmpty(imgPath)) {
             return;
@@ -376,7 +384,7 @@ public class DetailActivity extends PermissionActivity {
 
                     //图片路径不为空，继续上传剩余图片
                     if (selectUriList.size() > 0) {
-                        upLoadImg(selectUriList.get(0));
+                        upLoadImg(selectUriList.get(0), isTakePhoto);
                     }
                 }
             }
@@ -542,14 +550,14 @@ public class DetailActivity extends PermissionActivity {
 
     private UpLoadImgListener imgListener = new UpLoadImgListener() {
         @Override
-        public void upLoad(List<Uri> list) {
+        public void upLoad(List<Uri> list, boolean isTakePhoto) {
             showLoadingDialog();
 
             if (list.size() <= 0) {
                 return;
             }
             selectUriList = list;
-            upLoadImg(list.get(0));
+            upLoadImg(list.get(0), isTakePhoto);
         }
     };
 

@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity.base;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.yaheen.cis.entity.RecordEventBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,12 +88,19 @@ public class MapActivity extends PermissionActivity implements OnGetGeoCoderResu
         }
     }
 
-    public void searchRoute() {
-        PlanNode stNode = PlanNode.withCityNameAndPlaceName("北京", "天安门");
-        PlanNode enNode = PlanNode.withCityNameAndPlaceName("北京", "正阳门");
-        PlanNode passNode = PlanNode.withCityNameAndPlaceName("北京", "国家大剧院");
+    public void searchRoute(RecordEventBean.RecordObjectBean rBean, List<RecordEventBean.EventListBean> eventList) {
+
+        LatLng stLatLng = new LatLng(Float.valueOf(rBean.getStartLatitude()), Float.valueOf(rBean.getStartLongitude()));
+        LatLng enLatLng = new LatLng(Float.valueOf(rBean.getEndLatitude()), Float.valueOf(rBean.getEndLongitude()));
+
+        PlanNode stNode = PlanNode.withLocation(stLatLng);
+        PlanNode enNode = PlanNode.withLocation(enLatLng);
         List<PlanNode> planNodes = new ArrayList<>();
-        planNodes.add(passNode);
+        for (int i = 0; i < eventList.size(); i++) {
+            LatLng psLatLng = new LatLng(Float.valueOf(eventList.get(i).getLatitude()), Float.valueOf(eventList.get(i).getLongitude()));
+            PlanNode passNode = PlanNode.withLocation(psLatLng);
+            planNodes.add(passNode);
+        }
         planSearch.drivingSearch((new DrivingRoutePlanOption())
                 .from(stNode).to(enNode).passBy(planNodes));
     }

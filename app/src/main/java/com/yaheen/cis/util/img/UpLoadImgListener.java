@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UpLoadImgListener implements upLoadImg {
     @Override
-    public void upLoad(List<Uri> list) {
+    public void upLoad(List<Uri> list,boolean isTakePhoto) {
 
     }
 }
