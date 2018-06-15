@@ -70,7 +70,7 @@ public class RecordMapActivity extends MapActivity {
 
     private List<MyItem> items;
 
-    private String eventUrl = "http://192.168.199.108:8080/crs/eapi/eventList.do";
+    private String eventUrl = baseUrl + "/eapi/eventList.do";
 
     private String recordId;
 

@@ -83,13 +83,13 @@ public class DetailActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = "http://192.168.199.108:8080/crs/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = baseUrl+"/eapi/findQuestionaireByTypeId.do";
 
-    private String uploadImgUrl = "http://192.168.199.108:8080/crs/eapi/uploadPhoto.do";
+    private String uploadImgUrl = baseUrl+"/eapi/uploadPhoto.do";
 
-    private String reportUrl = "http://192.168.199.108:8080/crs/eapi/report.do";
+    private String reportUrl = baseUrl+"/eapi/report.do";
 
-    private String endUrl = "http://192.168.199.108:8080/crs/eapi/endPatrol.do";
+    private String endUrl = baseUrl+"/eapi/endPatrol.do";
 
     private String typeStr, questionStr, recordId;
 

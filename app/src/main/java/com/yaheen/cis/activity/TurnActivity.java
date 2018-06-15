@@ -14,7 +14,7 @@ import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 
 public class TurnActivity extends BaseActivity {
 
-    private TextView tvPatrol,tvRecord;
+    private TextView tvPatrol, tvRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class TurnActivity extends BaseActivity {
         tvRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TurnActivity.this,RecordActivity.class);
+                Intent intent = new Intent(TurnActivity.this, RecordActivity.class);
                 startActivity(intent);
             }
         });
@@ -35,7 +35,7 @@ public class TurnActivity extends BaseActivity {
         tvPatrol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TurnActivity.this,PatrolSettingActivity.class);
+                Intent intent = new Intent(TurnActivity.this, PatrolSettingActivity.class);
                 startActivity(intent);
             }
         });

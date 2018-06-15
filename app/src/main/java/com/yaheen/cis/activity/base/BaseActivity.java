@@ -24,6 +24,8 @@ public class BaseActivity extends AppCompatActivity {
 
     protected Gson gson = new Gson();
 
+    protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +43,12 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void setBackVisible(boolean visible){
+    protected void setBackVisible(boolean visible) {
         llBack = findViewById(R.id.back);
         if (llBack != null) {
-            if(visible){
+            if (visible) {
                 llBack.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 llBack.setVisibility(View.GONE);
             }
         }
@@ -62,11 +64,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showToast(int string){
-        toastUtils.showToast(string,this);
+    public void showToast(int string) {
+        toastUtils.showToast(string, this);
     }
 
-    public void showToast(String string){
-        toastUtils.showToast(string,this);
+    public void showToast(String string) {
+        toastUtils.showToast(string, this);
     }
 }

@@ -31,13 +31,13 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private PatrolSettingAdapter settingAdapter;
 
-    private String typeUrl = "http://192.168.199.108:8080/crs/eapi/findTypeByUserId.do";
+    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
 
-    private String startUrl = "http://192.168.199.108:8080/crs/eapi/startPatrol.do";
+    private String startUrl = baseUrl + "/eapi/startPatrol.do";
 
-    private String questionUrl = "http://192.168.199.108:8080/crs/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
 
-    private String recordId="";
+    private String recordId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,8 +180,12 @@ public class PatrolSettingActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                cancelLoadingDialog();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

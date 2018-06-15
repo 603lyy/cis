@@ -48,9 +48,9 @@ public class EventActivity extends MapActivity {
 
     private EventImgAdapter imgAdapter;
 
-    private String questionUrl = "http://192.168.199.108:8080/crs/eapi/eventDetail.do";
+    private String questionUrl = baseUrl + "/eapi/eventDetail.do";
 
-    private String  recordId, eventId;
+    private String recordId, eventId;
 
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;

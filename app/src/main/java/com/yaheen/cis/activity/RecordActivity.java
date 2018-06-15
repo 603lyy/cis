@@ -24,11 +24,11 @@ public class RecordActivity extends PermissionActivity {
 
     private RecyclerView rvRecord;
 
-    private TextView tvTime,tvDuration,tvType,tvDescribe,tvDetail;
+    private TextView tvTime, tvDuration, tvType, tvDescribe, tvDetail;
 
     private RecordAdapter recordAdapter;
 
-    private String recordUrl = "http://192.168.199.108:8080/crs/eapi/recordList.do";
+    private String recordUrl = baseUrl + "/eapi/recordList.do";
 
     private String recordId;
 
