@@ -7,24 +7,47 @@
     android:orientation="vertical"
     tools:context=".activity.RecordMapActivity">
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/record_map_view"
+    <FrameLayout
+        android:id="@+id/fl_map_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_margin="20dp"
-        android:background="@color/colorHint"
-        android:gravity="center"
-        android:text="@string/record_event_title"
-        android:textSize="16dp"
-        android:layout_height="40dp" />
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/record_map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_record_map"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        <ImageView
+            android:id="@+id/iv_full_screen"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
+            android:background="@drawable/ic_full_screen"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_record_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:background="@color/colorHint"
+            android:gravity="center"
+            android:text="@string/record_event_title"
+            android:textSize="16dp"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_record_map"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 </LinearLayout>

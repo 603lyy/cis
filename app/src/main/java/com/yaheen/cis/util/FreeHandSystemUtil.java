@@ -19,8 +19,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * @author jbt
- * @data 2016-2-2
  * @desc 本工具类用于操作系统属性相关方法
  */
 public class FreeHandSystemUtil {

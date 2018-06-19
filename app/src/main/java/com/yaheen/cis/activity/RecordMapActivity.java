@@ -8,6 +8,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -35,6 +38,8 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.RecordMapAdapter;
 import com.yaheen.cis.entity.RecordEventBean;
+import com.yaheen.cis.util.FreeHandScreenUtil;
+import com.yaheen.cis.util.FreeHandSystemUtil;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.cluster.Cluster;
 import com.yaheen.cis.util.map.cluster.ClusterItem;
@@ -54,11 +59,17 @@ import java.util.List;
 
 public class RecordMapActivity extends MapActivity {
 
+    private LinearLayout llRecord;
+
+    private FrameLayout flMapView;
+
     private RecyclerView rvRecordMap;
 
     private RecordMapAdapter mapAdapter;
 
     private MapView mapView = null;
+
+    private ImageView ivFull;
 
     private BaiduMap mBaiduMap;
 
@@ -77,6 +88,8 @@ public class RecordMapActivity extends MapActivity {
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
 
+    private boolean isFull = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,23 +101,11 @@ public class RecordMapActivity extends MapActivity {
         initMapView();
         initRecordView();
         getRecordEventList();
-
-        mapAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                //地图移动回定位位置
-//                MapStatus ms;
-//                ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(15).build();
-//                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
-                Intent intent = new Intent(RecordMapActivity.this, EventActivity.class);
-                intent.putExtra("recordId", recordId);
-                intent.putExtra("eventId", mapAdapter.getData().get(position).getId());
-                startActivity(intent);
-            }
-        });
     }
 
     private void initMapView() {
+        ivFull = findViewById(R.id.iv_full_screen);
+        flMapView = findViewById(R.id.fl_map_view);
         mapView = findViewById(R.id.record_map_view);
         mapView.showScaleControl(false);
         mapView.showZoomControls(false);
@@ -146,9 +147,29 @@ public class RecordMapActivity extends MapActivity {
                 return false;
             }
         });
+
+        ivFull.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) flMapView.getLayoutParams();
+                if (isFull) {
+                    isFull = false;
+                    llRecord.setVisibility(View.VISIBLE);
+                    params.height = (int) FreeHandScreenUtil.dpToPx(RecordMapActivity.this, 300);
+                } else {
+                    isFull = true;
+                    llRecord.setVisibility(View.GONE);
+                    int[] size = FreeHandScreenUtil.getScreenSize(RecordMapActivity.this);
+                    //全屏设置，屏幕的高度减去状态栏的高度
+                    params.height = size[1]-FreeHandScreenUtil.getStatusBarHeight(RecordMapActivity.this);
+                }
+                flMapView.setLayoutParams(params);//将设置好的布局参数应用到控件中
+            }
+        });
     }
 
     private void initRecordView() {
+        llRecord = findViewById(R.id.ll_record_list);
         rvRecordMap = findViewById(R.id.rv_record_map);
         rvRecordMap.setLayoutManager(new LinearLayoutManager(this));
 
@@ -174,6 +195,21 @@ public class RecordMapActivity extends MapActivity {
                         mapView.onResume();
                     }
                 }
+            }
+        });
+
+        mapAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //地图移动回定位位置
+//                MapStatus ms;
+//                ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(15).build();
+//                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+                Intent intent = new Intent(RecordMapActivity.this, EventActivity.class);
+                intent.putExtra("recordId", recordId);
+                intent.putExtra("eventId", mapAdapter.getData().get(position).getId());
+                startActivity(intent);
+
             }
         });
 

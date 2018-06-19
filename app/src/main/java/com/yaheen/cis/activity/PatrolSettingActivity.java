@@ -113,9 +113,15 @@ public class PatrolSettingActivity extends BaseActivity {
             return;
         }
 
+        String typeId = "";
+        for (int i = 0; i < settingAdapter.getTypeBean().getTypeArr().size(); i++) {
+            typeId = typeId + settingAdapter.getTypeBean().getTypeArr().get(i).getId() + ",";
+        }
+
         BDLocation location = BDMapUtils.getLocation();
         RequestParams requestParams = new RequestParams(startUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("typeId", typeId);
         requestParams.addQueryStringParameter("longitude", location.getLongitude() + "");
         requestParams.addQueryStringParameter("latitude", location.getLatitude() + "");
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
@@ -129,12 +135,13 @@ public class PatrolSettingActivity extends BaseActivity {
                     getQuestion();
                 } else {
                     showToast(R.string.setting_start_fail);
+                    cancelLoadingDialog();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                cancelLoadingDialog();
             }
 
             @Override
