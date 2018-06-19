@@ -111,6 +111,8 @@ public class LoginActivity extends PermissionActivity {
                         //不记住密码则保存空字符串
                         if (cbRPsd.isChecked()) {
                             DefaultPrefsUtil.setUserPassword(psd);
+                        } else {
+                            DefaultPrefsUtil.setUserPassword("");
                         }
                         DefaultPrefsUtil.setUserName(name);
                         DefaultPrefsUtil.setToken(data.getToken());
