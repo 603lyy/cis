@@ -45,6 +45,7 @@ import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.img.ImgUploadHelper;
+import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
@@ -105,8 +106,11 @@ public class DetailActivity extends PermissionActivity {
     //被选择的图片路径列表
     private List<Uri> selectUriList = new ArrayList<>();
 
-    //图片上传列表的数据列表
+    //图片上传列表的图片路径列表
     private List<String> adapterPathList = new ArrayList<>();
+
+    //图片上传列表的图片路径列表
+    private List<Uri> imgUriList = new ArrayList<>();
 
     //已上传图片的ID列表
     private List<String> uploadIdList = new ArrayList<>();
@@ -265,6 +269,21 @@ public class DetailActivity extends PermissionActivity {
         uploadAdapter = new ImgUploadAdapter(this);
         uploadAdapter.addFooterView(getImgFooterView());
         rvImg.setAdapter(uploadAdapter);
+
+        uploadAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof ImageView) {
+                    ArrayList<String> urls = new ArrayList<String>();
+                    urls.add(imgUriList.get(position) + "");
+                    new PhotoPagerUtils.Builder(DetailActivity.this)
+                            .setBigImageUrls(urls)
+                            .setBigBitmap(((ImageView) view).getDrawable())
+                            .setSavaImage(true)
+                            .build();
+                }
+            }
+        });
     }
 
     private void initMapView() {
@@ -365,6 +384,7 @@ public class DetailActivity extends PermissionActivity {
                     selectUriList.remove(uri);
 
                     if (data.isResult()) {
+                        imgUriList.add(uri);
                         uploadIdList.add(data.getFileId());
                         adapterPathList.add(imgPath);
                         uploadAdapter.setDatas(adapterPathList);
@@ -563,6 +583,7 @@ public class DetailActivity extends PermissionActivity {
 
     //上报成功后重置数据
     private void clearData() {
+        imgUriList.clear();
         uploadIdList.clear();
         selectUriList.clear();
         etDescribe.setText("");

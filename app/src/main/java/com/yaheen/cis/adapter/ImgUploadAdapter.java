@@ -33,5 +33,8 @@ public class ImgUploadAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
                 .load(path)
                 .centerCrop()
                 .into((ImageView) helper.getView(R.id.iv_img));
+
+        helper.addOnClickListener(R.id.iv_img);
+
     }
 }

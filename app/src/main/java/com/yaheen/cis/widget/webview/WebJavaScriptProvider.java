@@ -1,5 +1,5 @@
 
-package com.yaheen.cis.widget;
+package com.yaheen.cis.widget.webview;
 
 import android.content.Context;
 import android.webkit.JavascriptInterface;
