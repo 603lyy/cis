@@ -83,13 +83,13 @@ public class DetailActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = baseUrl+"/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
 
-    private String uploadImgUrl = baseUrl+"/eapi/uploadPhoto.do";
+    private String uploadImgUrl = baseUrl + "/eapi/uploadPhoto.do";
 
-    private String reportUrl = baseUrl+"/eapi/report.do";
+    private String reportUrl = baseUrl + "/eapi/report.do";
 
-    private String endUrl = baseUrl+"/eapi/endPatrol.do";
+    private String endUrl = baseUrl + "/eapi/endPatrol.do";
 
     private String typeStr, questionStr, recordId;
 
@@ -103,7 +103,7 @@ public class DetailActivity extends PermissionActivity {
     private long startTime;
 
     //被选择的图片路径列表
-    private List<Uri> selectUriList;
+    private List<Uri> selectUriList = new ArrayList<>();
 
     //图片上传列表的数据列表
     private List<String> adapterPathList = new ArrayList<>();
@@ -565,6 +565,7 @@ public class DetailActivity extends PermissionActivity {
     private void clearData() {
         uploadIdList.clear();
         selectUriList.clear();
+        etDescribe.setText("");
         adapterPathList.clear();
         problemAdapter.resetData();
         uploadAdapter.setDatas(null);
