@@ -583,13 +583,18 @@ public class DetailActivity extends PermissionActivity {
 
     //上报成功后重置数据
     private void clearData() {
+        etDescribe.setText("");
+        ivDelete.setVisibility(View.GONE);
+
         imgUriList.clear();
         uploadIdList.clear();
         selectUriList.clear();
-        etDescribe.setText("");
         adapterPathList.clear();
+
         problemAdapter.resetData();
+        urgencyAdapter.resetData();
         uploadAdapter.setDatas(null);
+        urgencyAdapter.notifyDataSetChanged();
         problemAdapter.notifyDataSetChanged();
     }
 

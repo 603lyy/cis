@@ -73,4 +73,10 @@ public class UrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseViewHolder
         }
         return id;
     }
+
+    public void resetData() {
+        for (int i = 0; i < mData.size(); i++) {
+            mData.get(i).setSelect(false);
+        }
+    }
 }
