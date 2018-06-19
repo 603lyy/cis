@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
 import com.yaheen.cis.adapter.EventImgAdapter;
@@ -24,11 +26,15 @@ import com.yaheen.cis.adapter.EventProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.EventDetailBean;
 import com.yaheen.cis.util.img.ImgUploadHelper;
+import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventActivity extends MapActivity {
 
@@ -47,6 +53,9 @@ public class EventActivity extends MapActivity {
     private EventProblemAdapter problemAdapter;
 
     private EventImgAdapter imgAdapter;
+
+    //图片链接列表
+    private List<EventDetailBean.TbEventBean.FileArrBean> imgUrlList = new ArrayList<>();
 
     private String questionUrl = baseUrl + "/eapi/eventDetail.do";
 
@@ -100,6 +109,21 @@ public class EventActivity extends MapActivity {
 
         imgAdapter = new EventImgAdapter(this);
         rvImg.setAdapter(imgAdapter);
+
+        imgAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof ImageView) {
+                    ArrayList<String> urls = new ArrayList<String>();
+                    urls.add(imgUrlList.get(position).getImageUrl());
+                    new PhotoPagerUtils.Builder(EventActivity.this)
+                            .setBigImageUrls(urls)
+                            .setBigBitmap(((ImageView) view).getDrawable())
+                            .setSavaImage(true)
+                            .build();
+                }
+            }
+        });
     }
 
     private void initMapView() {
@@ -124,6 +148,7 @@ public class EventActivity extends MapActivity {
                 EventDetailBean data = gson.fromJson(result, EventDetailBean.class);
                 if (data != null && data.isResult()) {
                     tvType.setText(data.getTbEvent().getType());
+                    imgUrlList = (data.getTbEvent().getFileArr());
                     tvDescribe.setText(data.getTbEvent().getDescribe());
                     emergencyTransfer(data.getTbEvent().getEmergency());
                     imgAdapter.setDatas(data.getTbEvent().getFileArr());

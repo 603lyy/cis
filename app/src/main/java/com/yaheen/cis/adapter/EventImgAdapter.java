@@ -32,5 +32,7 @@ public class EventImgAdapter extends BaseQuickAdapter<EventDetailBean.TbEventBea
                 .load(data.getImageUrl())
                 .centerCrop()
                 .into((ImageView) helper.getView(R.id.iv_img));
+
+        helper.addOnClickListener(R.id.iv_img);
     }
 }
