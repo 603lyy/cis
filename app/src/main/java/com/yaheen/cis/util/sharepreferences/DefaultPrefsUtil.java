@@ -101,4 +101,28 @@ public class DefaultPrefsUtil {
     public static int getVersion() {
         return DefaultPrefs.getInstance().getVersion();
     }
+
+    public static void setPatrolType(String patrolType) {
+        DefaultPrefs.getInstance().setPatrolType(patrolType);
+    }
+
+    public static String getPatrolType() {
+        return DefaultPrefs.getInstance().getPatrolType();
+    }
+
+    public static void setPatrolqQuestion(String patrolqQuestion) {
+        DefaultPrefs.getInstance().setPatrolQuestion(patrolqQuestion);
+    }
+
+    public static String getPatrolqQuestion() {
+        return DefaultPrefs.getInstance().getPatrolQuestion();
+    }
+
+    public static void setPatrolStart(long patrolStart) {
+        DefaultPrefs.getInstance().setPatrolStart(patrolStart);
+    }
+
+    public static long getPatrolStart() {
+        return DefaultPrefs.getInstance().getPatrolStart();
+    }
 }

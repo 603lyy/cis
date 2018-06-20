@@ -25,8 +25,10 @@ public class BaseActivity extends AppCompatActivity {
     protected Gson gson = new Gson();
 
     protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
-//
+
 //    protected String baseUrl = "http://192.168.199.113:8080/crs";
+
+    protected String webSocketUrl = "ws://192.168.199.113:8080/crs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

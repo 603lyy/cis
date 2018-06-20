@@ -3,18 +3,16 @@ package com.yaheen.cis.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
@@ -25,13 +23,10 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.gson.JsonArray;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
-import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.ProblemAdapter;
@@ -62,7 +57,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tavendo.autobahn.WebSocketConnection;
+import de.tavendo.autobahn.WebSocketException;
+import de.tavendo.autobahn.WebSocketHandler;
+
 public class DetailActivity extends PermissionActivity {
+
+    private WebSocketConnection mConnection = new WebSocketConnection();
 
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
@@ -131,12 +132,22 @@ public class DetailActivity extends PermissionActivity {
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
 
-        startTime = System.currentTimeMillis();
-        typeStr = getIntent().getStringExtra("type");
-        recordId = getIntent().getStringExtra("recordId");
         questionStr = getIntent().getStringExtra("question");
+        typeStr = getIntent().getStringExtra("type");
         qData = gson.fromJson(questionStr, QuestionBean.class);
         typeData = gson.fromJson(typeStr, TypeBean.class);
+        startTime = DefaultPrefsUtil.getPatrolStart();
+        recordId = typeData.getRecordId();
+
+        if (startTime == 0) {
+            startTime = System.currentTimeMillis();
+        }
+
+        if (!typeData.getRecordId().equals(qData.getRecordId())) {
+            DefaultPrefsUtil.setPatrolType("");
+            DefaultPrefsUtil.setPatrolqQuestion("");
+            finish();
+        }
 
         //记录ID不可为空
         if (TextUtils.isEmpty(recordId)) {
@@ -160,7 +171,16 @@ public class DetailActivity extends PermissionActivity {
         tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                DialogUtils.showDialog(DetailActivity.this, "是否要结束本次巡查？", new DialogCallback() {
+                    @Override
+                    public void callback() {
+                        finishPatrol();
+                    }
+                }, new IDialogCancelCallback() {
+                    @Override
+                    public void cancelCallback() {
+                    }
+                });
             }
         });
     }
@@ -295,6 +315,44 @@ public class DetailActivity extends PermissionActivity {
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new LocationListener());
+    }
+
+    private void initWebSocket() {
+        //注意连接和服务名称要一致
+        String wsuri = "ws://" + baseUrl + "/ws/chat.do";
+
+        if (mConnection == null) {
+            mConnection = new WebSocketConnection();
+        }
+
+        try {
+            mConnection.connect(wsuri, new mWebSocketHandler());
+        } catch (WebSocketException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class mWebSocketHandler extends WebSocketHandler {
+        @Override
+        public void onOpen() {
+            Toast.makeText(DetailActivity.this, "连接服务器成功", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onTextMessage(String text) {
+            Gson gson = new Gson();
+//            TbChatMsg chatMsg = gson.fromJson(text, TbChatMsg.class);
+        }
+
+        @Override
+        public void onBinaryMessage(byte[] payload) {
+            super.onBinaryMessage(payload);
+        }
+
+        @Override
+        public void onClose(int code, String reason) {
+            Toast.makeText(DetailActivity.this, "连接服务器失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private View getImgFooterView() {
@@ -523,6 +581,9 @@ public class DetailActivity extends PermissionActivity {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_finish_success);
+                    DefaultPrefsUtil.setPatrolqQuestion("");
+                    DefaultPrefsUtil.setPatrolStart(0);
+                    DefaultPrefsUtil.setPatrolType("");
                     finish();
                 } else {
                     showToast(R.string.detail_finish_fail);
@@ -631,16 +692,7 @@ public class DetailActivity extends PermissionActivity {
 
     @Override
     public void onBackPressed() {
-
-        DialogUtils.showDialog(DetailActivity.this, "是否要结束本次巡查？", new DialogCallback() {
-            @Override
-            public void callback() {
-                finishPatrol();
-            }
-        }, new IDialogCancelCallback() {
-            @Override
-            public void cancelCallback() {
-            }
-        });
+        DefaultPrefsUtil.setPatrolStart(startTime);
+        super.onBackPressed();
     }
 }

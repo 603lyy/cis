@@ -82,6 +82,21 @@ final class DefaultPrefs extends AbstractSharePreference {
          * 项目版本号
          */
         String APP_VERSION = "version";
+
+        /**
+         * 巡查类型
+         */
+        String PATROL_TYPE = "patrol_type";
+
+        /**
+         * 巡查具体问题
+         */
+        String PATROL_QUESTION = "patrol_question";
+
+        /**
+         * 巡查时长
+         */
+        String PATROL_START = "patrol_start";
     }
 
     /**
@@ -214,6 +229,39 @@ final class DefaultPrefs extends AbstractSharePreference {
 
     void setIpUrl(String ipUrl) {
         putString(Keys.IP_URL, ipUrl);
+    }
+
+    /**
+     * PATROL_TYPE
+     */
+    String getPatrolType() {
+        return getString(Keys.PATROL_TYPE, "");
+    }
+
+    void setPatrolType(String patrolType) {
+        putString(Keys.PATROL_TYPE, patrolType);
+    }
+
+    /**
+     * PATROL_QUESTION
+     */
+    String getPatrolQuestion() {
+        return getString(Keys.PATROL_QUESTION, "");
+    }
+
+    void setPatrolQuestion(String patrolQuestion) {
+        putString(Keys.PATROL_QUESTION, patrolQuestion);
+    }
+
+    /**
+     * PATROL_START
+     */
+    long getPatrolStart() {
+        return getLong(Keys.PATROL_START,0 );
+    }
+
+    void setPatrolStart(long patrolStart) {
+        putLong(Keys.PATROL_START, patrolStart);
     }
 
 }

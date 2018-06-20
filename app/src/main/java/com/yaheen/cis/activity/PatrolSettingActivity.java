@@ -83,6 +83,7 @@ public class PatrolSettingActivity extends BaseActivity {
             public void onSuccess(String result) {
                 TypeBean data = gson.fromJson(result, TypeBean.class);
                 if (data != null && data.isResult()) {
+                    data.setRecordId(recordId);
                     settingAdapter.setDatas(data.getTypeArr());
                     settingAdapter.notifyDataSetChanged();
                 }
@@ -165,13 +166,20 @@ public class PatrolSettingActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 QuestionBean data = gson.fromJson(result, QuestionBean.class);
+                TypeBean typeBean = settingAdapter.getTypeBean();
+                typeBean.setRecordId(recordId);
                 if (data != null && data.isResult()) {
-                    String typeStr = gson.toJson(settingAdapter.getTypeBean());
+                    data.setRecordId(recordId);
+                    String typeStr = gson.toJson(typeBean);
+                    String questionStr = gson.toJson(data);
+                    DefaultPrefsUtil.setPatrolType(typeStr);
+                    DefaultPrefsUtil.setPatrolqQuestion(questionStr);
+
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
                     intent.putExtra("type", typeStr);
-                    intent.putExtra("question", result);
-                    intent.putExtra("recordId", recordId);
+                    intent.putExtra("question", questionStr);
                     startActivity(intent);
+                    finish();
                 }
             }
 
