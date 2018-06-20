@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * Created by Awen <Awentljs@gmail.com>
  */
-public class AppPathUtil {
+public class ImgPathUtil {
 
     /**
      * 裁剪头像
@@ -16,7 +16,7 @@ public class AppPathUtil {
      * @return
      */
     public static String getClipPhotoPath() {
-        return getPath("clip");
+        return getPath();
     }
 
     /**
@@ -25,16 +25,16 @@ public class AppPathUtil {
      * @return String
      */
     public static String getBigBitmapCachePath() {
-        return getPath("Photo");
+        return getPath();
     }
 
-    private static String getPath(String str) {
+    private static String getPath() {
         String path = null;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            path = Environment.getExternalStorageDirectory().getPath()+ File.separator;
+            path = Environment.getExternalStorageDirectory().getPath() + File.separator + "cis/";
         }
         if (TextUtils.isEmpty(path)) {
-            path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cis";
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cis/";
         }
 //        //地址如下:path/appname/
 //        String app_root_name = Awen.getContext().getString(R.string.app_root_name);

@@ -37,14 +37,14 @@ public class ImgUploadHelper {
 
     private static String basePath = Environment.getExternalStorageDirectory().toString();
 
-    private static String patrolImgPath = basePath + "/patrol_temp.jpg";
+    private static String patrolImgPath = "";
 
     //相册多选URI列表
     private static List<Uri> mSelected = new ArrayList<>();
 
     private static UpLoadImgListener imgListener;
 
-    public static String getPhotoPath(){
+    public static String getPhotoPath() {
         return patrolImgPath;
     }
 
@@ -78,6 +78,7 @@ public class ImgUploadHelper {
         tv_camera.setOnClickListener(new OnRepeatClickListener() {
             @Override
             public void onRepeatClick(View v) {
+                patrolImgPath = ImgPathUtil.getBigBitmapCachePath() + System.currentTimeMillis() + ".jpg";
                 Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intentFromCapture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFileProvider(activity));
@@ -104,7 +105,7 @@ public class ImgUploadHelper {
                 if (resultCode == RESULT_OK) {
                     mSelected.clear();
                     mSelected = Matisse.obtainResult(data);
-                    imgListener.upLoad(mSelected,false);
+                    imgListener.upLoad(mSelected, false);
                 }
 
                 break;
@@ -117,7 +118,7 @@ public class ImgUploadHelper {
 //                );
                 mSelected.clear();
                 mSelected.add(getUriForFileProvider(activity));
-                imgListener.upLoad(mSelected,true);
+                imgListener.upLoad(mSelected, true);
                 break;
             case RESULT_REQUEST_CODE:
                 if (data != null)
@@ -128,15 +129,7 @@ public class ImgUploadHelper {
     }
 
     public static Uri getUriForFileProvider(BaseActivity activity) {
-        File outputImage = new File(basePath, "patrol_temp.jpg");
-        if (outputImage.exists()) {
-            outputImage.delete();
-        }
-        try {
-            outputImage.createNewFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        File outputImage = new File(patrolImgPath);
         return FileProvider.getUriForFile(activity.getBaseContext(), "com.yaheen.cis.provider", outputImage);
     }
 

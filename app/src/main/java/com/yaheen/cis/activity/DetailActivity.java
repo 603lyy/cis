@@ -411,7 +411,8 @@ public class DetailActivity extends PermissionActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                showToast(R.string.upload_image_fail);
+                cancelLoadingDialog();
             }
 
             @Override

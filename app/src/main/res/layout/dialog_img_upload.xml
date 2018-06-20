@@ -30,7 +30,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="40dp"
         android:drawablePadding="20dp"
-        android:visibility="gone"
         android:minHeight="50dp"
         android:textColor="#666666"
         android:textSize="14dp"

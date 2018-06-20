@@ -23,7 +23,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.yaheen.cis.R;
 import com.yaheen.cis.entity.PhotoPagerBean;
 import com.yaheen.cis.util.PermissionUtil;
-import com.yaheen.cis.util.img.AppPathUtil;
+import com.yaheen.cis.util.img.ImgPathUtil;
 import com.yaheen.cis.util.img.ImageUtils;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.img.fresco.FrescoImageLoader;
@@ -180,12 +180,12 @@ public class PhotoPagerActivity extends PhotoPagerBaseActivity implements View.O
             //防止有些图片没有后缀名
             fileName = fileName + ".jpg";
         }
-        String filePath = (AppPathUtil.getBigBitmapCachePath()) + "yzd/" + fileName;
+        String filePath = (ImgPathUtil.getBigBitmapCachePath()) + "cis/" + fileName;
         if (TextUtils.isEmpty(filePath) && saveImageLocalPath != null) {
-            filePath = saveImageLocalPath + "/yzd/" + fileName;
+            filePath = saveImageLocalPath + "/cis/" + fileName;
         }
         boolean state = saveImage(filePath);
-        String tips = state ? getString(R.string.save_image_aready) : getString(R.string.saved_faild);
+        String tips = state ? getString(R.string.save_image_success) : getString(R.string.saved_fail);
         Toast.makeText(PhotoPagerActivity.this, tips, Toast.LENGTH_SHORT).show();
     }
 

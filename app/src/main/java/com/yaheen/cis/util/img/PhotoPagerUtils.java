@@ -72,7 +72,7 @@ public class PhotoPagerUtils {
             photoPagerBean = new PhotoPagerBean();
             photoPagerBean.setPagePosition(0);//默认展示第1张图片
             photoPagerBean.setSaveImage(false);//默认不开启保存图片到本地
-            photoPagerBean.setSaveImageLocalPath(AppPathUtil.getBigBitmapCachePath());//默认保存到本地的图片地址
+            photoPagerBean.setSaveImageLocalPath(ImgPathUtil.getBigBitmapCachePath());//默认保存到本地的图片地址
             photoPagerBean.setOpenDownAnimate(true);
         }
 
