@@ -161,7 +161,7 @@ public class RecordMapActivity extends MapActivity {
                     llRecord.setVisibility(View.GONE);
                     int[] size = FreeHandScreenUtil.getScreenSize(RecordMapActivity.this);
                     //全屏设置，屏幕的高度减去状态栏的高度
-                    params.height = size[1]-FreeHandScreenUtil.getStatusBarHeight(RecordMapActivity.this);
+                    params.height = size[1] - FreeHandScreenUtil.getStatusBarHeight(RecordMapActivity.this);
                 }
                 flMapView.setLayoutParams(params);//将设置好的布局参数应用到控件中
             }
@@ -313,6 +313,7 @@ public class RecordMapActivity extends MapActivity {
                 Float.valueOf(rBean.getEndLatitude()), Float.valueOf(rBean.getEndLongitude()));
 
         String eventId = "";
+        String emergency = "";
 
         for (int i = 0; i < eventList.size() + 2; i++) {
             LatLng latLng;
@@ -327,8 +328,9 @@ public class RecordMapActivity extends MapActivity {
                         Float.valueOf(eventList.get(i - 1).getLatitude()),
                         Float.valueOf(eventList.get(i - 1).getLongitude()));
                 eventId = eventList.get(i - 1).getId();
+                emergency = eventList.get(i - 1).getEmergency();
             }
-            items.add(new MyItem(latLng, eventId));
+            items.add(new MyItem(latLng, eventId, emergency));
             points.add(latLng);
         }
 
@@ -350,9 +352,12 @@ public class RecordMapActivity extends MapActivity {
 
         private final String eventId;
 
-        public MyItem(LatLng latLng, String eventId) {
+        private final String emergency;
+
+        public MyItem(LatLng latLng, String eventId, String emergency) {
             mPosition = latLng;
             this.eventId = eventId;
+            this.emergency = emergency;
         }
 
         @Override
