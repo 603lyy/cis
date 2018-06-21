@@ -49,6 +49,9 @@ public class TurnActivity extends BaseActivity {
      * 判断上次巡查是否结束
      */
     private void checkRecord() {
+//        DefaultPrefsUtil.setPatrolqQuestion("");
+//        DefaultPrefsUtil.setPatrolStart(0);
+//        DefaultPrefsUtil.setPatrolType("");
         if (TextUtils.isEmpty(DefaultPrefsUtil.getPatrolType()) ||
                 TextUtils.isEmpty(DefaultPrefsUtil.getPatrolqQuestion())) {
             Intent intent = new Intent(TurnActivity.this, PatrolSettingActivity.class);

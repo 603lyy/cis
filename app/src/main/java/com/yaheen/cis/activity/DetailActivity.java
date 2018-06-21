@@ -648,6 +648,7 @@ public class DetailActivity extends PermissionActivity {
 
     @Override
     public void compress(Uri uri, String imgPath, boolean isTakePhoto) {
+        showLoadingDialog();
         upLoadImg(uri, imgPath, isTakePhoto);
     }
 

@@ -75,7 +75,6 @@ public class ImgUploadHelper {
                         .thumbnailScale(0.85f) // 缩略图的比例
                         .imageEngine(new GlideEngine()) // 使用的图片加载引擎
                         .forResult(IMAGE_REQUEST_CODE); // 设置作为标记的请求码
-                activity.showLoadingDialog();
                 dialog.dismiss();
             }
         });
@@ -89,7 +88,6 @@ public class ImgUploadHelper {
                 intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
                         getUriForFileProvider(activity, patrolTempImgPath));
                 activity.startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
-                activity.showLoadingDialog();
                 dialog.dismiss();
             }
         });
