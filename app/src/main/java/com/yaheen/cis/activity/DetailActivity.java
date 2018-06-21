@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
@@ -36,6 +35,7 @@ import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.entity.UploadLocationListBean;
+import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
@@ -62,8 +62,6 @@ import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
 
 public class DetailActivity extends PermissionActivity {
-
-    private WebSocketConnection mConnection = new WebSocketConnection();
 
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
@@ -139,6 +137,7 @@ public class DetailActivity extends PermissionActivity {
         startTime = DefaultPrefsUtil.getPatrolStart();
         recordId = typeData.getRecordId();
 
+        //开始时间为零，即开始新的巡查
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
         }
@@ -153,6 +152,12 @@ public class DetailActivity extends PermissionActivity {
         if (TextUtils.isEmpty(recordId)) {
             finish();
         }
+        DefaultPrefsUtil.setPatrolRecordId(recordId);
+
+
+        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
+        startService(intent);
+//        bindService(intent, conn, BIND_AUTO_CREATE);
 
         initView();
         initPatrol();
@@ -185,6 +190,15 @@ public class DetailActivity extends PermissionActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cancelLoadingDialog();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mBaiduMap.setMyLocationEnabled(true);
+        mapView.onResume();
+    }
+
     private void initView() {
         tvTime = findViewById(R.id.tv_time);
         etDescribe = findViewById(R.id.et_describe);
@@ -201,7 +215,7 @@ public class DetailActivity extends PermissionActivity {
         });
 
         CountDownTimerUtils.getCountDownTimer()
-                .setMillisInFuture(24 * 60 * 60 * 1000)
+                .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
                 .setCountDownInterval(1000)
                 .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                     @Override
@@ -308,51 +322,12 @@ public class DetailActivity extends PermissionActivity {
 
     private void initMapView() {
         mapView = findViewById(R.id.detail_map_view);
-        tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new LocationListener());
-    }
-
-    private void initWebSocket() {
-        //注意连接和服务名称要一致
-        String wsuri = "ws://" + baseUrl + "/ws/chat.do";
-
-        if (mConnection == null) {
-            mConnection = new WebSocketConnection();
-        }
-
-        try {
-            mConnection.connect(wsuri, new mWebSocketHandler());
-        } catch (WebSocketException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class mWebSocketHandler extends WebSocketHandler {
-        @Override
-        public void onOpen() {
-            Toast.makeText(DetailActivity.this, "连接服务器成功", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onTextMessage(String text) {
-            Gson gson = new Gson();
-//            TbChatMsg chatMsg = gson.fromJson(text, TbChatMsg.class);
-        }
-
-        @Override
-        public void onBinaryMessage(byte[] payload) {
-            super.onBinaryMessage(payload);
-        }
-
-        @Override
-        public void onClose(int code, String reason) {
-            Toast.makeText(DetailActivity.this, "连接服务器失败", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private View getImgFooterView() {
@@ -464,7 +439,7 @@ public class DetailActivity extends PermissionActivity {
                     if (selectUriList.size() > 0) {
                         ImgUploadHelper.compressImage(DetailActivity.this,
                                 UriUtil.getPath(DetailActivity.this,
-                                        selectUriList.get(0)),isTakePhoto);
+                                        selectUriList.get(0)), isTakePhoto);
                     }
                 }
             }
@@ -619,6 +594,7 @@ public class DetailActivity extends PermissionActivity {
 
             // 设置定位数据
             mBaiduMap.setMyLocationData(locData);
+            tvLocation.setText(mLoc.getAddrStr());
 
             if (isFirstLoc) {
                 isFirstLoc = false;
@@ -642,7 +618,7 @@ public class DetailActivity extends PermissionActivity {
             }
             selectUriList = list;
             ImgUploadHelper.compressImage(DetailActivity.this,
-                    UriUtil.getPath(DetailActivity.this, list.get(0)),isTakePhoto);
+                    UriUtil.getPath(DetailActivity.this, list.get(0)), isTakePhoto);
         }
     };
 
@@ -681,15 +657,7 @@ public class DetailActivity extends PermissionActivity {
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mapView.onDestroy();
         mapView = null;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        cancelLoadingDialog();
-        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
-        mBaiduMap.setMyLocationEnabled(true);
-        mapView.onResume();
+        CountDownTimerUtils.getCountDownTimer().cancel();
     }
 
     @Override

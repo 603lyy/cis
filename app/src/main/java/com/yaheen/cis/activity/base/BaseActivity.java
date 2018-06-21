@@ -26,16 +26,14 @@ public class BaseActivity extends AppCompatActivity implements CompressImg {
 
     protected Gson gson = new Gson();
 
-    protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
-
-//    protected String baseUrl = "http://192.168.199.113:8080/crs";
-
-    protected String webSocketUrl = "ws://192.168.199.113:8080/crs";
+    //    protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
+//
+    protected String baseUrl = "http://192.168.199.146:8080/crs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initToolBar();
+//        initToolBar();
     }
 
     private void initToolBar() {
@@ -61,6 +59,9 @@ public class BaseActivity extends AppCompatActivity implements CompressImg {
     }
 
     public void showLoadingDialog() {
+        if (progersssDialog != null && progersssDialog.isShowing()) {
+            return;
+        }
         progersssDialog = new ProgersssDialog(BaseActivity.this);
     }
 

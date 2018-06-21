@@ -97,6 +97,11 @@ final class DefaultPrefs extends AbstractSharePreference {
          * 巡查时长
          */
         String PATROL_START = "patrol_start";
+
+        /**
+         * 巡查记录ID
+         */
+        String PATROL_RECORD_ID = "patrol_record_id";
     }
 
     /**
@@ -257,11 +262,22 @@ final class DefaultPrefs extends AbstractSharePreference {
      * PATROL_START
      */
     long getPatrolStart() {
-        return getLong(Keys.PATROL_START,0 );
+        return getLong(Keys.PATROL_START, 0);
     }
 
     void setPatrolStart(long patrolStart) {
         putLong(Keys.PATROL_START, patrolStart);
+    }
+
+    /**
+     * PATROL_RECORD_ID
+     */
+    String getPatrolRecordId() {
+        return getString(Keys.PATROL_RECORD_ID, "");
+    }
+
+    void setPatrolRecordId(String patrolRecordId) {
+        putString(Keys.PATROL_RECORD_ID, patrolRecordId);
     }
 
 }

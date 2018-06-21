@@ -1,7 +1,10 @@
 package com.yaheen.cis.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +14,7 @@ import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
+import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
@@ -43,6 +47,7 @@ public class TurnActivity extends BaseActivity {
                 checkRecord();
             }
         });
+
     }
 
     /**
@@ -52,14 +57,15 @@ public class TurnActivity extends BaseActivity {
 //        DefaultPrefsUtil.setPatrolqQuestion("");
 //        DefaultPrefsUtil.setPatrolStart(0);
 //        DefaultPrefsUtil.setPatrolType("");
-        if (TextUtils.isEmpty(DefaultPrefsUtil.getPatrolType()) ||
-                TextUtils.isEmpty(DefaultPrefsUtil.getPatrolqQuestion())) {
+        String typeStr = DefaultPrefsUtil.getPatrolType();
+        String questionStr = DefaultPrefsUtil.getPatrolqQuestion();
+        if (TextUtils.isEmpty(typeStr) || TextUtils.isEmpty(questionStr)) {
             Intent intent = new Intent(TurnActivity.this, PatrolSettingActivity.class);
             startActivity(intent);
         } else {
             Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
-            intent.putExtra("type", DefaultPrefsUtil.getPatrolType());
-            intent.putExtra("question", DefaultPrefsUtil.getPatrolqQuestion());
+            intent.putExtra("type", typeStr);
+            intent.putExtra("question", questionStr);
             startActivity(intent);
         }
     }

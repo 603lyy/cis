@@ -125,4 +125,12 @@ public class DefaultPrefsUtil {
     public static long getPatrolStart() {
         return DefaultPrefs.getInstance().getPatrolStart();
     }
+
+    public static void setPatrolRecordId(String patrolRecordId) {
+        DefaultPrefs.getInstance().setPatrolRecordId(patrolRecordId);
+    }
+
+    public static String getPatrolRecordId() {
+        return DefaultPrefs.getInstance().getPatrolRecordId();
+    }
 }
