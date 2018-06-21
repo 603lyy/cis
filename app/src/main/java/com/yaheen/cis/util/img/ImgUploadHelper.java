@@ -23,7 +23,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
+
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.CONTEXT_IGNORE_SECURITY;
 
 public class ImgUploadHelper {
 
@@ -37,7 +41,7 @@ public class ImgUploadHelper {
 
     private static String basePath = Environment.getExternalStorageDirectory().toString();
 
-    private static String patrolImgPath = "";
+    private static String patrolTempImgPath = "";
 
     //相册多选URI列表
     private static List<Uri> mSelected = new ArrayList<>();
@@ -45,7 +49,7 @@ public class ImgUploadHelper {
     private static UpLoadImgListener imgListener;
 
     public static String getPhotoPath() {
-        return patrolImgPath;
+        return patrolTempImgPath;
     }
 
     /**
@@ -71,6 +75,7 @@ public class ImgUploadHelper {
                         .thumbnailScale(0.85f) // 缩略图的比例
                         .imageEngine(new GlideEngine()) // 使用的图片加载引擎
                         .forResult(IMAGE_REQUEST_CODE); // 设置作为标记的请求码
+                activity.showLoadingDialog();
                 dialog.dismiss();
             }
         });
@@ -78,11 +83,13 @@ public class ImgUploadHelper {
         tv_camera.setOnClickListener(new OnRepeatClickListener() {
             @Override
             public void onRepeatClick(View v) {
-                patrolImgPath = ImgPathUtil.getBigBitmapCachePath() + System.currentTimeMillis() + ".jpg";
+                patrolTempImgPath = ImgPathUtil.getBigBitmapCachePath() + System.currentTimeMillis() + ".jpg";
                 Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intentFromCapture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFileProvider(activity));
+                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
+                        getUriForFileProvider(activity, patrolTempImgPath));
                 activity.startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+                activity.showLoadingDialog();
                 dialog.dismiss();
             }
         });
@@ -110,15 +117,7 @@ public class ImgUploadHelper {
 
                 break;
             case CAMERA_REQUEST_CODE:
-//                cropImage(activity,
-////                        Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString() + "/Yiniu/avatar_temp.jpg"))
-//                        FileProvider.getUriForFile(activity, "com.yaheen.cis.fileprovider",
-//                                new File(Environment.getExternalStorageDirectory().toString() +
-//                                        "/Yiniu/.UserInfo/avatar_temp.jpg"))
-//                );
-                mSelected.clear();
-                mSelected.add(getUriForFileProvider(activity));
-                imgListener.upLoad(mSelected, true);
+                compressImage(activity, patrolTempImgPath, true);
                 break;
             case RESULT_REQUEST_CODE:
                 if (data != null)
@@ -128,9 +127,33 @@ public class ImgUploadHelper {
 
     }
 
-    public static Uri getUriForFileProvider(BaseActivity activity) {
-        File outputImage = new File(patrolImgPath);
+    public static Uri getUriForFileProvider(BaseActivity activity, String path) {
+        File outputImage = new File(path);
         return FileProvider.getUriForFile(activity.getBaseContext(), "com.yaheen.cis.provider", outputImage);
+    }
+
+    public static void compressImage(final BaseActivity activity, String imgPath, final boolean isTakePhoto) {
+        Luban.with(activity)
+                .load(imgPath)
+                .ignoreBy(100)
+                .setTargetDir(ImgPathUtil.getBigBitmapCachePath())
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        activity.compress(getUriForFileProvider(activity, file.getAbsolutePath()),
+                                file.getAbsolutePath(), isTakePhoto);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                }).launch();
     }
 
     /**

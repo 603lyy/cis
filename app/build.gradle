@@ -56,4 +56,7 @@ dependencies {
     implementation 'com.facebook.fresco:fresco:0.14.1'
     //android6.0权限工具类
     implementation 'com.lovedise:permissiongen:0.1.1'
+    implementation files('libs/autobahn-0.5.0.jar')
+    //图片压缩
+    implementation 'top.zibin:Luban:1.1.6'
 }

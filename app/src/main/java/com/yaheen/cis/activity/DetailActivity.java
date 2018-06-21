@@ -415,15 +415,15 @@ public class DetailActivity extends PermissionActivity {
         });
     }
 
-    private void upLoadImg(final Uri uri, final boolean isTakePhoto) {
+    private void upLoadImg(final Uri uri, final String imgPath, final boolean isTakePhoto) {
 
-        final String imgPath;
-
-        if (!isTakePhoto) {
-            imgPath = UriUtil.getPath(DetailActivity.this, uri);
-        } else {
-            imgPath = ImgUploadHelper.getPhotoPath();
-        }
+//        final String imgPath;
+//
+//        if (!isTakePhoto) {
+//            imgPath = UriUtil.getPath(DetailActivity.this, uri);
+//        } else {
+//            imgPath = path;
+//        }
 
         if (TextUtils.isEmpty(imgPath)) {
             return;
@@ -439,7 +439,7 @@ public class DetailActivity extends PermissionActivity {
                 ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
                 if (data != null) {
                     //删除已请求上传图片的路径
-                    selectUriList.remove(uri);
+                    selectUriList.remove(0);
 
                     if (data.isResult()) {
                         imgUriList.add(uri);
@@ -462,7 +462,9 @@ public class DetailActivity extends PermissionActivity {
 
                     //图片路径不为空，继续上传剩余图片
                     if (selectUriList.size() > 0) {
-                        upLoadImg(selectUriList.get(0), isTakePhoto);
+                        ImgUploadHelper.compressImage(DetailActivity.this,
+                                UriUtil.getPath(DetailActivity.this,
+                                        selectUriList.get(0)),isTakePhoto);
                     }
                 }
             }
@@ -639,9 +641,15 @@ public class DetailActivity extends PermissionActivity {
                 return;
             }
             selectUriList = list;
-            upLoadImg(list.get(0), isTakePhoto);
+            ImgUploadHelper.compressImage(DetailActivity.this,
+                    UriUtil.getPath(DetailActivity.this, list.get(0)),isTakePhoto);
         }
     };
+
+    @Override
+    public void compress(Uri uri, String imgPath, boolean isTakePhoto) {
+        upLoadImg(uri, imgPath, isTakePhoto);
+    }
 
     //上报成功后重置数据
     private void clearData() {
@@ -677,6 +685,7 @@ public class DetailActivity extends PermissionActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        cancelLoadingDialog();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mBaiduMap.setMyLocationEnabled(true);
         mapView.onResume();

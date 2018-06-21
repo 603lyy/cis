@@ -17,7 +17,7 @@ public class UrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseViewHolder
     public UrgencyAdapter() {
         super(R.layout.item_urgency);
         List<UrgencyBean> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 1; i < 5; i++) {
             UrgencyBean bean = new UrgencyBean();
             bean.setId(i + "");
             bean.setSelect(false);

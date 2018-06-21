@@ -58,8 +58,8 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/btn_blue_round"
         android:gravity="center"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/login_text"
         android:textColor="@color/white"
         android:textSize="18dp" />

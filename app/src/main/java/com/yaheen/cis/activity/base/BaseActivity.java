@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity.base;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +10,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.yaheen.cis.R;
 import com.yaheen.cis.util.ProgersssDialog;
+import com.yaheen.cis.util.img.CompressImg;
 import com.yaheen.cis.util.toast.ToastUtils;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements CompressImg {
 
     private ProgersssDialog progersssDialog;
 
@@ -74,5 +76,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showToast(String string) {
         toastUtils.showToast(string, this);
+    }
+
+    @Override
+    public void compress(Uri uri, String imgPath, boolean isTakePhoto) {
+
     }
 }
