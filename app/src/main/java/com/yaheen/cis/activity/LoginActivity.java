@@ -1,19 +1,24 @@
 package com.yaheen.cis.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.LoginBean;
+import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
@@ -26,7 +31,13 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import de.tavendo.autobahn.WebSocketConnection;
+import de.tavendo.autobahn.WebSocketException;
+import de.tavendo.autobahn.WebSocketHandler;
+
 public class LoginActivity extends PermissionActivity {
+
+    private UploadLocationService.MyBinder myBinder;
 
     private LinearLayout llRPsd;
 
@@ -61,6 +72,11 @@ public class LoginActivity extends PermissionActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Intent intent = new Intent(LoginActivity.this, UploadLocationService.class);
+//                bindService(intent, conn, BIND_AUTO_CREATE);
+//                if (myBinder != null) {
+//                    myBinder.sendLocation();
+//                }
                 showLoadingDialog();
                 login();
 //                Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
@@ -153,6 +169,22 @@ public class LoginActivity extends PermissionActivity {
         }
     }
 
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            //拿到后台服务代理对象
+            myBinder = (UploadLocationService.MyBinder) service;
+            //调用后台服务的方法
+            myBinder.connect();
+            myBinder.startTimer();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     @Override
     public void onBackPressed() {
         DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
@@ -165,5 +197,13 @@ public class LoginActivity extends PermissionActivity {
             public void cancelCallback() {
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+//        unbindService(conn);
+//        Intent intent = new Intent(LoginActivity.this, UploadLocationService.class);
+//        stopService(intent);
+        super.onDestroy();
     }
 }
