@@ -3,6 +3,7 @@ package com.yaheen.cis.activity.base;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,9 +27,11 @@ public class BaseActivity extends AppCompatActivity implements CompressImg {
 
     protected Gson gson = new Gson();
 
-    protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
-
+//    protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
+//
 //    protected String baseUrl = "http://192.168.199.125:8080/crs";
+//
+    protected String baseUrl = "http:/tlep2.yaheen.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,13 @@ public class BaseActivity extends AppCompatActivity implements CompressImg {
 
     public void showToast(String string) {
         toastUtils.showToast(string, this);
+    }
+
+    public void setIp(String ip) {
+        if (TextUtils.isEmpty(ip)) {
+            return;
+        }
+        baseUrl = "http://" + ip + "8080/crs";
     }
 
     @Override

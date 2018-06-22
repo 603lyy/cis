@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,13 +48,17 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";
 
-    private TextView tvPatrol, tvRecord;
+    private TextView tvPatrol, tvRecord, tvFetch;
+
+    private LinearLayout llBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turn);
 
+        llBack = findViewById(R.id.back);
+        tvFetch = findViewById(R.id.tv_fetch);
         tvPatrol = findViewById(R.id.tv_patrol);
         tvRecord = findViewById(R.id.tv_record);
 
@@ -70,7 +75,20 @@ public class TurnActivity extends PermissionActivity {
             public void onClick(View view) {
                 showLoadingDialog();
                 checkRecord();
-//                openFetch();
+            }
+        });
+
+        tvFetch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFetch();
+            }
+        });
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
 
@@ -190,9 +208,10 @@ public class TurnActivity extends PermissionActivity {
                 if (data != null) {
                     if (data.isResult()) {
                         getTypeList();
-                    }else if(data.getMsg()==null){
+                    } else if (data.getMsg() == null) {
                         showToast(R.string.not_id);
-                    }else {
+                        getTypeList();
+                    } else {
                         showToast(R.string.scan_not);
                     }
                 }

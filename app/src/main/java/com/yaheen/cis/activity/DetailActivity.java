@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -75,6 +76,10 @@ public class DetailActivity extends PermissionActivity {
 
     private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
 
+    private LinearLayout llDetailTitle;
+
+    private View llTitle;
+
     private ProblemAdapter problemAdapter;
 
     private PatrolTypeAdapter typeAdapter;
@@ -130,6 +135,9 @@ public class DetailActivity extends PermissionActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        llDetailTitle = findViewById(R.id.ll_detail_title);
+        llTitle = findViewById(R.id.ll_title_bar);
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
 
@@ -231,6 +239,11 @@ public class DetailActivity extends PermissionActivity {
                             tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
                         }
                     }).start();
+            llTitle.setVisibility(View.GONE);
+            llDetailTitle.setVisibility(View.VISIBLE);
+        } else {
+            llTitle.setVisibility(View.VISIBLE);
+            llDetailTitle.setVisibility(View.GONE);
         }
     }
 
@@ -428,7 +441,9 @@ public class DetailActivity extends PermissionActivity {
                 ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
                 if (data != null) {
                     //删除已请求上传图片的路径
-                    selectUriList.remove(0);
+                    if (selectUriList.size() > 0) {
+                        selectUriList.remove(0);
+                    }
 
                     if (data.isResult()) {
                         imgUriList.add(uri);
@@ -508,7 +523,7 @@ public class DetailActivity extends PermissionActivity {
         }
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("typeId", typeData.getTypeArr().get(0).getId());
+        jsonObject.addProperty("typeId", typeAdapter.getTypeId());
         jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
         jsonObject.addProperty("emergency", urgencyAdapter.geUrgencyId());
         jsonObject.addProperty("describe", etDescribe.getText().toString());
@@ -529,7 +544,11 @@ public class DetailActivity extends PermissionActivity {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_commit_success);
-                    clearData();
+                    if (isSign) {
+                        finish();
+                    } else {
+                        clearData();
+                    }
                 } else {
                     showToast(R.string.detail_commit_fail);
                 }

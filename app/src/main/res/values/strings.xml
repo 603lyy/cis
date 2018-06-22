@@ -16,6 +16,7 @@
 
     <string name="turn_patrol_text">巡查</string>
     <string name="turn_record_text">巡查记录</string>
+    <string name="turn_fetch_text">签到</string>
 
     <string name="detail_finish">结束</string>
     <string name="detail_sign">签到</string>

@@ -45,7 +45,7 @@ public class LoginActivity extends PermissionActivity {
 
     private TextView tvLogin;
 
-    private EditText etName, etPsd;
+    private EditText etName, etPsd, etIp;
 
     private String url = baseUrl + "/eapi/login.do";
 
@@ -92,6 +92,7 @@ public class LoginActivity extends PermissionActivity {
         etName = findViewById(R.id.et_username);
         etPsd = findViewById(R.id.et_password);
         tvLogin = findViewById(R.id.tv_login);
+        etIp = findViewById(R.id.et_ip);
 
         etPsd.setText(DefaultPrefsUtil.getUserPassword());
         etName.setText(DefaultPrefsUtil.getUserName());
@@ -99,6 +100,10 @@ public class LoginActivity extends PermissionActivity {
     }
 
     private void login() {
+
+//        setIp(etIp.getText().toString());
+
+        DefaultPrefsUtil.setIpUrl(etIp.getText().toString());
 
         final String name = etName.getText().toString();
         final String psd = etPsd.getText().toString();

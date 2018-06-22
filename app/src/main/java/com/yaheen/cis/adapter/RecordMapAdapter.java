@@ -42,7 +42,7 @@ public class RecordMapAdapter extends BaseQuickAdapter<RecordEventBean.EventList
         } else if (emergency.equals("3")) {
             return String.format(mContext.getResources().getString(R.string.record_event_emergency), "可疑");
         } else if (emergency.equals("4")) {
-            return String.format(mContext.getResources().getString(R.string.record_event_emergency), "危险");
+            return String.format(mContext.getResources().getString(R.string.record_event_emergency), "紧急");
         }
         return emergency;
     }

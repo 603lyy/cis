@@ -1,6 +1,7 @@
 package com.yaheen.cis.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -53,5 +54,17 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         } else {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
         }
+    }
+
+    //返回选中问题的ID字符串
+    public String getTypeId() {
+        String str = "";
+
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).isSelected()) {
+                return mData.get(i).getId();
+            }
+        }
+        return str;
     }
 }
