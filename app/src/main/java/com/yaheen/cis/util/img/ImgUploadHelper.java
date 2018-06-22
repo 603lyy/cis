@@ -55,7 +55,8 @@ public class ImgUploadHelper {
     /**
      * 显示用户头像上传对话框
      */
-    public static void showUserAvatarUploadDialog(final BaseActivity activity, UpLoadImgListener upLoadImgListener) {
+    public static void showUserAvatarUploadDialog(final BaseActivity activity,
+                                                  UpLoadImgListener upLoadImgListener, final int length) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_img_upload, null);
         final Dialog dialog = new AlertDialog.Builder(activity).setView(view).show();
         View tv_photo = dialog.findViewById(R.id.tv_photo);
@@ -69,7 +70,7 @@ public class ImgUploadHelper {
                 Matisse.from(activity)
                         .choose(MimeType.allOf()) // 选择 mime 的类型
                         .countable(true)
-                        .maxSelectable(9) // 图片选择的最多数量
+                        .maxSelectable(length) // 图片选择的最多数量
                         .gridExpectedSize(activity.getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                         .thumbnailScale(0.85f) // 缩略图的比例

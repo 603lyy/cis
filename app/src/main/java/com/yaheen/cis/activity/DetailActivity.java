@@ -341,7 +341,12 @@ public class DetailActivity extends PermissionActivity {
         ivAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgUploadHelper.showUserAvatarUploadDialog(DetailActivity.this, imgListener);
+                if (uploadIdList.size() < 9) {
+                    ImgUploadHelper.showUserAvatarUploadDialog(
+                            DetailActivity.this, imgListener, 9 - uploadIdList.size());
+                } else {
+                    showToast(R.string.detail_img_limit);
+                }
             }
         });
 
