@@ -145,6 +145,7 @@ public class DetailActivity extends PermissionActivity {
         //开始时间为零，即开始新的巡查
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
+            DefaultPrefsUtil.setPatrolStart(startTime);
         }
 
         if (!typeData.getRecordId().equals(qData.getRecordId())) {
@@ -684,7 +685,6 @@ public class DetailActivity extends PermissionActivity {
 
     @Override
     public void onBackPressed() {
-        DefaultPrefsUtil.setPatrolStart(startTime);
         super.onBackPressed();
     }
 }
