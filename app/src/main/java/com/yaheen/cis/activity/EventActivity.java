@@ -8,9 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -41,6 +44,8 @@ public class EventActivity extends MapActivity {
     private final int REQUEST_CODE_CHOOSE = 1001;
 
     private TextView tvLocation, tvType, tvDescribe, tvUrgency;
+
+    private LinearLayout llBack;
 
     private ImageView ivUrgency;
 
@@ -86,11 +91,19 @@ public class EventActivity extends MapActivity {
     }
 
     private void initView() {
+        llBack = findViewById(R.id.back);
         tvType = findViewById(R.id.tv_type);
         ivUrgency = findViewById(R.id.iv_urgency);
         tvUrgency = findViewById(R.id.tv_urgency);
         tvDescribe = findViewById(R.id.tv_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initQuestion() {
@@ -131,8 +144,11 @@ public class EventActivity extends MapActivity {
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.hideSDKLayer();
+        BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+                .fromResource(R.drawable.ic_map_point);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-                MyLocationConfiguration.LocationMode.NORMAL, true, null));
+                MyLocationConfiguration.LocationMode.NORMAL, true, mCurrentMarker));
     }
 
     private void getEventInfo() {
@@ -183,6 +199,7 @@ public class EventActivity extends MapActivity {
 
         // 设置定位数据
         mBaiduMap.setMyLocationData(locData);
+        mBaiduMap.showSDKLayer();
 
         if (isFirstLoc) {
             isFirstLoc = false;

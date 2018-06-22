@@ -155,8 +155,9 @@ public class DetailActivity extends PermissionActivity {
         DefaultPrefsUtil.setPatrolRecordId(recordId);
 
 
-        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
-        startService(intent);
+//        开启后台服务上传坐标（待定）
+//        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
+//        startService(intent);
 //        bindService(intent, conn, BIND_AUTO_CREATE);
 
         initView();
@@ -325,6 +326,7 @@ public class DetailActivity extends PermissionActivity {
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.hideSDKLayer();
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new LocationListener());
@@ -595,6 +597,7 @@ public class DetailActivity extends PermissionActivity {
             // 设置定位数据
             mBaiduMap.setMyLocationData(locData);
             tvLocation.setText(mLoc.getAddrStr());
+            mBaiduMap.showSDKLayer();
 
             if (isFirstLoc) {
                 isFirstLoc = false;

@@ -109,12 +109,16 @@ public class RecordMapActivity extends MapActivity {
         mapView = findViewById(R.id.record_map_view);
         mapView.showScaleControl(false);
         mapView.showZoomControls(false);
+
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
         mBaiduMap.hideSDKLayer();
+
+        BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
+                .fromResource(R.drawable.ic_map_point);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-                MyLocationConfiguration.LocationMode.NORMAL, true, null));
+                MyLocationConfiguration.LocationMode.NORMAL, true, mCurrentMarker));
 //        BDMapUtils.setMapViewListener(new locationListener());
 //        setLocationData(BDMapUtils.getLocation());
 
@@ -367,8 +371,21 @@ public class RecordMapActivity extends MapActivity {
 
         @Override
         public BitmapDescriptor getBitmapDescriptor() {
+            if(emergency.equals("1")){
+                return BitmapDescriptorFactory
+                        .fromResource(R.drawable.ic_map_recode);
+            }else if(emergency.equals("2")){
+                return BitmapDescriptorFactory
+                        .fromResource(R.drawable.ic_map_normal);
+            }else if(emergency.equals("3")){
+                return BitmapDescriptorFactory
+                        .fromResource(R.drawable.ic_map_suspicious);
+            }else if(emergency.equals("4")){
+                return BitmapDescriptorFactory
+                        .fromResource(R.drawable.ic_map_urgency);
+            }
             return BitmapDescriptorFactory
-                    .fromResource(R.drawable.icon_gcoding);
+                    .fromResource(R.drawable.ic_map_point);
         }
     }
 
