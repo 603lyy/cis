@@ -64,4 +64,10 @@
     <string name="permission_tip_SD">本App需要使用(存储)权限，您是否同意?点击"设置"去开启此权限\n您可在“设置”>“应用”>“权限”中配置权限</string>
     <string name="settings">设置</string>
 
+    <string name="short_link_empty">短链接不能为空</string>
+    <string name="scan_success">扫描成功</string>
+    <string name="scan_fail">扫描失败</string>
+    <string name="scan_not">不是本系统的短链接</string>
+    <string name="not_id">不是巡查点</string>
+
 </resources>

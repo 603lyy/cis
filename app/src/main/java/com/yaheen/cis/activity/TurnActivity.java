@@ -8,27 +8,44 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
+import com.yaheen.cis.activity.base.PermissionActivity;
+import com.yaheen.cis.entity.CheckBean;
+import com.yaheen.cis.entity.CommonBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
+import com.yaheen.cis.util.nfc.Base64;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-public class TurnActivity extends BaseActivity {
+public class TurnActivity extends PermissionActivity {
+
+    /**
+     * 扫描跳转Activity RequestCode
+     */
+    public static final int REQUEST_CODE = 111;
 
     private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
 
     private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
+
+    private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
+
+    private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";
 
     private TextView tvPatrol, tvRecord;
 
@@ -53,10 +70,15 @@ public class TurnActivity extends BaseActivity {
             public void onClick(View view) {
                 showLoadingDialog();
                 checkRecord();
-//                getTypeList();
+//                openFetch();
             }
         });
 
+    }
+
+    private void openFetch() {
+        Intent intent = new Intent(getApplication(), CaptureActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     /**
@@ -143,6 +165,123 @@ public class TurnActivity extends BaseActivity {
                 cancelLoadingDialog();
             }
         });
+    }
+
+    //请求门牌系统，判断是否是巡查点
+    private void checkId(CheckBean.EntityBean data) {
+
+        String id = data.getLink().substring(data.getLink().lastIndexOf("=") + 1);
+
+        if (TextUtils.isEmpty(id)) {
+            cancelLoadingDialog();
+            return;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("houseNumberId", id);
+
+        RequestParams params = new RequestParams(checkIdUrl);
+        params.addQueryStringParameter("json", Base64.encode(jsonObject.toString().getBytes()));
+        params.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                CommonBean data = gson.fromJson(result, CommonBean.class);
+                if (data != null) {
+                    if (data.isResult()) {
+                        getTypeList();
+                    }else if(data.getMsg()==null){
+                        showToast(R.string.not_id);
+                    }else {
+                        showToast(R.string.scan_not);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void check(String slink) {
+
+        if (TextUtils.isEmpty(slink)) {
+            Toast.makeText(this, R.string.short_link_empty, Toast.LENGTH_SHORT).show();
+            cancelLoadingDialog();
+            return;
+        }
+        slink = slink.substring(slink.lastIndexOf("/") + 1);
+
+        RequestParams params = new RequestParams(checkUrl);
+        params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
+        params.addQueryStringParameter("shortLinkCode", slink);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                CheckBean checkBean = gson.fromJson(result, CheckBean.class);
+                if (checkBean != null && checkBean.isResult()) {
+                    checkId(checkBean.getEntity());
+                } else {
+                    Toast.makeText(TurnActivity.this, R.string.scan_not, Toast.LENGTH_SHORT).show();
+                    cancelLoadingDialog();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(TurnActivity.this, R.string.scan_fail, Toast.LENGTH_SHORT).show();
+                cancelLoadingDialog();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * 处理二维码扫描结果
+         */
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    if (result != null) {
+                        showLoadingDialog();
+                        check(result);
+                    } else {
+                        Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                    }
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     @Override

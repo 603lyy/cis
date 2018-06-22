@@ -9,6 +9,7 @@ import android.util.Log;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.yaheen.cis.util.FreeHandSystemUtil;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.widget.scalephotoview.ImagePipelineConfigFactory;
@@ -73,6 +74,9 @@ public class BaseApp extends android.app.Application {
 
         //fresco图片加载
         Fresco.initialize(this, ImagePipelineConfigFactory.getImagePipelineConfig(this));
+
+        //二维码扫描
+        ZXingLibrary.initDisplayOpinion(this);
 
         //x5内核
 //        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
