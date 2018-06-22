@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,6 +22,8 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 public class RecordActivity extends PermissionActivity {
+
+    private LinearLayout llBack;
 
     private RecyclerView rvRecord;
 
@@ -38,13 +41,13 @@ public class RecordActivity extends PermissionActivity {
         setContentView(R.layout.activity_record);
 
         showLoadingDialog();
-        setBackVisible(false);
 
+        llBack = findViewById(R.id.back);
         tvTime = findViewById(R.id.tv_time);
         tvType = findViewById(R.id.tv_type);
+        rvRecord = findViewById(R.id.rv_record);
         tvDescribe = findViewById(R.id.tv_describe);
         tvDuration = findViewById(R.id.tv_duration);
-        rvRecord = findViewById(R.id.rv_record);
         rvRecord.setLayoutManager(new LinearLayoutManager(this));
 
         recordAdapter = new RecordAdapter();
@@ -57,6 +60,13 @@ public class RecordActivity extends PermissionActivity {
                 recordId = recordAdapter.getData().get(position).getId();
                 intent.putExtra("recordId", recordId);
                 startActivity(intent);
+            }
+        });
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
 

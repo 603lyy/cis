@@ -1,10 +1,7 @@
 package com.yaheen.cis.activity;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,13 +13,11 @@ import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
-import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.CheckBean;
 import com.yaheen.cis.entity.CommonBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
-import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
@@ -95,6 +90,7 @@ public class TurnActivity extends PermissionActivity {
     }
 
     private void openFetch() {
+        showLoadingDialog();
         Intent intent = new Intent(getApplication(), CaptureActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -130,12 +126,14 @@ public class TurnActivity extends PermissionActivity {
                 TypeBean data = gson.fromJson(result, TypeBean.class);
                 if (data != null && data.isResult()) {
                     getQuestion(data);
+                } else {
+                    cancelLoadingDialog();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                cancelLoadingDialog();
             }
 
             @Override
@@ -165,12 +163,14 @@ public class TurnActivity extends PermissionActivity {
                     intent.putExtra("question", gson.toJson(data));
                     intent.putExtra("sign", true);
                     startActivity(intent);
+                } else {
+                    cancelLoadingDialog();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                cancelLoadingDialog();
             }
 
             @Override
@@ -213,6 +213,7 @@ public class TurnActivity extends PermissionActivity {
                         getTypeList();
                     } else {
                         showToast(R.string.scan_not);
+                        cancelLoadingDialog();
                     }
                 }
 
@@ -282,6 +283,7 @@ public class TurnActivity extends PermissionActivity {
          * 处理二维码扫描结果
          */
         if (requestCode == REQUEST_CODE) {
+            showLoadingDialog();
             //处理扫描结果（在界面上显示）
             if (null != data) {
                 Bundle bundle = data.getExtras();
@@ -294,9 +296,11 @@ public class TurnActivity extends PermissionActivity {
                         showLoadingDialog();
                         check(result);
                     } else {
+                        cancelLoadingDialog();
                         Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                     }
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    cancelLoadingDialog();
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }

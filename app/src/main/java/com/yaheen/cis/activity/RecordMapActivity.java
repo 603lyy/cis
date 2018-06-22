@@ -59,7 +59,7 @@ import java.util.List;
 
 public class RecordMapActivity extends MapActivity {
 
-    private LinearLayout llRecord;
+    private LinearLayout llRecord,llBack;
 
     private FrameLayout flMapView;
 
@@ -95,12 +95,21 @@ public class RecordMapActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_map);
 
+        llBack = findViewById(R.id.back);
+
         recordId = getIntent().getStringExtra("recordId");
         showLoadingDialog();
 
         initMapView();
         initRecordView();
         getRecordEventList();
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initMapView() {
