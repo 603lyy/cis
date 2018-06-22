@@ -99,6 +99,9 @@ public class DetailActivity extends PermissionActivity {
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
 
+    //判断是否签到按钮进入，是则取消巡查功能，只提供上报功能
+    private boolean isSign = false;
+
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
 
@@ -130,8 +133,10 @@ public class DetailActivity extends PermissionActivity {
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
 
+        isSign = getIntent().getBooleanExtra("sign", false);
         questionStr = getIntent().getStringExtra("question");
         typeStr = getIntent().getStringExtra("type");
+
         qData = gson.fromJson(questionStr, QuestionBean.class);
         typeData = gson.fromJson(typeStr, TypeBean.class);
         startTime = DefaultPrefsUtil.getPatrolStart();
@@ -148,11 +153,10 @@ public class DetailActivity extends PermissionActivity {
             finish();
         }
 
-        //记录ID不可为空
-        if (TextUtils.isEmpty(recordId)) {
-            finish();
+
+        if (!TextUtils.isEmpty(recordId)) {
+            DefaultPrefsUtil.setPatrolRecordId(recordId);
         }
-        DefaultPrefsUtil.setPatrolRecordId(recordId);
 
 
 //        开启后台服务上传坐标（待定）
@@ -215,16 +219,18 @@ public class DetailActivity extends PermissionActivity {
             }
         });
 
-        CountDownTimerUtils.getCountDownTimer()
-                .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                .setCountDownInterval(1000)
-                .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                    @Override
-                    public void onTick(long pMillisUntilFinished) {
-                        long time = System.currentTimeMillis() - startTime - 28800000L;
-                        tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
-                    }
-                }).start();
+        if (!isSign) {
+            CountDownTimerUtils.getCountDownTimer()
+                    .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
+                    .setCountDownInterval(1000)
+                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+                        @Override
+                        public void onTick(long pMillisUntilFinished) {
+                            long time = System.currentTimeMillis() - startTime - 28800000L;
+                            tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
+                        }
+                    }).start();
+        }
     }
 
     private void initPatrol() {
@@ -259,7 +265,7 @@ public class DetailActivity extends PermissionActivity {
 
     private void initQuestion() {
         rvProblem = findViewById(R.id.rv_problem);
-        rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
+        rvProblem.setLayoutManager(new GridLayoutManager(this, 3));
 
         problemAdapter = new ProblemAdapter();
         if (!TextUtils.isEmpty(typeStr)) {
@@ -530,7 +536,7 @@ public class DetailActivity extends PermissionActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                showToast(R.string.detail_commit_fail);
             }
 
             @Override

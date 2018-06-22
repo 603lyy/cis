@@ -20,7 +20,15 @@ import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
 public class TurnActivity extends BaseActivity {
+
+    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
+
+    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
 
     private TextView tvPatrol, tvRecord;
 
@@ -45,6 +53,7 @@ public class TurnActivity extends BaseActivity {
             public void onClick(View view) {
                 showLoadingDialog();
                 checkRecord();
+//                getTypeList();
             }
         });
 
@@ -68,6 +77,72 @@ public class TurnActivity extends BaseActivity {
             intent.putExtra("question", questionStr);
             startActivity(intent);
         }
+    }
+
+    private void getTypeList() {
+
+        RequestParams requestParams = new RequestParams(typeUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                TypeBean data = gson.fromJson(result, TypeBean.class);
+                if (data != null && data.isResult()) {
+                    getQuestion(data);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    private void getQuestion(final TypeBean typeBean) {
+        RequestParams requestParams = new RequestParams(questionUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("typeId", typeBean.getTypeArr().get(0).getId());
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                QuestionBean data = gson.fromJson(result, QuestionBean.class);
+                if (data != null && data.isResult()) {
+                    Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
+                    intent.putExtra("type", gson.toJson(typeBean));
+                    intent.putExtra("question", gson.toJson(data));
+                    intent.putExtra("sign", true);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                cancelLoadingDialog();
+            }
+        });
     }
 
     @Override

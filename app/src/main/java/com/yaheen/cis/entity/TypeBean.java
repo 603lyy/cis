@@ -15,7 +15,7 @@ public class TypeBean implements Serializable {
     private boolean result;
     private int code;
     private String msg;
-    private String recordId;
+    private String recordId = "";
     private List<TypeArrBean> typeArr;
 
     public String getRecordId() {

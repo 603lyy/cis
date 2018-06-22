@@ -32,7 +32,10 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         helper.addOnClickListener(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());
 
-        if (changeTime < getData().size() - 1 && helper.getAdapterPosition() != 0) {
+        if (changeTime == 0) {
+            item.setSelected(true);
+            changeTime++;
+        } else if (changeTime < getData().size() - 1) {
             item.setSelected(false);
             changeTime++;
         }
@@ -43,11 +46,11 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
             checkBox.setChecked(false);
         }
 
-        if(item.getName().equals("国土")){
+        if (item.getName().equals("国土")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
-        }else if(item.getName().equals("禁毒")){
+        } else if (item.getName().equals("禁毒")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
-        }else {
+        } else {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
         }
     }

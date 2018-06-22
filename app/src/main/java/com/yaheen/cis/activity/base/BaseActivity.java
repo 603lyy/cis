@@ -28,7 +28,7 @@ public class BaseActivity extends AppCompatActivity implements CompressImg {
 
     protected String baseUrl = "http://myj.tunnel.echomod.cn/crs";
 
-//    protected String baseUrl = "http://192.168.199.146:8080/crs";
+//    protected String baseUrl = "http://192.168.199.125:8080/crs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

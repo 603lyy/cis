@@ -34,7 +34,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="时间"
                 android:textColor="@color/red_2"
                 android:textSize="20dp" />
 
