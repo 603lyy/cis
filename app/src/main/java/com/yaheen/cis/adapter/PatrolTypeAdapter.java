@@ -35,7 +35,7 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         if (changeTime == 0) {
             item.setSelected(true);
             changeTime++;
-        } else if (changeTime < getData().size() - 1) {
+        } else if (changeTime < getData().size()) {
             item.setSelected(false);
             changeTime++;
         }
