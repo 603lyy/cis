@@ -210,13 +210,11 @@ public class TurnActivity extends PermissionActivity {
                         getTypeList();
                     } else if (data.getMsg() == null) {
                         showToast(R.string.not_id);
-                        getTypeList();
                     } else {
                         showToast(R.string.scan_not);
-                        cancelLoadingDialog();
                     }
                 }
-
+                cancelLoadingDialog();
             }
 
             @Override
