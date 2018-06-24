@@ -47,6 +47,9 @@ public class TurnActivity extends PermissionActivity {
 
     private LinearLayout llBack;
 
+    //成功扫码则为true，否则为false
+    private boolean isFetch = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,7 +181,6 @@ public class TurnActivity extends PermissionActivity {
 
             @Override
             public void onFinished() {
-                cancelLoadingDialog();
             }
         });
     }
@@ -208,16 +210,17 @@ public class TurnActivity extends PermissionActivity {
                         getTypeList();
                     } else if (data.getMsg() == null) {
                         showToast(R.string.not_id);
+                        cancelLoadingDialog();
                     } else {
                         showToast(R.string.scan_not);
+                        cancelLoadingDialog();
                     }
                 }
-                cancelLoadingDialog();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                cancelLoadingDialog();
             }
 
             @Override
@@ -290,6 +293,7 @@ public class TurnActivity extends PermissionActivity {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
                     if (result != null) {
                         showLoadingDialog();
+                        isFetch = true;
                         check(result);
                     } else {
                         cancelLoadingDialog();
@@ -300,12 +304,18 @@ public class TurnActivity extends PermissionActivity {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
+        } else {
+            cancelLoadingDialog();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (!isFetch) {
+            cancelLoadingDialog();
+        }
+        isFetch = false;
     }
 
     @Override

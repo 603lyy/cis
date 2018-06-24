@@ -43,6 +43,7 @@
                 style="@style/Detail_Toolbar_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:background="@drawable/btn_orange"
                 android:text="@string/detail_sign" />
 
