@@ -163,8 +163,6 @@ public class TurnActivity extends PermissionActivity {
                     intent.putExtra("question", gson.toJson(data));
                     intent.putExtra("sign", true);
                     startActivity(intent);
-                } else {
-                    cancelLoadingDialog();
                 }
             }
 
@@ -308,7 +306,6 @@ public class TurnActivity extends PermissionActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cancelLoadingDialog();
     }
 
     @Override
