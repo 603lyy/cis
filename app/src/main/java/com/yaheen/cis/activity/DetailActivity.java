@@ -403,12 +403,14 @@ public class DetailActivity extends PermissionActivity {
                     problemAdapter.notifyDataSetChanged();
                     clearData();
                 } else {
+                    showToast(R.string.get_question_empty);
                     finish();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.get_question_empty);
                 finish();
             }
 
@@ -448,12 +450,11 @@ public class DetailActivity extends PermissionActivity {
             @Override
             public void onSuccess(String result) {
                 ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
+                //删除已请求上传图片的路径
+                if (selectUriList.size() > 0) {
+                    selectUriList.remove(0);
+                }
                 if (data != null) {
-                    //删除已请求上传图片的路径
-                    if (selectUriList.size() > 0) {
-                        selectUriList.remove(0);
-                    }
-
                     if (data.isResult()) {
                         imgUriList.add(uri);
                         uploadIdList.add(data.getFileId());
@@ -472,13 +473,13 @@ public class DetailActivity extends PermissionActivity {
                     } else {
                         ivDelete.setVisibility(View.GONE);
                     }
+                }
 
-                    //图片路径不为空，继续上传剩余图片
-                    if (selectUriList.size() > 0) {
-                        ImgUploadHelper.compressImage(DetailActivity.this,
-                                UriUtil.getPath(DetailActivity.this,
-                                        selectUriList.get(0)), isTakePhoto);
-                    }
+                //图片路径不为空，继续上传剩余图片
+                if (selectUriList.size() > 0) {
+                    ImgUploadHelper.compressImage(DetailActivity.this,
+                            UriUtil.getPath(DetailActivity.this,
+                                    selectUriList.get(0)), isTakePhoto);
                 }
             }
 
