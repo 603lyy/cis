@@ -7,54 +7,139 @@
     android:orientation="vertical"
     tools:context=".activity.TurnActivity">
 
-    <include layout="@layout/item_title_bar" />
-
-    <ScrollView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="250dp"
+        android:background="@drawable/ic_turn_bannar" />
+
+    <!--<HorizontalScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="30dp">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_patrol"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="50dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_gravity="center"
-                android:background="@drawable/btn_turn"
-                android:gravity="center"
-                android:text="@string/turn_patrol_text"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
+                android:background="@drawable/ic_turn_patrol"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="@string/turn_patrol_text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:background="@color/orange_2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_fetch"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:background="@drawable/btn_turn"
-                android:gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:text="@string/turn_fetch_text"
+                android:background="@drawable/ic_turn_sign"
                 android:textColor="@color/white"
                 android:textSize="18dp" />
 
             <TextView
-                android:id="@+id/tv_record"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:background="@drawable/btn_turn"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:text="@string/turn_record_text"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
+                android:text="@string/turn_fetch_text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:background="@color/yellow_1" />
+
         </LinearLayout>
 
-    </ScrollView>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_record"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_turn_record"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="@string/turn_record_text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:background="@color/red_3" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--</HorizontalScrollView>-->
+
+    <!--<ScrollView--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent">-->
+
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:orientation="vertical">-->
+
+    <!--<TextView--><!--android:id="@+id/tv_patrol"--><!--android:layout_width="200dp"--><!--android:layout_height="200dp"--><!--android:layout_marginTop="50dp"--><!--android:layout_gravity="center"--><!--android:background="@drawable/btn_turn"--><!--android:gravity="center"--><!--android:text="@string/turn_patrol_text"--><!--android:textColor="@color/white"--><!--android:textSize="18dp" />-->
+
+    <!--<TextView--><!--android:id="@+id/tv_fetch"--><!--android:layout_width="200dp"--><!--android:layout_height="200dp"--><!--android:background="@drawable/btn_turn"--><!--android:gravity="center"--><!--android:layout_gravity="center"--><!--android:layout_marginTop="50dp"--><!--android:text="@string/turn_fetch_text"--><!--android:textColor="@color/white"--><!--android:textSize="18dp" />-->
+
+    <!--<TextView--><!--android:id="@+id/tv_record"--><!--android:layout_width="200dp"--><!--android:layout_height="200dp"--><!--android:background="@drawable/btn_turn"--><!--android:gravity="center"--><!--android:layout_gravity="center"--><!--android:layout_marginTop="50dp"--><!--android:text="@string/turn_record_text"--><!--android:textColor="@color/white"--><!--android:textSize="18dp" />--><!--</LinearLayout>-->
+
+    <!--</ScrollView>-->
 
 </LinearLayout>
