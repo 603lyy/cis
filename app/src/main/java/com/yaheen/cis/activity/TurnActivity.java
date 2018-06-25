@@ -128,14 +128,20 @@ public class TurnActivity extends PermissionActivity {
             public void onSuccess(String result) {
                 TypeBean data = gson.fromJson(result, TypeBean.class);
                 if (data != null && data.isResult()) {
-                    getQuestion(data);
+//                    getQuestion(data);
+                    Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
+                    intent.putExtra("type", gson.toJson(data));
+                    intent.putExtra("sign", true);
+                    startActivity(intent);
                 } else {
                     cancelLoadingDialog();
+                    showToast(R.string.scan_fail);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.scan_fail);
                 cancelLoadingDialog();
             }
 

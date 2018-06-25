@@ -67,7 +67,7 @@
 
     <string name="short_link_empty">短链接不能为空</string>
     <string name="scan_success">扫描成功</string>
-    <string name="scan_fail">扫描失败</string>
+    <string name="scan_fail">扫描失败,请重新扫描</string>
     <string name="scan_not">不是本系统的短链接</string>
     <string name="not_id">不是巡查点</string>
 

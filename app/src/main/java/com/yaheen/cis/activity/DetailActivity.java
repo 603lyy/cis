@@ -146,7 +146,7 @@ public class DetailActivity extends PermissionActivity {
         questionStr = getIntent().getStringExtra("question");
         typeStr = getIntent().getStringExtra("type");
 
-        qData = gson.fromJson(questionStr, QuestionBean.class);
+//        qData = gson.fromJson(questionStr, QuestionBean.class);
         typeData = gson.fromJson(typeStr, TypeBean.class);
         startTime = DefaultPrefsUtil.getPatrolStart();
         recordId = typeData.getRecordId();
