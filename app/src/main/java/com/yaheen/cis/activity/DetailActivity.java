@@ -140,6 +140,7 @@ public class DetailActivity extends PermissionActivity {
         llTitle = findViewById(R.id.ll_title_bar);
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
+        showLoadingDialog();
 
         isSign = getIntent().getBooleanExtra("sign", false);
         questionStr = getIntent().getStringExtra("question");
@@ -156,11 +157,11 @@ public class DetailActivity extends PermissionActivity {
             DefaultPrefsUtil.setPatrolStart(startTime);
         }
 
-        if (!typeData.getRecordId().equals(qData.getRecordId())) {
-            DefaultPrefsUtil.setPatrolType("");
-            DefaultPrefsUtil.setPatrolqQuestion("");
-            finish();
-        }
+//        if (!typeData.getRecordId().equals(qData.getRecordId())) {
+//            DefaultPrefsUtil.setPatrolType("");
+//            DefaultPrefsUtil.setPatrolqQuestion("");
+//            finish();
+//        }
 
 
         if (!TextUtils.isEmpty(recordId)) {
@@ -179,6 +180,9 @@ public class DetailActivity extends PermissionActivity {
         initUrgency();
         initMapView();
         initImgUpload();
+        if (qData == null) {
+            getQuestionMsg(typeData.getTypeArr().get(0).getId());
+        }
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,7 +211,6 @@ public class DetailActivity extends PermissionActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cancelLoadingDialog();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mBaiduMap.setMyLocationEnabled(true);
         mapView.onResume();
@@ -282,7 +285,7 @@ public class DetailActivity extends PermissionActivity {
         rvProblem.setLayoutManager(new GridLayoutManager(this, 3));
 
         problemAdapter = new ProblemAdapter();
-        if (!TextUtils.isEmpty(typeStr)) {
+        if (!TextUtils.isEmpty(typeStr) && qData != null) {
             problemAdapter.setDatas(qData.getTypeArr());
         }
         rvProblem.setAdapter(problemAdapter);
@@ -346,7 +349,7 @@ public class DetailActivity extends PermissionActivity {
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
-        mBaiduMap.hideSDKLayer();
+//        mBaiduMap.hideSDKLayer();
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new LocationListener());
@@ -385,9 +388,11 @@ public class DetailActivity extends PermissionActivity {
 
     private void getQuestionMsg(String typeId) {
         RequestParams requestParams = new RequestParams(questionUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("typeId", typeId);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        requestParams.setConnectTimeout(60 * 1000);
+        requestParams.setReadTimeout(60 * 1000);
 
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -397,12 +402,14 @@ public class DetailActivity extends PermissionActivity {
                     problemAdapter.setDatas(data.getTypeArr());
                     problemAdapter.notifyDataSetChanged();
                     clearData();
+                } else {
+                    finish();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                finish();
             }
 
             @Override
@@ -434,6 +441,8 @@ public class DetailActivity extends PermissionActivity {
         RequestParams params = new RequestParams(uploadImgUrl);
         params.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         params.addBodyParameter("originImage", new File(imgPath));
+        params.setConnectTimeout(60 * 1000);
+        params.setReadTimeout(60 * 1000);
         params.setMultipart(true);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -628,7 +637,7 @@ public class DetailActivity extends PermissionActivity {
             // 设置定位数据
             mBaiduMap.setMyLocationData(locData);
             tvLocation.setText(mLoc.getAddrStr());
-            mBaiduMap.showSDKLayer();
+//            mBaiduMap.showSDKLayer();
 
             if (isFirstLoc) {
                 isFirstLoc = false;

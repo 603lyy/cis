@@ -131,9 +131,18 @@ public class PatrolSettingActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 StartPatrolBean data = gson.fromJson(result, StartPatrolBean.class);
+                TypeBean typeBean = settingAdapter.getTypeBean();
+                typeBean.setRecordId(recordId);
                 if (data != null && data.isResult()) {
                     recordId = data.getRecordId();
-                    getQuestion();
+                    typeBean.setRecordId(data.getRecordId());
+                    String typeStr = gson.toJson(typeBean);
+                    DefaultPrefsUtil.setPatrolType(typeStr);
+
+                    Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
+                    intent.putExtra("type", typeStr);
+                    startActivity(intent);
+                    finish();
                 } else {
                     showToast(R.string.setting_start_fail);
                     cancelLoadingDialog();
@@ -161,6 +170,7 @@ public class PatrolSettingActivity extends BaseActivity {
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("typeId", settingAdapter.getTypeBean().getTypeArr().get(0).getId());
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        requestParams.setConnectTimeout(30 * 1000);
 
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override

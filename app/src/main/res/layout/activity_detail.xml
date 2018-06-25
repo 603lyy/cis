@@ -22,12 +22,13 @@
             android:paddingRight="20dp">
 
             <TextView
-                android:id="@+id/tv_finish"
+                android:id="@+id/tv_sign"
                 style="@style/Detail_Toolbar_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_red"
-                android:text="@string/detail_finish" />
+                android:visibility="invisible"
+                android:background="@drawable/btn_orange"
+                android:text="@string/detail_sign" />
 
             <TextView
                 android:id="@+id/tv_time"
@@ -39,13 +40,12 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/tv_sign"
+                android:id="@+id/tv_finish"
                 style="@style/Detail_Toolbar_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:background="@drawable/btn_orange"
-                android:text="@string/detail_sign" />
+                android:background="@drawable/btn_red"
+                android:text="@string/detail_finish" />
 
         </LinearLayout>
 
@@ -129,7 +129,7 @@
                 android:gravity="start"
                 android:maxEms="6"
                 android:padding="5dp"
-                android:textSize="12dp" />
+                android:textSize="18dp" />
 
         </LinearLayout>
 

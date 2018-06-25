@@ -107,7 +107,7 @@ public class TurnActivity extends PermissionActivity {
 //        DefaultPrefsUtil.setPatrolType("");
         String typeStr = DefaultPrefsUtil.getPatrolType();
         String questionStr = DefaultPrefsUtil.getPatrolqQuestion();
-        if (TextUtils.isEmpty(typeStr) || TextUtils.isEmpty(questionStr)) {
+        if (TextUtils.isEmpty(typeStr)) {
             Intent intent = new Intent(TurnActivity.this, PatrolSettingActivity.class);
             startActivity(intent);
         } else {
