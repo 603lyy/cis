@@ -1,10 +1,17 @@
 package com.yaheen.cis.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -37,7 +44,14 @@ import de.tavendo.autobahn.WebSocketHandler;
 
 public class LoginActivity extends PermissionActivity {
 
-    private UploadLocationService.MyBinder myBinder;
+    //定义notify的id，避免与其它的notification的处理冲突
+    private static final int NOTIFY_ID = 840567289;
+
+    private static final String CHANNEL = "1";
+
+    private NotificationManager mNotificationManager;
+
+    private NotificationCompat.Builder mBuilder;
 
     private LinearLayout llRPsd;
 
@@ -70,15 +84,9 @@ public class LoginActivity extends PermissionActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(LoginActivity.this, UploadLocationService.class);
-//                bindService(intent, conn, BIND_AUTO_CREATE);
-//                if (myBinder != null) {
-//                    myBinder.sendLocation();
-//                }
                 showLoadingDialog();
                 login();
-//                Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
-//                startActivity(intent);
+//                setNotification();
             }
         });
     }
@@ -172,21 +180,34 @@ public class LoginActivity extends PermissionActivity {
         }
     }
 
-    ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            //拿到后台服务代理对象
-            myBinder = (UploadLocationService.MyBinder) service;
-            //调用后台服务的方法
-            myBinder.connect();
-            myBinder.startTimer();
+    /**
+     * 创建通知栏
+     */
+    private void setNotification() {
+
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("1",
+                    "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.enableLights(true); //是否在桌面icon右上角展示小红点
+            channel.setLightColor(Color.GREEN); //小红点颜色
+            channel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+            mNotificationManager.createNotificationChannel(channel);
         }
-    };
+
+        mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL);
+        mBuilder.setContentTitle("开始下载")
+                .setContentText("正在连接服务器")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setOngoing(true)
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis());
+        mNotificationManager.notify(NOTIFY_ID, mBuilder.build());
+    }
 
     @Override
     public void onBackPressed() {
@@ -204,9 +225,6 @@ public class LoginActivity extends PermissionActivity {
 
     @Override
     protected void onDestroy() {
-//        unbindService(conn);
-//        Intent intent = new Intent(LoginActivity.this, UploadLocationService.class);
-//        stopService(intent);
         super.onDestroy();
     }
 }

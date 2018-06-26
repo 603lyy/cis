@@ -1,8 +1,11 @@
 package com.yaheen.cis.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,6 +56,7 @@ import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.time.TimeTransferUtils;
+import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -67,6 +71,8 @@ import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
 
 public class DetailActivity extends PermissionActivity {
+
+    private UploadLocationService.MyBinder myBinder;
 
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
@@ -155,8 +161,8 @@ public class DetailActivity extends PermissionActivity {
 
 //        qData = gson.fromJson(questionStr, QuestionBean.class);
         typeData = gson.fromJson(typeStr, TypeBean.class);
+        recordId = DefaultPrefsUtil.getPatrolRecordId();
         startTime = DefaultPrefsUtil.getPatrolStart();
-        recordId = typeData.getRecordId();
 
         //开始定位
         BDMapUtils.startLocation();
@@ -171,10 +177,11 @@ public class DetailActivity extends PermissionActivity {
             DefaultPrefsUtil.setPatrolRecordId(recordId);
         }
 
-//        开启后台服务上传坐标（待定）
+//        开启后台服务上传坐标
 //        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
 //        startService(intent);
 //        bindService(intent, conn, BIND_AUTO_CREATE);
+        UploadLocationUtils.startUpload(getApplicationContext());
 
         initView();
         initPatrol();
@@ -412,18 +419,21 @@ public class DetailActivity extends PermissionActivity {
                 QuestionBean data = gson.fromJson(result, QuestionBean.class);
                 if (data != null && data.isResult()) {
                     problemAdapter.setDatas(data.getTypeArr());
-                    problemAdapter.notifyDataSetChanged();
                     refreshLayout.finishRefresh(true);
                     clearData();
                 } else {
                     showToast(R.string.get_question_empty);
+                    problemAdapter.setDatas(null);
 //                    finish();
                 }
+                problemAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 showToast(R.string.get_question_empty);
+                problemAdapter.notifyDataSetChanged();
+                problemAdapter.setDatas(null);
 //                finish();
             }
 
@@ -625,6 +635,7 @@ public class DetailActivity extends PermissionActivity {
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_finish_success);
                     DefaultPrefsUtil.setPatrolqQuestion("");
+                    DefaultPrefsUtil.setPatrolRecordId("");
                     DefaultPrefsUtil.setPatrolStart(0);
                     DefaultPrefsUtil.setPatrolType("");
                     BDMapUtils.stopLocation();
@@ -695,6 +706,22 @@ public class DetailActivity extends PermissionActivity {
         }
     };
 
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            //拿到后台服务代理对象
+            myBinder = (UploadLocationService.MyBinder) service;
+            //调用后台服务的方法
+            myBinder.connect();
+            myBinder.startTimer();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     @Override
     public void compress(Uri uri, String imgPath, boolean isTakePhoto) {
         showLoadingDialog();
@@ -728,9 +755,9 @@ public class DetailActivity extends PermissionActivity {
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        CountDownTimerUtils.getCountDownTimer().cancel();
         mapView.onDestroy();
         mapView = null;
-        CountDownTimerUtils.getCountDownTimer().cancel();
     }
 
     @Override

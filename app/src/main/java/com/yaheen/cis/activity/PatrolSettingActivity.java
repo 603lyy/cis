@@ -147,6 +147,7 @@ public class PatrolSettingActivity extends BaseActivity {
                     typeBean.setRecordId(data.getRecordId());
                     String typeStr = gson.toJson(typeBean);
                     DefaultPrefsUtil.setPatrolType(typeStr);
+                    DefaultPrefsUtil.setPatrolRecordId(recordId);
 
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
                     intent.putExtra("type", typeStr);

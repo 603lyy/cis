@@ -59,7 +59,7 @@ import java.util.List;
 
 public class RecordMapActivity extends MapActivity {
 
-    private LinearLayout llRecord,llBack;
+    private LinearLayout llRecord, llBack;
 
     private FrameLayout flMapView;
 
@@ -317,16 +317,18 @@ public class RecordMapActivity extends MapActivity {
         LatLng enLatLng = new LatLng(
                 Float.valueOf(rBean.getEndLatitude()), Float.valueOf(rBean.getEndLongitude()));
 
-        String eventId = "";
-        String emergency = "";
+        String eventId;
+        String emergency;
 
         for (int i = 0; i < eventList.size() + 2; i++) {
             LatLng latLng;
             if (i == 0) {
                 latLng = enLatLng;
+                emergency = "";
                 eventId = "";
             } else if (i == eventList.size() + 1) {
                 latLng = stLatLng;
+                emergency = "";
                 eventId = "";
             } else {
                 latLng = new LatLng(
@@ -372,16 +374,16 @@ public class RecordMapActivity extends MapActivity {
 
         @Override
         public BitmapDescriptor getBitmapDescriptor() {
-            if(emergency.equals("1")){
+            if (emergency.equals("1")) {
                 return BitmapDescriptorFactory
                         .fromResource(R.drawable.ic_map_recode);
-            }else if(emergency.equals("2")){
+            } else if (emergency.equals("2")) {
                 return BitmapDescriptorFactory
                         .fromResource(R.drawable.ic_map_normal);
-            }else if(emergency.equals("3")){
+            } else if (emergency.equals("3")) {
                 return BitmapDescriptorFactory
                         .fromResource(R.drawable.ic_map_suspicious);
-            }else if(emergency.equals("4")){
+            } else if (emergency.equals("4")) {
                 return BitmapDescriptorFactory
                         .fromResource(R.drawable.ic_map_urgency);
             }
