@@ -60,8 +60,6 @@ public class LoginActivity extends PermissionActivity {
 
         initView();
 
-        BDMapUtils.startLocation();
-
         llRPsd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

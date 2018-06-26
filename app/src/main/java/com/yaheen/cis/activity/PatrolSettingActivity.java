@@ -44,6 +44,9 @@ public class PatrolSettingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patrol_setting);
 
+        //开始定位
+        BDMapUtils.startLocation();
+
         showLoadingDialog();
         initSettingView();
         getTypeList();
@@ -107,6 +110,12 @@ public class PatrolSettingActivity extends BaseActivity {
     }
 
     private void startPatrol() {
+
+        if (BDMapUtils.getLocation() == null) {
+            showToast(R.string.map_init_ing);
+            cancelLoadingDialog();
+            return;
+        }
 
         if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
             showToast(R.string.setting_start_select);

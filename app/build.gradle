@@ -61,4 +61,6 @@ dependencies {
     implementation 'top.zibin:Luban:1.1.6'
     //二维码扫描
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
+    //下拉刷新库
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-7'
 }

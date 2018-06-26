@@ -21,6 +21,7 @@ import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
+import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.Base64;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 

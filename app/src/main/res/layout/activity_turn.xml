@@ -35,8 +35,8 @@
 
             <TextView
                 android:id="@+id/tv_patrol"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -46,16 +46,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_gravity="center"
-                android:text="@string/turn_patrol_text" />
+                android:text="@string/turn_patrol_text"
+                android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
-                android:background="@color/orange_2" />
+                android:background="@color/orange_2"
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -67,8 +68,8 @@
 
             <TextView
                 android:id="@+id/tv_fetch"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -79,16 +80,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_gravity="center"
-                android:text="@string/turn_fetch_text" />
+                android:text="@string/turn_fetch_text"
+                android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
-                android:background="@color/yellow_1" />
+                android:background="@color/yellow_1"
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -100,8 +102,8 @@
 
             <TextView
                 android:id="@+id/tv_record"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -113,16 +115,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_gravity="center"
-                android:text="@string/turn_record_text" />
+                android:text="@string/turn_record_text"
+                android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
-                android:background="@color/red_3" />
+                android:background="@color/red_3"
+                android:visibility="gone" />
 
         </LinearLayout>
 

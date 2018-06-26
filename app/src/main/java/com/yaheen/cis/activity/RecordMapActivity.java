@@ -128,13 +128,9 @@ public class RecordMapActivity extends MapActivity {
                 .fromResource(R.drawable.ic_map_point);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, mCurrentMarker));
-//        BDMapUtils.setMapViewListener(new locationListener());
-//        setLocationData(BDMapUtils.getLocation());
 
         // 定义点聚合管理类ClusterManager
         mClusterManager = new ClusterManager<MyItem>(this, mBaiduMap);
-        // 添加Marker点
-//        addMarkers();
         // 设置地图监听，当地图状态发生改变时，进行点聚合运算
         mBaiduMap.setOnMapStatusChangeListener(mClusterManager);
         // 设置maker点击时的响应
@@ -214,10 +210,6 @@ public class RecordMapActivity extends MapActivity {
         mapAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                //地图移动回定位位置
-//                MapStatus ms;
-//                ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(15).build();
-//                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
                 Intent intent = new Intent(RecordMapActivity.this, EventActivity.class);
                 intent.putExtra("recordId", recordId);
                 intent.putExtra("eventId", mapAdapter.getData().get(position).getId());

@@ -3,6 +3,7 @@ package com.yaheen.cis.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,9 @@ import com.baidu.mapapi.model.LatLng;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
@@ -77,6 +81,8 @@ public class DetailActivity extends PermissionActivity {
     private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
 
     private LinearLayout llDetailTitle;
+
+    private RefreshLayout refreshLayout;
 
     private View llTitle;
 
@@ -137,6 +143,7 @@ public class DetailActivity extends PermissionActivity {
         setContentView(R.layout.activity_detail);
 
         llDetailTitle = findViewById(R.id.ll_detail_title);
+        refreshLayout = findViewById(R.id.refresh_layout);
         llTitle = findViewById(R.id.ll_title_bar);
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
@@ -151,23 +158,18 @@ public class DetailActivity extends PermissionActivity {
         startTime = DefaultPrefsUtil.getPatrolStart();
         recordId = typeData.getRecordId();
 
+        //开始定位
+        BDMapUtils.startLocation();
+
         //开始时间为零，即开始新的巡查
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
             DefaultPrefsUtil.setPatrolStart(startTime);
         }
 
-//        if (!typeData.getRecordId().equals(qData.getRecordId())) {
-//            DefaultPrefsUtil.setPatrolType("");
-//            DefaultPrefsUtil.setPatrolqQuestion("");
-//            finish();
-//        }
-
-
         if (!TextUtils.isEmpty(recordId)) {
             DefaultPrefsUtil.setPatrolRecordId(recordId);
         }
-
 
 //        开启后台服务上传坐标（待定）
 //        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
@@ -204,6 +206,15 @@ public class DetailActivity extends PermissionActivity {
                     public void cancelCallback() {
                     }
                 });
+            }
+        });
+
+        refreshLayout.setEnableLoadMore(false);
+        refreshLayout.setRefreshHeader(new ClassicsHeader(this));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshlayout) {
+                getQuestionMsg(typeAdapter.getTypeId());
             }
         });
     }
@@ -401,17 +412,18 @@ public class DetailActivity extends PermissionActivity {
                 if (data != null && data.isResult()) {
                     problemAdapter.setDatas(data.getTypeArr());
                     problemAdapter.notifyDataSetChanged();
+                    refreshLayout.finishRefresh(true);
                     clearData();
                 } else {
                     showToast(R.string.get_question_empty);
-                    finish();
+//                    finish();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 showToast(R.string.get_question_empty);
-                finish();
+//                finish();
             }
 
             @Override
@@ -510,13 +522,18 @@ public class DetailActivity extends PermissionActivity {
             return;
         }
 
-//        if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
-//            showToast(R.string.detail_urgency_empty);
-//            return;
-//        }
+        if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
+            showToast(R.string.detail_question_empty);
+            return;
+        }
 
         if (TextUtils.isEmpty(etDescribe.getText())) {
             showToast(R.string.detail_describe_empty);
+            return;
+        }
+
+        if (BDMapUtils.getLocation() == null) {
+            showToast(R.string.map_init_ing);
             return;
         }
 
@@ -582,6 +599,11 @@ public class DetailActivity extends PermissionActivity {
     }
 
     private void finishPatrol() {
+
+        if (BDMapUtils.getLocation() == null) {
+            showToast(R.string.map_init_ing);
+            return;
+        }
         showLoadingDialog();
 
         UploadLocationListBean.LocationBean bean = new UploadLocationListBean.LocationBean();
@@ -604,6 +626,7 @@ public class DetailActivity extends PermissionActivity {
                     DefaultPrefsUtil.setPatrolqQuestion("");
                     DefaultPrefsUtil.setPatrolStart(0);
                     DefaultPrefsUtil.setPatrolType("");
+                    BDMapUtils.stopLocation();
                     finish();
                 } else {
                     showToast(R.string.detail_finish_fail);
@@ -647,6 +670,11 @@ public class DetailActivity extends PermissionActivity {
                 //设置地图层级（4-21）
                 builder.target(ll).zoom(19.0f);
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+            } else {
+//            地图移动回定位位置
+                MapStatus ms;
+                ms = new MapStatus.Builder().target(new LatLng(mLoc.getLatitude(), mLoc.getLongitude())).zoom(19.0f).build();
+                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
             }
         }
 
