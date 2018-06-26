@@ -50,7 +50,7 @@ public class UploadLocationService extends Service {
 
 //    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
 
-    private String questionUrl = "http://lyy.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
+    private String questionUrl = "http://myj.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
 
     private NotificationManager mNotificationManager;
 
