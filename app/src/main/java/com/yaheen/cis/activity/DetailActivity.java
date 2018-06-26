@@ -209,6 +209,7 @@ public class DetailActivity extends PermissionActivity {
             }
         });
 
+        refreshLayout.setDragRate(0.3f);
         refreshLayout.setEnableLoadMore(false);
         refreshLayout.setRefreshHeader(new ClassicsHeader(this));
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -517,8 +518,8 @@ public class DetailActivity extends PermissionActivity {
 
     private void sendReport() {
 
-        if (TextUtils.isEmpty(urgencyAdapter.geUrgencyId())) {
-            showToast(R.string.detail_urgency_empty);
+        if (BDMapUtils.getLocation() == null) {
+            showToast(R.string.map_init_ing);
             return;
         }
 
@@ -532,8 +533,8 @@ public class DetailActivity extends PermissionActivity {
             return;
         }
 
-        if (BDMapUtils.getLocation() == null) {
-            showToast(R.string.map_init_ing);
+        if (TextUtils.isEmpty(urgencyAdapter.geUrgencyId())) {
+            showToast(R.string.detail_urgency_empty);
             return;
         }
 

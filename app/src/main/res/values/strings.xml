@@ -70,7 +70,8 @@
     <string name="scan_fail">扫描失败,请重新扫描</string>
     <string name="scan_not">不是本系统的短链接</string>
     <string name="not_id">不是巡查点</string>
-    <string name="get_question_empty">获取问题列表失败，请重新进入</string>
+
+    <string name="get_question_empty">获取问题列表失败，请重新加载</string>
 
 
     <string name="map_init_ing">定位功能正在启动中，请稍后再试</string>
