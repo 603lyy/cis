@@ -1,48 +1,35 @@
 package com.yaheen.cis.service;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.TaskStackBuilder;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.yaheen.cis.BaseApp;
+import com.yaheen.cis.IAIDLUpload;
 import com.yaheen.cis.R;
-import com.yaheen.cis.activity.LoginActivity;
-import com.yaheen.cis.activity.base.BaseActivity;
-import com.yaheen.cis.entity.UploadLocationBean;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
-import com.yaheen.cis.util.time.TimeTransferUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.util.Timer;
-
-import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketException;
-import de.tavendo.autobahn.WebSocketHandler;
 
 public class UploadLocationService extends Service {
 
@@ -59,11 +46,7 @@ public class UploadLocationService extends Service {
 
     private NotificationCompat.Builder mBuilder;
 
-    private AlarmManager manager;
-
-    private PendingIntent pi;
-
-    private Gson gson = new Gson();
+    private IAIDLUpload iaidlUpload = null;
 
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
@@ -73,13 +56,21 @@ public class UploadLocationService extends Service {
     public IBinder onBind(Intent intent) {
         Log.i("lin", "onBind: ");
         startTime = System.currentTimeMillis();
-        return new MyBinder();
+        return new MBinder();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         Log.i("lin", "onUnbind: ");
         return super.onUnbind(intent);
+    }
+
+    class MBinder extends IAIDLUpload.Stub {
+
+        @Override
+        public String getServiceName() throws RemoteException {
+            return "123";
+        }
     }
 
     /**
@@ -133,6 +124,12 @@ public class UploadLocationService extends Service {
             if (DefaultPrefsUtil.getIsStop()) {
                 stopService(new Intent(UploadLocationService.this, GuardService.class));
                 unbindService(mServiceConnection);
+            }
+            iaidlUpload = IAIDLUpload.Stub.asInterface(service);
+            try {
+                Log.i("lin", "onServiceConnected: " + iaidlUpload.getServiceName());
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
 

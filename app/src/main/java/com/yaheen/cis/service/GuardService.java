@@ -8,16 +8,18 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.yaheen.cis.IAIDLUpload;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 
 public class GuardService extends Service {
 
-    private int GuardId = 1;
+    private IAIDLUpload iaidlUpload = null;
 
 
     /**
@@ -27,7 +29,15 @@ public class GuardService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new MyBinder();
+        return new MBinder();
+    }
+
+    class MBinder extends IAIDLUpload.Stub{
+
+        @Override
+        public String getServiceName() throws RemoteException {
+            return "321";
+        }
     }
 
     /**
@@ -61,6 +71,12 @@ public class GuardService extends Service {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            iaidlUpload = IAIDLUpload.Stub.asInterface(service);
+            try {
+                Log.i("lin", "onServiceConnected: " + iaidlUpload.getServiceName());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
