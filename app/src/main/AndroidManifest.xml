@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.READ_OWNER_DATA" />
     <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -54,6 +53,9 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <!--JobService权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".BaseApp"
         android:allowBackup="true"
@@ -81,6 +83,17 @@
             android:process=":remote" />
 
         <service android:name=".service.UploadLocationService" />
+
+        <!-- guardService : 意思是把GuardService放到另一个线程中 -->
+        <service
+            android:name=".service.GuardService"
+            android:process=":guardService" />
+
+        <service
+            android:name=".service.JobWakeUpService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <receiver android:name=".service.AlarmReceiver" />
 
         <provider
@@ -101,7 +114,16 @@
         <activity android:name=".activity.RecordMapActivity" />
         <activity android:name=".activity.EventActivity" />
         <activity android:name=".activity.base.PhotoPagerActivity" />
-        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.LoginActivity" />
+
+        <!--用于保活APP设置的1像素activity-->
+        <activity
+            android:name=".activity.base.SinglePixelActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/SingleActivityStyle" />
     </application>
 
 </manifest>

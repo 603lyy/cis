@@ -23,23 +23,16 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.RouteLine;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
-import com.baidu.mapapi.search.route.WalkingRouteResult;
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
-import com.yaheen.cis.activity.base.PermissionActivity;
-import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.RecordMapAdapter;
 import com.yaheen.cis.entity.RecordEventBean;
-import com.yaheen.cis.util.FreeHandScreenUtil;
-import com.yaheen.cis.util.FreeHandSystemUtil;
+import com.yaheen.cis.util.common.FreeHandScreenUtil;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.cluster.Cluster;
 import com.yaheen.cis.util.map.cluster.ClusterItem;
@@ -47,7 +40,6 @@ import com.yaheen.cis.util.map.cluster.ClusterManager;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.map.route.DrivingRouteOverlay;
 import com.yaheen.cis.util.map.route.OverlayManager;
-import com.yaheen.cis.util.map.route.WalkingRouteOverlay;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import org.xutils.common.Callback;
@@ -388,7 +380,7 @@ public class RecordMapActivity extends MapActivity {
                         .fromResource(R.drawable.ic_map_urgency);
             }
             return BitmapDescriptorFactory
-                    .fromResource(R.drawable.ic_map_point);
+                    .fromResource(R.drawable.ic_map_point_2);
         }
     }
 

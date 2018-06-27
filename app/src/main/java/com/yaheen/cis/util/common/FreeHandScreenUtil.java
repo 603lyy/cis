@@ -1,5 +1,5 @@
 
-package com.yaheen.cis.util;
+package com.yaheen.cis.util.common;
 
 import android.app.Activity;
 import android.content.Context;

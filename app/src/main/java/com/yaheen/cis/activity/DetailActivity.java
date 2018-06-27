@@ -634,6 +634,7 @@ public class DetailActivity extends PermissionActivity {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_finish_success);
+                    UploadLocationUtils.stopUpload(getApplicationContext());
                     DefaultPrefsUtil.setPatrolqQuestion("");
                     DefaultPrefsUtil.setPatrolRecordId("");
                     DefaultPrefsUtil.setPatrolStart(0);

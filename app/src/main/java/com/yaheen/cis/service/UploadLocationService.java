@@ -7,8 +7,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Binder;
@@ -44,13 +46,13 @@ import de.tavendo.autobahn.WebSocketHandler;
 public class UploadLocationService extends Service {
 
     //定义notify的id，避免与其它的notification的处理冲突
-    private static final int NOTIFY_ID = 840567289;
+    private static final int NOTIFY_ID = 2018627;
 
     private static final String CHANNEL = "1";
 
-//    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
-
-    private String questionUrl = "http://myj.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
+    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
+//
+//    private String questionUrl = "http://myj.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
 
     private NotificationManager mNotificationManager;
 
@@ -73,22 +75,19 @@ public class UploadLocationService extends Service {
         return new MyBinder();
     }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.i("lin", "onUnbind: ");
+        return super.onUnbind(intent);
+    }
+
     /**
      * 代理类
      */
     public class MyBinder extends Binder {
 
         public void startTimer() {
-            CountDownTimerUtils.getCountDownTimer()
-                    .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                    .setCountDownInterval(30 * 1000)
-                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                        @Override
-                        public void onTick(long pMillisUntilFinished) {
-                            sendLocation();
-                            Log.i("lin", "onTick: ");
-                        }
-                    }).start();
+            startCountTime();
         }
 
         public void connect() {
@@ -98,32 +97,55 @@ public class UploadLocationService extends Service {
         public void sendLocation() {
             sendRealLocation();
         }
-    }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        Log.i("lin", "onUnbind: ");
-        return super.onUnbind(intent);
+        public void disConnect() {
+            mNotificationManager.cancel(NOTIFY_ID);
+        }
     }
 
     @Override
     public void onCreate() {
+        startCountTime();
+        setNotification();
         Log.i("lin", "onCreate: ");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        int time = 30 * 1000;
-//        long triggerAtTime = SystemClock.elapsedRealtime() + (time);
-//        Intent i = new Intent(this, AlarmReceiver.class);
-//        pi = PendingIntent.getBroadcast(this, 0, i, 0);
-//        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+        startService(new Intent(UploadLocationService.this, GuardService.class));
+        bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        return START_STICKY;
+    }
 
-//        sendRealLocation();
-        Log.i("lin", "onStartCommand: ");
-        return super.onStartCommand(intent, flags, startId);
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // 连接上
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            // 断开连接，需要重新启动，然后重新绑定
+
+            // 重新启动
+            startService(new Intent(UploadLocationService.this, GuardService.class));
+            // 重新绑定
+            bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        }
+    };
+
+    private void startCountTime() {
+        CountDownTimerUtils.getCountDownTimer()
+                .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
+                .setCountDownInterval(30 * 1000)
+                .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+                    @Override
+                    public void onTick(long pMillisUntilFinished) {
+                        sendRealLocation();
+                        Log.i("lin", "onTick: ");
+                    }
+                }).start();
     }
 
     private void sendRealLocation() {
@@ -190,18 +212,18 @@ public class UploadLocationService extends Service {
         }
 
         mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL);
-        mBuilder.setContentTitle("开始下载")
-                .setContentText("正在连接服务器")
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setOngoing(true)
+        mBuilder.setVibrate(new long[]{0, 0, 0, 0})
+                .setContentText("定时上传当前坐标")
+                .setSmallIcon(R.mipmap.ic_logo)
+                .setContentTitle("实时定位")
                 .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis());
+                .setOngoing(true);
         mNotificationManager.notify(NOTIFY_ID, mBuilder.build());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("lin", "onDestroy: ");
+        mNotificationManager.cancel(NOTIFY_ID);
     }
 }

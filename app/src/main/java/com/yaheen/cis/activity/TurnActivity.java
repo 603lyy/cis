@@ -24,6 +24,7 @@ import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.Base64;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -330,6 +331,7 @@ public class TurnActivity extends PermissionActivity {
         DialogUtils.showDialog(TurnActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
+                UploadLocationUtils.stopUpload(getApplicationContext());
                 BaseApp.exit();
             }
         }, new IDialogCancelCallback() {

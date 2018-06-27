@@ -33,6 +33,7 @@ import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.AESUtils;
 import com.yaheen.cis.util.nfc.Base64;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -180,40 +181,12 @@ public class LoginActivity extends PermissionActivity {
         }
     }
 
-    /**
-     * 创建通知栏
-     */
-    private void setNotification() {
-
-        if (mNotificationManager == null) {
-            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("1",
-                    "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.enableLights(true); //是否在桌面icon右上角展示小红点
-            channel.setLightColor(Color.GREEN); //小红点颜色
-            channel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
-            mNotificationManager.createNotificationChannel(channel);
-        }
-
-        mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL);
-        mBuilder.setContentTitle("开始下载")
-                .setContentText("正在连接服务器")
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setOngoing(true)
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis());
-        mNotificationManager.notify(NOTIFY_ID, mBuilder.build());
-    }
-
     @Override
     public void onBackPressed() {
         DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
+                UploadLocationUtils.stopUpload(getApplicationContext());
                 BaseApp.exit();
             }
         }, new IDialogCancelCallback() {

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import static com.yaheen.cis.util.nfc.NFCUtils.ByteArrayToHexString;
 import static com.yaheen.cis.util.nfc.NFCUtils.toStringHex;
 
-public class CommontActivity extends BaseActivity implements NfcInterface {
+public class CommonActivity extends BaseActivity implements NfcInterface {
 
     private NfcB nfcbTag;
     private Tag tagFromIntent;

@@ -10,7 +10,7 @@ import com.yaheen.cis.activity.base.BaseActivity;
 
 import java.util.ArrayList;
 
-public class PermissionActivity extends BaseActivity {
+public class PermissionActivity extends ScreenActivity {
 
     private final int SDK_PERMISSION_REQUEST = 127;
 
