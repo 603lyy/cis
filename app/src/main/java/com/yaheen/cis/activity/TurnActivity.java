@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -317,6 +318,22 @@ public class TurnActivity extends PermissionActivity {
         }
     }
 
+    private void exitProcess() {
+
+        String name = "com.yaheen.cis:guardService";
+        //判断内容
+        if (TextUtils.isEmpty(name.trim())) {
+            return;
+        }
+
+        //调用系统服务api杀死进程
+        //此种方式不能自杀,也不能杀掉系统的关键进程
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        if (manager != null) {
+            manager.killBackgroundProcesses(name);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -331,7 +348,7 @@ public class TurnActivity extends PermissionActivity {
         DialogUtils.showDialog(TurnActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
-                UploadLocationUtils.stopUpload(getApplicationContext());
+                DefaultPrefsUtil.setIsStop(true);
                 BaseApp.exit();
             }
         }, new IDialogCancelCallback() {

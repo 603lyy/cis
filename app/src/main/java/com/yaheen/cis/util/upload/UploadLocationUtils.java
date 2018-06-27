@@ -10,6 +10,7 @@ import android.os.IBinder;
 import com.yaheen.cis.service.GuardService;
 import com.yaheen.cis.service.JobWakeUpService;
 import com.yaheen.cis.service.UploadLocationService;
+import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
@@ -33,13 +34,11 @@ public class UploadLocationUtils {
     };
 
     public static void startUpload(Context context) {
+        DefaultPrefsUtil.setIsStop(false);
 //        开启后台服务上传坐标
         Intent intent = new Intent(context, UploadLocationService.class);
         context.startService(intent);
 //        context.bindService(intent, conn, BIND_AUTO_CREATE);
-
-        //开启双进程保护service
-//        context.startService(new Intent(context, GuardService.class));
 
 //        // 这里必须判断，否则5.0以下手机肯定崩溃
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -49,7 +48,7 @@ public class UploadLocationUtils {
     }
 
     public static void stopUpload(Context context) {
-        context.stopService(new Intent(context, UploadLocationService.class));
         context.stopService(new Intent(context, GuardService.class));
+        context.stopService(new Intent(context, UploadLocationService.class));
     }
 }

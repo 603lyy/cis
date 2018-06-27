@@ -24,6 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.LoginActivity;
 import com.yaheen.cis.activity.base.BaseActivity;
@@ -105,6 +106,9 @@ public class UploadLocationService extends Service {
 
     @Override
     public void onCreate() {
+        if (DefaultPrefsUtil.getIsStop()) {
+            return;
+        }
         startCountTime();
         setNotification();
         Log.i("lin", "onCreate: ");
@@ -113,8 +117,12 @@ public class UploadLocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startService(new Intent(UploadLocationService.this, GuardService.class));
-        bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        if (!DefaultPrefsUtil.getIsStop()) {
+            startService(new Intent(UploadLocationService.this, GuardService.class));
+            bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        } else {
+            stopService(new Intent(UploadLocationService.this, GuardService.class));
+        }
         return START_STICKY;
     }
 
@@ -122,16 +130,20 @@ public class UploadLocationService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             // 连接上
+            if (DefaultPrefsUtil.getIsStop()) {
+                stopService(new Intent(UploadLocationService.this, GuardService.class));
+                unbindService(mServiceConnection);
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            // 断开连接，需要重新启动，然后重新绑定
-
-            // 重新启动
-            startService(new Intent(UploadLocationService.this, GuardService.class));
-            // 重新绑定
-            bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+            if (!DefaultPrefsUtil.getIsStop()) {
+                // 重新启动
+                startService(new Intent(UploadLocationService.this, GuardService.class));
+                // 重新绑定
+                bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+            }
         }
     };
 

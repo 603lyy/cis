@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity;
 
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -72,7 +73,6 @@ public class LoginActivity extends PermissionActivity {
         setContentView(R.layout.activity_main);
 
         setTitleContent(R.string.login_title);
-
         initView();
 
         llRPsd.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +178,22 @@ public class LoginActivity extends PermissionActivity {
             cbRPsd.setChecked(false);
         } else {
             cbRPsd.setChecked(true);
+        }
+    }
+
+    private void exitProcess() {
+
+        String name = "com.yaheen.cis:guardService";
+        //判断内容
+        if (TextUtils.isEmpty(name.trim())) {
+            return;
+        }
+
+        //调用系统服务api杀死进程
+        //此种方式不能自杀,也不能杀掉系统的关键进程
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        if (manager != null) {
+            manager.killBackgroundProcesses(name);
         }
     }
 

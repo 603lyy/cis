@@ -29,9 +29,9 @@ final class DefaultPrefs extends AbstractSharePreference {
     static interface Keys {
 
         /**
-         * 屏幕是否是横屏
+         * 应用是否关闭
          */
-        String IS_HENG = "screen";
+        String IS_STOP = "is_stop";
 
         /**
          * 课程编号
@@ -107,12 +107,12 @@ final class DefaultPrefs extends AbstractSharePreference {
     /**
      * 屏幕是否是横屏
      */
-    boolean getIsHeng() {
-        return getBoolean(Keys.IS_HENG, true);
+    boolean getIsStop() {
+        return getBoolean(Keys.IS_STOP, false);
     }
 
-    void setIsHeng(boolean isHeng) {
-        putBoolean(Keys.IS_HENG, isHeng);
+    void setIsStop(boolean isStop) {
+        putBoolean(Keys.IS_STOP, isStop);
     }
 
     /**

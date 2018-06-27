@@ -6,12 +6,12 @@ package com.yaheen.cis.util.sharepreferences;
 
 public class DefaultPrefsUtil {
 
-    public static void setIsHorizontalScreen(boolean isHeng) {
-        DefaultPrefs.getInstance().setIsHeng(isHeng);
+    public static void setIsStop(boolean isStop) {
+        DefaultPrefs.getInstance().setIsStop(isStop);
     }
 
-    public static boolean getIsHorizontalScreen() {
-        return DefaultPrefs.getInstance().getIsHeng();
+    public static boolean getIsStop() {
+        return DefaultPrefs.getInstance().getIsStop();
     }
 
     public static void setCourseCode(String courseCode) {

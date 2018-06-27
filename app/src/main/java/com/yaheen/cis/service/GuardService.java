@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 
 public class GuardService extends Service {
@@ -49,8 +50,10 @@ public class GuardService extends Service {
         // 提高进程优先级 ，就会在通知栏中出现自己的应用，如果不想提高优先级，可以把这个注释
 //        startForeground(GuardId, new Notification());
 
-        // 让GuardService绑定MessageService 并建立连接
-        bindService(new Intent(this, UploadLocationService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        if (!DefaultPrefsUtil.getIsStop()) {
+            // 让GuardService绑定MessageService 并建立连接
+            bindService(new Intent(this, UploadLocationService.class), mServiceConnection, Context.BIND_IMPORTANT);
+        }
         return START_STICKY;
     }
 
@@ -58,19 +61,22 @@ public class GuardService extends Service {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-//            UploadLocationService.MyBinder myBinder = (UploadLocationService.MyBinder) service;
-//            myBinder.connect();
-//            myBinder.startTimer();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            // 断开连接，就需要重新启动，然后重新绑定
 
-            // 重新启动
-            startService(new Intent(GuardService.this, UploadLocationService.class));
-            // 重新绑定
-            bindService(new Intent(GuardService.this, UploadLocationService.class), mServiceConnection, Context.BIND_IMPORTANT);
+            Log.i("lin", "onServiceDisconnected: 1" + DefaultPrefsUtil.getIsStop());
+            if (!DefaultPrefsUtil.getIsStop()) {
+                // 重新启动
+                startService(new Intent(GuardService.this, UploadLocationService.class));
+                // 重新绑定
+                bindService(new Intent(GuardService.this, UploadLocationService.class), mServiceConnection, Context.BIND_IMPORTANT);
+            } else {
+                Log.i("lin", "onServiceDisconnected: 2");
+                stopService(new Intent(GuardService.this, UploadLocationService.class));
+                unbindService(mServiceConnection);
+            }
         }
     };
 }

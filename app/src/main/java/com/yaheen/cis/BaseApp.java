@@ -1,6 +1,7 @@
 
 package com.yaheen.cis;
 
+import android.app.ActivityManager;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.text.TextUtils;
@@ -117,6 +118,7 @@ public class BaseApp extends android.app.Application {
      * 应用退出，结束所有的activity,没有考虑到多线程环境下的退出
      */
     public static void exit() {
-        System.exit(0);
+        android.os.Process.killProcess(android.os.Process.myPid()) ;
+//        System.exit(0);
     }
 }
