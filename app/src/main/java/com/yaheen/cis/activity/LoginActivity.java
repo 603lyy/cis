@@ -28,6 +28,7 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.common.FreeHandSystemUtil;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
@@ -85,7 +86,6 @@ public class LoginActivity extends PermissionActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoadingDialog();
                 login();
 //                setNotification();
             }
@@ -108,8 +108,6 @@ public class LoginActivity extends PermissionActivity {
 
     private void login() {
 
-//        setIp(etIp.getText().toString());
-
         DefaultPrefsUtil.setIpUrl(etIp.getText().toString());
 
         final String name = etName.getText().toString();
@@ -125,9 +123,12 @@ public class LoginActivity extends PermissionActivity {
             return;
         }
 
+        showLoadingDialog();
+
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("username", name);
         requestParams.addQueryStringParameter("password", Base64.encode(AESUtils.encrypt(psd, key)));
+        requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -178,22 +179,6 @@ public class LoginActivity extends PermissionActivity {
             cbRPsd.setChecked(false);
         } else {
             cbRPsd.setChecked(true);
-        }
-    }
-
-    private void exitProcess() {
-
-        String name = "com.yaheen.cis:guardService";
-        //判断内容
-        if (TextUtils.isEmpty(name.trim())) {
-            return;
-        }
-
-        //调用系统服务api杀死进程
-        //此种方式不能自杀,也不能杀掉系统的关键进程
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        if (manager != null) {
-            manager.killBackgroundProcesses(name);
         }
     }
 

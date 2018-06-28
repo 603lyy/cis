@@ -90,14 +90,14 @@ public class MapActivity extends PermissionActivity implements OnGetGeoCoderResu
 
     public void searchRoute(RecordEventBean.RecordObjectBean rBean, List<RecordEventBean.EventListBean> eventList) {
 
-        LatLng stLatLng = new LatLng(Float.valueOf(rBean.getStartLatitude()), Float.valueOf(rBean.getStartLongitude()));
-        LatLng enLatLng = new LatLng(Float.valueOf(rBean.getEndLatitude()), Float.valueOf(rBean.getEndLongitude()));
+        LatLng stLatLng = new LatLng(rBean.getStartLatitude(), rBean.getStartLongitude());
+        LatLng enLatLng = new LatLng(rBean.getEndLatitude(), rBean.getEndLongitude());
 
         PlanNode stNode = PlanNode.withLocation(stLatLng);
         PlanNode enNode = PlanNode.withLocation(enLatLng);
         List<PlanNode> planNodes = new ArrayList<>();
         for (int i = 0; i < eventList.size(); i++) {
-            LatLng psLatLng = new LatLng(Float.valueOf(eventList.get(i).getLatitude()), Float.valueOf(eventList.get(i).getLongitude()));
+            LatLng psLatLng = new LatLng(eventList.get(i).getLatitude(), eventList.get(i).getLongitude());
             PlanNode passNode = PlanNode.withLocation(psLatLng);
             planNodes.add(passNode);
         }

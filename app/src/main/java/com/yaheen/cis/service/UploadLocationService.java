@@ -19,6 +19,8 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.yaheen.cis.IAIDLUpload;
 import com.yaheen.cis.R;
@@ -52,6 +54,12 @@ public class UploadLocationService extends Service {
 
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
+
+    //上一次上传的坐标点
+    private LatLng lastPoint;
+
+    //当前的坐标点
+    private LatLng curPoint;
 
     @Nullable
     @Override
@@ -111,7 +119,7 @@ public class UploadLocationService extends Service {
     private void startCountTime() {
         timerUtils = CountDownTimerUtils.getCountDownTimer()
                 .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                .setCountDownInterval(30 * 1000)
+                .setCountDownInterval(60 * 1000)
                 .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                     @Override
                     public void onTick(long pMillisUntilFinished) {
@@ -145,6 +153,16 @@ public class UploadLocationService extends Service {
         if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
             return;
         }
+
+        curPoint = new LatLng(BDMapUtils.getLocation().getLatitude(), BDMapUtils.getLocation().getLongitude());
+        if (DistanceUtil.getDistance(lastPoint, curPoint) < 100) {
+            if (lastPoint == null) {
+                lastPoint = curPoint;
+            }
+            return;
+        }
+
+        lastPoint = curPoint;
 
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("longitude",
