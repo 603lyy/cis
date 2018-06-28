@@ -6,8 +6,9 @@ public class RecordEventBean {
 
     /**
      * result : true
-     * eventList : [{"id":"402847ec63fc0b920163fc131b8e0007","time":"2018-06-14 10:15:00","longitude":"113.40793","latitude":"23.131159","emergency":"3","describe":"好大火啊啊啊啊啊"},{"id":"402847ec63fc0b920163fc1299b80005","time":"2018-06-14 10:14:27","longitude":"113.40473","latitude":"23.131159","emergency":"2","describe":"好大火啊啊啊啊啊"}]
-     * recordObject : {"startLongitude":"113.404734","startLatitude":"23.131158","endLongitude":"113.404734","endLatitude":"23.131158"}
+     * eventList : [{"id":"40287e5e6436a2fa016436ae4225001d","time":"2018\r\n\r\n-06-25 19:22:27","longitude":115.672264,"latitude":23.304787,"emergency":"4","describe":"测试"}]
+     * coordinateList : [{"longitude":115.672343,"latitude":23.304756}]
+     * recordObject : {"startLongitude":115.672343,"startLatitude":23.304756,"endLongitude":115.672275,"endLatitude":23.304935}
      * code : 1004
      * msg : 成功
      */
@@ -17,6 +18,7 @@ public class RecordEventBean {
     private int code;
     private String msg;
     private List<EventListBean> eventList;
+    private List<CoordinateListBean> coordinateList;
 
     public boolean isResult() {
         return result;
@@ -58,66 +60,76 @@ public class RecordEventBean {
         this.eventList = eventList;
     }
 
+    public List<CoordinateListBean> getCoordinateList() {
+        return coordinateList;
+    }
+
+    public void setCoordinateList(List<CoordinateListBean> coordinateList) {
+        this.coordinateList = coordinateList;
+    }
+
     public static class RecordObjectBean {
         /**
-         * startLongitude : 113.404734
-         * startLatitude : 23.131158
-         * endLongitude : 113.404734
-         * endLatitude : 23.131158
+         * startLongitude : 115.672343
+         * startLatitude : 23.304756
+         * endLongitude : 115.672275
+         * endLatitude : 23.304935
          */
 
-        private String startLongitude;
-        private String startLatitude;
-        private String endLongitude;
-        private String endLatitude;
+        private double startLongitude;
+        private double startLatitude;
+        private double endLongitude;
+        private double endLatitude;
 
-        public String getStartLongitude() {
+        public double getStartLongitude() {
             return startLongitude;
         }
 
-        public void setStartLongitude(String startLongitude) {
+        public void setStartLongitude(double startLongitude) {
             this.startLongitude = startLongitude;
         }
 
-        public String getStartLatitude() {
+        public double getStartLatitude() {
             return startLatitude;
         }
 
-        public void setStartLatitude(String startLatitude) {
+        public void setStartLatitude(double startLatitude) {
             this.startLatitude = startLatitude;
         }
 
-        public String getEndLongitude() {
+        public double getEndLongitude() {
             return endLongitude;
         }
 
-        public void setEndLongitude(String endLongitude) {
+        public void setEndLongitude(double endLongitude) {
             this.endLongitude = endLongitude;
         }
 
-        public String getEndLatitude() {
+        public double getEndLatitude() {
             return endLatitude;
         }
 
-        public void setEndLatitude(String endLatitude) {
+        public void setEndLatitude(double endLatitude) {
             this.endLatitude = endLatitude;
         }
     }
 
     public static class EventListBean {
         /**
-         * id : 402847ec63fc0b920163fc131b8e0007
-         * time : 2018-06-14 10:15:00
-         * longitude : 113.40793
-         * latitude : 23.131159
-         * emergency : 3
-         * describe : 好大火啊啊啊啊啊
+         * id : 40287e5e6436a2fa016436ae4225001d
+         * time : 2018
+
+         -06-25 19:22:27
+         * longitude : 115.672264
+         * latitude : 23.304787
+         * emergency : 4
+         * describe : 测试
          */
 
         private String id;
         private String time;
-        private String longitude;
-        private String latitude;
+        private double longitude;
+        private double latitude;
         private String emergency;
         private String describe;
 
@@ -137,19 +149,19 @@ public class RecordEventBean {
             this.time = time;
         }
 
-        public String getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(String longitude) {
+        public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
 
-        public String getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(String latitude) {
+        public void setLatitude(double latitude) {
             this.latitude = latitude;
         }
 
@@ -167,6 +179,32 @@ public class RecordEventBean {
 
         public void setDescribe(String describe) {
             this.describe = describe;
+        }
+    }
+
+    public static class CoordinateListBean {
+        /**
+         * longitude : 115.672343
+         * latitude : 23.304756
+         */
+
+        private double longitude;
+        private double latitude;
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
         }
     }
 }

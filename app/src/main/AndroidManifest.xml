@@ -90,11 +90,6 @@
             android:name=".service.GuardService"
             android:process=":guardService" />
 
-        <service
-            android:name=".service.JobWakeUpService"
-            android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <receiver android:name=".service.AlarmReceiver" />
 
         <provider

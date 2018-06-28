@@ -162,7 +162,9 @@ public class RecordMapActivity extends MapActivity {
                     llRecord.setVisibility(View.GONE);
                     int[] size = FreeHandScreenUtil.getScreenSize(RecordMapActivity.this);
                     //全屏设置，屏幕的高度减去状态栏的高度
-                    params.height = size[1] - FreeHandScreenUtil.getStatusBarHeight(RecordMapActivity.this);
+                    params.height = (int) (size[1]
+                            - FreeHandScreenUtil.getStatusBarHeight(RecordMapActivity.this)
+                            - FreeHandScreenUtil.dpToPx(RecordMapActivity.this, 45));
                 }
                 flMapView.setLayoutParams(params);//将设置好的布局参数应用到控件中
             }
@@ -225,8 +227,7 @@ public class RecordMapActivity extends MapActivity {
                 if (data != null && data.isResult()) {
                     mapAdapter.setDatas(data.getEventList());
                     mapAdapter.notifyDataSetChanged();
-                    addMarkers(data.getRecordObject(), data.getEventList());
-//                    searchRoute(data.getRecordObject(), data.getEventList());
+                    addMarkers(data.getRecordObject(), data.getEventList(), data.getCoordinateList());
                 }
             }
 
@@ -245,23 +246,6 @@ public class RecordMapActivity extends MapActivity {
                 cancelLoadingDialog();
             }
         });
-    }
-
-    private View getHeaderView() {
-        View view = getLayoutInflater().inflate(R.layout.header_record_map,
-                (ViewGroup) rvRecordMap.getParent(), false);
-
-        mapView = view.findViewById(R.id.record_map_view);
-        mapView.showScaleControl(false);
-        mapView.showZoomControls(false);
-        mBaiduMap = mapView.getMap();
-        mBaiduMap.setMyLocationEnabled(true);
-        mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-                MyLocationConfiguration.LocationMode.NORMAL, true, null));
-        BDMapUtils.setMapViewListener(new locationListener());
-//        setLocationData(BDMapUtils.getLocation());
-
-        return view;
     }
 
     private void setLocationData(LatLng mLoc) {
@@ -286,32 +270,38 @@ public class RecordMapActivity extends MapActivity {
         }
     }
 
-    private class locationListener implements MapViewLocationListener {
-
-        @Override
-        public void changeLocation(BDLocation mLoc) {
-
-//            setLocationData(mLoc);
-        }
-    }
-
     /**
      * 向地图添加Marker点
      */
-    public void addMarkers(RecordEventBean.RecordObjectBean rBean, List<RecordEventBean.EventListBean> eventList) {
+    public void addMarkers(RecordEventBean.RecordObjectBean rBean,
+                           List<RecordEventBean.EventListBean> eventList,
+                           List<RecordEventBean.CoordinateListBean> coordinateList) {
 
         items = new ArrayList<>();
         //画直线
         List<LatLng> points = new ArrayList<LatLng>();
 
-        LatLng stLatLng = new LatLng(
-                Float.valueOf(rBean.getStartLatitude()), Float.valueOf(rBean.getStartLongitude()));
-        LatLng enLatLng = new LatLng(
-                Float.valueOf(rBean.getEndLatitude()), Float.valueOf(rBean.getEndLongitude()));
+        LatLng stLatLng = new LatLng(rBean.getStartLatitude(), rBean.getStartLongitude());
+        LatLng enLatLng = new LatLng(rBean.getEndLatitude(), rBean.getEndLongitude());
 
         String eventId;
         String emergency;
 
+        //画轨迹线
+        for (int i = 0; i < coordinateList.size(); i++) {
+            LatLng latLng;
+            if (i == 0) {
+                latLng = enLatLng;
+            } else if (i == coordinateList.size() - 1) {
+                latLng = stLatLng;
+            } else {
+                latLng = new LatLng(coordinateList.get(i).getLatitude(),
+                        coordinateList.get(i).getLongitude());
+            }
+            points.add(latLng);
+        }
+
+        //事件上报点+起终点
         for (int i = 0; i < eventList.size() + 2; i++) {
             LatLng latLng;
             if (i == 0) {
@@ -323,14 +313,12 @@ public class RecordMapActivity extends MapActivity {
                 emergency = "";
                 eventId = "";
             } else {
-                latLng = new LatLng(
-                        Float.valueOf(eventList.get(i - 1).getLatitude()),
-                        Float.valueOf(eventList.get(i - 1).getLongitude()));
+                latLng = new LatLng(eventList.get(i - 1).getLatitude(),
+                        eventList.get(i - 1).getLongitude());
                 eventId = eventList.get(i - 1).getId();
                 emergency = eventList.get(i - 1).getEmergency();
             }
             items.add(new MyItem(latLng, eventId, emergency));
-            points.add(latLng);
         }
 
 
