@@ -29,6 +29,7 @@ import com.yaheen.cis.adapter.EventImgAdapter;
 import com.yaheen.cis.adapter.EventProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.EventDetailBean;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
@@ -157,9 +158,8 @@ public class EventActivity extends MapActivity {
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("eventId", eventId);
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 EventDetailBean data = gson.fromJson(result, EventDetailBean.class);

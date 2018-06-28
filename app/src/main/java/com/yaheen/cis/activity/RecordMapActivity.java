@@ -32,6 +32,7 @@ import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
 import com.yaheen.cis.adapter.RecordMapAdapter;
 import com.yaheen.cis.entity.RecordEventBean;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.FreeHandScreenUtil;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.cluster.Cluster;
@@ -218,9 +219,8 @@ public class RecordMapActivity extends MapActivity {
         RequestParams requestParams = new RequestParams(eventUrl);
         requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 RecordEventBean data = gson.fromJson(result, RecordEventBean.class);

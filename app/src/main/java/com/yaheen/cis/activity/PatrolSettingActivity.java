@@ -18,6 +18,7 @@ import com.yaheen.cis.adapter.PatrolSettingAdapter;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.StartPatrolBean;
 import com.yaheen.cis.entity.TypeBean;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
@@ -80,8 +81,7 @@ public class PatrolSettingActivity extends BaseActivity {
 
         RequestParams requestParams = new RequestParams(typeUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 TypeBean data = gson.fromJson(result, TypeBean.class);
@@ -136,13 +136,12 @@ public class PatrolSettingActivity extends BaseActivity {
 
         BDLocation location = BDMapUtils.getLocation();
         RequestParams requestParams = new RequestParams(startUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("typeId", typeId);
-        requestParams.addQueryStringParameter("longitude", location.getLongitude() + "");
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("latitude", location.getLatitude() + "");
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        requestParams.addQueryStringParameter("longitude", location.getLongitude() + "");
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 StartPatrolBean data = gson.fromJson(result, StartPatrolBean.class);
@@ -177,51 +176,6 @@ public class PatrolSettingActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-            }
-        });
-    }
-
-    private void getQuestion() {
-        RequestParams requestParams = new RequestParams(questionUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("typeId", settingAdapter.getTypeBean().getTypeArr().get(0).getId());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        requestParams.setConnectTimeout(30 * 1000);
-
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                QuestionBean data = gson.fromJson(result, QuestionBean.class);
-                TypeBean typeBean = settingAdapter.getTypeBean();
-                typeBean.setRecordId(recordId);
-                if (data != null && data.isResult()) {
-                    data.setRecordId(recordId);
-                    String typeStr = gson.toJson(typeBean);
-                    String questionStr = gson.toJson(data);
-                    DefaultPrefsUtil.setPatrolType(typeStr);
-                    DefaultPrefsUtil.setPatrolqQuestion(questionStr);
-
-                    Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
-                    intent.putExtra("type", typeStr);
-                    intent.putExtra("question", questionStr);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                cancelLoadingDialog();
             }
         });
     }

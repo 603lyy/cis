@@ -28,6 +28,7 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.FreeHandSystemUtil;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
@@ -129,8 +130,8 @@ public class LoginActivity extends PermissionActivity {
         requestParams.addQueryStringParameter("username", name);
         requestParams.addQueryStringParameter("password", Base64.encode(AESUtils.encrypt(psd, key)));
         requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+
+        HttpUtils.getPostHttp(requestParams,new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
 

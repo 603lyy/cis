@@ -20,6 +20,7 @@ import com.yaheen.cis.entity.CommonBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
@@ -125,8 +126,8 @@ public class TurnActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(typeUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 TypeBean data = gson.fromJson(result, TypeBean.class);
@@ -159,41 +160,6 @@ public class TurnActivity extends PermissionActivity {
         });
     }
 
-    private void getQuestion(final TypeBean typeBean) {
-        RequestParams requestParams = new RequestParams(questionUrl);
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("typeId", typeBean.getTypeArr().get(0).getId());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                QuestionBean data = gson.fromJson(result, QuestionBean.class);
-                if (data != null && data.isResult()) {
-                    Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
-                    intent.putExtra("type", gson.toJson(typeBean));
-                    intent.putExtra("question", gson.toJson(data));
-                    intent.putExtra("sign", true);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                cancelLoadingDialog();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-            }
-        });
-    }
-
     //请求门牌系统，判断是否是巡查点
     private void checkId(CheckBean.EntityBean data) {
 
@@ -209,8 +175,8 @@ public class TurnActivity extends PermissionActivity {
 
         RequestParams params = new RequestParams(checkIdUrl);
         params.addQueryStringParameter("json", Base64.encode(jsonObject.toString().getBytes()));
-        params.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        x.http().post(params, new Callback.CommonCallback<String>() {
+
+        HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 CommonBean data = gson.fromJson(result, CommonBean.class);
@@ -256,7 +222,8 @@ public class TurnActivity extends PermissionActivity {
         RequestParams params = new RequestParams(checkUrl);
         params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
         params.addQueryStringParameter("shortLinkCode", slink);
-        x.http().post(params, new Callback.CommonCallback<String>() {
+
+        HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 CheckBean checkBean = gson.fromJson(result, CheckBean.class);
@@ -317,23 +284,6 @@ public class TurnActivity extends PermissionActivity {
             cancelLoadingDialog();
         }
     }
-
-    private void exitProcess() {
-
-        String name = "com.yaheen.cis:guardService";
-        //判断内容
-        if (TextUtils.isEmpty(name.trim())) {
-            return;
-        }
-
-        //调用系统服务api杀死进程
-        //此种方式不能自杀,也不能杀掉系统的关键进程
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        if (manager != null) {
-            manager.killBackgroundProcesses(name);
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();

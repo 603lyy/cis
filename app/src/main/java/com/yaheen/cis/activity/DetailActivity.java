@@ -45,6 +45,7 @@ import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.entity.UploadLocationListBean;
 import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.img.ImgUploadHelper;
@@ -408,11 +409,8 @@ public class DetailActivity extends PermissionActivity {
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("typeId", typeId);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        requestParams.setConnectTimeout(60 * 1000);
-        requestParams.setReadTimeout(60 * 1000);
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 QuestionBean data = gson.fromJson(result, QuestionBean.class);
@@ -465,64 +463,64 @@ public class DetailActivity extends PermissionActivity {
         RequestParams params = new RequestParams(uploadImgUrl);
         params.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         params.addBodyParameter("originImage", new File(imgPath));
-        params.setConnectTimeout(60 * 1000);
-        params.setReadTimeout(60 * 1000);
         params.setMultipart(true);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
-                //删除已请求上传图片的路径
-                if (selectUriList.size() > 0) {
-                    selectUriList.remove(0);
-                }
-                if (data != null) {
-                    if (data.isResult()) {
-                        imgUriList.add(uri);
-                        uploadIdList.add(data.getFileId());
-                        adapterPathList.add(imgPath);
-                        uploadAdapter.setDatas(adapterPathList);
-                        uploadAdapter.notifyDataSetChanged();
-                        if (TextUtils.isEmpty(imgIdStr)) {
-                            imgIdStr = data.getFileId();
-                        } else {
-                            imgIdStr = imgIdStr + "," + data.getFileId();
+
+        HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        ImgUploadBean data = gson.fromJson(result, ImgUploadBean.class);
+                        //删除已请求上传图片的路径
+                        if (selectUriList.size() > 0) {
+                            selectUriList.remove(0);
+                        }
+                        if (data != null) {
+                            if (data.isResult()) {
+                                imgUriList.add(uri);
+                                uploadIdList.add(data.getFileId());
+                                adapterPathList.add(imgPath);
+                                uploadAdapter.setDatas(adapterPathList);
+                                uploadAdapter.notifyDataSetChanged();
+                                if (TextUtils.isEmpty(imgIdStr)) {
+                                    imgIdStr = data.getFileId();
+                                } else {
+                                    imgIdStr = imgIdStr + "," + data.getFileId();
+                                }
+                            }
+
+                            if (uploadIdList != null && uploadIdList.size() > 0) {
+                                ivDelete.setVisibility(View.VISIBLE);
+                            } else {
+                                ivDelete.setVisibility(View.GONE);
+                            }
+                        }
+
+                        //图片路径不为空，继续上传剩余图片
+                        if (selectUriList.size() > 0) {
+                            ImgUploadHelper.compressImage(DetailActivity.this,
+                                    UriUtil.getPath(DetailActivity.this,
+                                            selectUriList.get(0)), isTakePhoto);
                         }
                     }
 
-                    if (uploadIdList != null && uploadIdList.size() > 0) {
-                        ivDelete.setVisibility(View.VISIBLE);
-                    } else {
-                        ivDelete.setVisibility(View.GONE);
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        showToast(R.string.upload_image_fail);
+                        cancelLoadingDialog();
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+                        if (selectUriList.size() <= 0) {
+                            cancelLoadingDialog();
+                        }
                     }
                 }
-
-                //图片路径不为空，继续上传剩余图片
-                if (selectUriList.size() > 0) {
-                    ImgUploadHelper.compressImage(DetailActivity.this,
-                            UriUtil.getPath(DetailActivity.this,
-                                    selectUriList.get(0)), isTakePhoto);
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                showToast(R.string.upload_image_fail);
-                cancelLoadingDialog();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                if (selectUriList.size() <= 0) {
-                    cancelLoadingDialog();
-                }
-            }
-        });
+        );
     }
 
     private void sendReport() {
@@ -579,9 +577,8 @@ public class DetailActivity extends PermissionActivity {
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
@@ -621,7 +618,7 @@ public class DetailActivity extends PermissionActivity {
             return;
         }
 
-        if(BDMapUtils.getLocation().getLatitude()<1||BDMapUtils.getLocation().getLongitude()<1){
+        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
             showToast(R.string.map_init_fail);
             return;
         }
@@ -637,9 +634,8 @@ public class DetailActivity extends PermissionActivity {
         requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("data", gson.toJson(locationList));
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 ReportBean data = gson.fromJson(result, ReportBean.class);

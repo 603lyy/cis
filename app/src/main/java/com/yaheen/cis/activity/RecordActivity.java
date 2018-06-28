@@ -15,6 +15,7 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.DataServer;
 import com.yaheen.cis.adapter.RecordAdapter;
 import com.yaheen.cis.entity.RecordBean;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
 import org.xutils.common.Callback;
@@ -76,9 +77,8 @@ public class RecordActivity extends PermissionActivity {
     private void getRecordList() {
         RequestParams requestParams = new RequestParams(recordUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 RecordBean data = gson.fromJson(result, RecordBean.class);
