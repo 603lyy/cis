@@ -179,7 +179,9 @@ public class DetailActivity extends PermissionActivity {
 //        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
 //        startService(intent);
 //        bindService(intent, conn, BIND_AUTO_CREATE);
-        UploadLocationUtils.startUpload(getApplicationContext());
+        if (!isSign) {
+            UploadLocationUtils.startUpload(getApplicationContext());
+        }
 
         initView();
         initPatrol();
@@ -530,6 +532,12 @@ public class DetailActivity extends PermissionActivity {
             return;
         }
 
+        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
+            showToast(R.string.map_init_fail);
+            cancelLoadingDialog();
+            return;
+        }
+
         if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
             showToast(R.string.detail_question_empty);
             return;
@@ -612,6 +620,12 @@ public class DetailActivity extends PermissionActivity {
             showToast(R.string.map_init_ing);
             return;
         }
+
+        if(BDMapUtils.getLocation().getLatitude()<1||BDMapUtils.getLocation().getLongitude()<1){
+            showToast(R.string.map_init_fail);
+            return;
+        }
+
         showLoadingDialog();
 
         UploadLocationListBean.LocationBean bean = new UploadLocationListBean.LocationBean();

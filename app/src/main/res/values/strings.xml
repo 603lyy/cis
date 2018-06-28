@@ -75,5 +75,6 @@
 
 
     <string name="map_init_ing">定位功能正在启动中，请稍后再试</string>
+    <string name="map_init_fail">定位功能未启动，请打开定位功能</string>
 
 </resources>

@@ -117,6 +117,12 @@ public class PatrolSettingActivity extends BaseActivity {
             return;
         }
 
+        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
+            showToast(R.string.map_init_fail);
+            cancelLoadingDialog();
+            return;
+        }
+
         if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
             showToast(R.string.setting_start_select);
             cancelLoadingDialog();

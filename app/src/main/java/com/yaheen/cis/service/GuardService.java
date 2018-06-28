@@ -58,7 +58,6 @@ public class GuardService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             iaidlUpload = IAIDLUpload.Stub.asInterface(service);
-            stop = false;
         }
 
         @Override
@@ -82,7 +81,9 @@ public class GuardService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        cancelConnect();
+        if (stop) {
+            cancelConnect();
+        }
         return super.onUnbind(intent);
     }
 

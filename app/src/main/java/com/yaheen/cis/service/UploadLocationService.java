@@ -38,9 +38,9 @@ public class UploadLocationService extends Service {
 
     private static final String CHANNEL = "1";
 
-    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
-//
-//    private String questionUrl = "http://myj.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
+//    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
+
+    private String questionUrl = "http://lyy.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
 
     private NotificationManager mNotificationManager;
 
@@ -139,6 +139,10 @@ public class UploadLocationService extends Service {
 
         if (BDMapUtils.getLocation() == null) {
             BDMapUtils.startLocation();
+            return;
+        }
+
+        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
             return;
         }
 

@@ -1,18 +1,10 @@
 package com.yaheen.cis.util.upload;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Build;
-import android.os.IBinder;
 
-import com.yaheen.cis.service.GuardService;
-import com.yaheen.cis.service.JobWakeUpService;
 import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
-
-import static android.content.Context.BIND_AUTO_CREATE;
 
 public class UploadLocationUtils {
 
