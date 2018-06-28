@@ -48,13 +48,14 @@ public class UploadLocationService extends Service {
 
     private IAIDLUpload iaidlUpload = null;
 
+    private CountDownTimerUtils timerUtils;
+
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i("lin", "onBind: ");
         startTime = System.currentTimeMillis();
         return new MBinder();
     }
@@ -68,30 +69,8 @@ public class UploadLocationService extends Service {
     class MBinder extends IAIDLUpload.Stub {
 
         @Override
-        public String getServiceName() throws RemoteException {
-            return "123";
-        }
-    }
+        public void stopApp() throws RemoteException {
 
-    /**
-     * 代理类
-     */
-    public class MyBinder extends Binder {
-
-        public void startTimer() {
-            startCountTime();
-        }
-
-        public void connect() {
-            setNotification();
-        }
-
-        public void sendLocation() {
-            sendRealLocation();
-        }
-
-        public void disConnect() {
-            mNotificationManager.cancel(NOTIFY_ID);
         }
     }
 
@@ -102,17 +81,15 @@ public class UploadLocationService extends Service {
         }
         startCountTime();
         setNotification();
-        Log.i("lin", "onCreate: ");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!DefaultPrefsUtil.getIsStop()) {
-            startService(new Intent(UploadLocationService.this, GuardService.class));
-            bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+            connect();
         } else {
-            stopService(new Intent(UploadLocationService.this, GuardService.class));
+            cancelConnect();
         }
         return START_STICKY;
     }
@@ -120,41 +97,38 @@ public class UploadLocationService extends Service {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            // 连接上
-            if (DefaultPrefsUtil.getIsStop()) {
-                stopService(new Intent(UploadLocationService.this, GuardService.class));
-                unbindService(mServiceConnection);
-            }
             iaidlUpload = IAIDLUpload.Stub.asInterface(service);
-            try {
-                Log.i("lin", "onServiceConnected: " + iaidlUpload.getServiceName());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             if (!DefaultPrefsUtil.getIsStop()) {
-                // 重新启动
-                startService(new Intent(UploadLocationService.this, GuardService.class));
-                // 重新绑定
-                bindService(new Intent(UploadLocationService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+                connect();
             }
         }
     };
 
     private void startCountTime() {
-        CountDownTimerUtils.getCountDownTimer()
+        timerUtils = CountDownTimerUtils.getCountDownTimer()
                 .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
                 .setCountDownInterval(30 * 1000)
                 .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                     @Override
                     public void onTick(long pMillisUntilFinished) {
+                        if (DefaultPrefsUtil.getIsStop()) {
+                            try {
+                                iaidlUpload.stopApp();
+                                cancelConnect();
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                            return;
+                        }
                         sendRealLocation();
                         Log.i("lin", "onTick: ");
                     }
-                }).start();
+                });
+        timerUtils.start();
     }
 
     private void sendRealLocation() {
@@ -230,9 +204,24 @@ public class UploadLocationService extends Service {
         mNotificationManager.notify(NOTIFY_ID, mBuilder.build());
     }
 
+    private void connect() {
+        // 重新启动
+        startService(new Intent(UploadLocationService.this, GuardService.class));
+        // 重新绑定
+        bindService(new Intent(UploadLocationService.this, GuardService.class),
+                mServiceConnection, Context.BIND_IMPORTANT);
+    }
+
+    private void cancelConnect() {
+        stopService(new Intent(UploadLocationService.this, GuardService.class));
+        unbindService(mServiceConnection);
+        timerUtils.cancel();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mNotificationManager.cancel(NOTIFY_ID);
     }
+
 }

@@ -72,8 +72,6 @@ import de.tavendo.autobahn.WebSocketHandler;
 
 public class DetailActivity extends PermissionActivity {
 
-    private UploadLocationService.MyBinder myBinder;
-
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
     private EditText etDescribe;
@@ -246,7 +244,6 @@ public class DetailActivity extends PermissionActivity {
                 if (BDMapUtils.getLocation() != null) {
                     tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
                 }
-
             }
         });
 
@@ -634,7 +631,7 @@ public class DetailActivity extends PermissionActivity {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_finish_success);
-                    UploadLocationUtils.stopUpload(getApplicationContext());
+                    UploadLocationUtils.stopUpload();
                     DefaultPrefsUtil.setPatrolqQuestion("");
                     DefaultPrefsUtil.setPatrolRecordId("");
                     DefaultPrefsUtil.setPatrolStart(0);
@@ -704,22 +701,6 @@ public class DetailActivity extends PermissionActivity {
             selectUriList = list;
             ImgUploadHelper.compressImage(DetailActivity.this,
                     UriUtil.getPath(DetailActivity.this, list.get(0)), isTakePhoto);
-        }
-    };
-
-    ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            //拿到后台服务代理对象
-            myBinder = (UploadLocationService.MyBinder) service;
-            //调用后台服务的方法
-            myBinder.connect();
-            myBinder.startTimer();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
         }
     };
 

@@ -202,7 +202,7 @@ public class LoginActivity extends PermissionActivity {
         DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
-                UploadLocationUtils.stopUpload(getApplicationContext());
+                UploadLocationUtils.stopUpload();
                 BaseApp.exit();
             }
         }, new IDialogCancelCallback() {

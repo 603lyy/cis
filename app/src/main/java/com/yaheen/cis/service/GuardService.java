@@ -21,6 +21,7 @@ public class GuardService extends Service {
 
     private IAIDLUpload iaidlUpload = null;
 
+    private boolean stop = false;
 
     /**
      * 返回 IBinder驱动
@@ -32,26 +33,11 @@ public class GuardService extends Service {
         return new MBinder();
     }
 
-    class MBinder extends IAIDLUpload.Stub{
+    class MBinder extends IAIDLUpload.Stub {
 
         @Override
-        public String getServiceName() throws RemoteException {
-            return "321";
-        }
-    }
-
-    /**
-     * 代理类
-     */
-    public class MyBinder extends Binder {
-
-        public void connect() {
-        }
-
-        public void sendLocation() {
-        }
-
-        public void disConnect() {
+        public void stopApp() throws RemoteException {
+            stop = true;
         }
     }
 
@@ -60,8 +46,8 @@ public class GuardService extends Service {
         // 提高进程优先级 ，就会在通知栏中出现自己的应用，如果不想提高优先级，可以把这个注释
 //        startForeground(GuardId, new Notification());
 
-        if (!DefaultPrefsUtil.getIsStop()) {
-            // 让GuardService绑定MessageService 并建立连接
+        // 让GuardService绑定MessageService 并建立连接
+        if (!stop) {
             bindService(new Intent(this, UploadLocationService.class), mServiceConnection, Context.BIND_IMPORTANT);
         }
         return START_STICKY;
@@ -72,27 +58,36 @@ public class GuardService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             iaidlUpload = IAIDLUpload.Stub.asInterface(service);
-            try {
-                Log.i("lin", "onServiceConnected: " + iaidlUpload.getServiceName());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            stop = false;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
-            Log.i("lin", "onServiceDisconnected: 1" + DefaultPrefsUtil.getIsStop());
-            if (!DefaultPrefsUtil.getIsStop()) {
+            if (stop) {
                 // 重新启动
                 startService(new Intent(GuardService.this, UploadLocationService.class));
                 // 重新绑定
                 bindService(new Intent(GuardService.this, UploadLocationService.class), mServiceConnection, Context.BIND_IMPORTANT);
             } else {
-                Log.i("lin", "onServiceDisconnected: 2");
-                stopService(new Intent(GuardService.this, UploadLocationService.class));
-                unbindService(mServiceConnection);
+                cancelConnect();
             }
         }
     };
+
+    private void cancelConnect() {
+        stopService(new Intent(GuardService.this, UploadLocationService.class));
+        unbindService(mServiceConnection);
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        cancelConnect();
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

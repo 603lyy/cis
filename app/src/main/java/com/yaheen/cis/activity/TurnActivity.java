@@ -348,7 +348,7 @@ public class TurnActivity extends PermissionActivity {
         DialogUtils.showDialog(TurnActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
-                DefaultPrefsUtil.setIsStop(true);
+                UploadLocationUtils.stopUpload();
                 BaseApp.exit();
             }
         }, new IDialogCancelCallback() {

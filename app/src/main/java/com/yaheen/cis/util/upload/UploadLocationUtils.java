@@ -16,23 +16,6 @@ import static android.content.Context.BIND_AUTO_CREATE;
 
 public class UploadLocationUtils {
 
-    private static UploadLocationService.MyBinder myBinder;
-
-    private static ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            //拿到后台服务代理对象
-            myBinder = (UploadLocationService.MyBinder) service;
-            //调用后台服务的方法
-            myBinder.connect();
-            myBinder.startTimer();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
-
     public static void startUpload(Context context) {
         DefaultPrefsUtil.setIsStop(false);
 //        开启后台服务上传坐标
@@ -47,8 +30,7 @@ public class UploadLocationUtils {
 
     }
 
-    public static void stopUpload(Context context) {
-        context.stopService(new Intent(context, GuardService.class));
-        context.stopService(new Intent(context, UploadLocationService.class));
+    public static void stopUpload() {
+        DefaultPrefsUtil.setIsStop(true);
     }
 }
