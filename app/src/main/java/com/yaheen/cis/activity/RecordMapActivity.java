@@ -115,7 +115,7 @@ public class RecordMapActivity extends MapActivity {
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-        mBaiduMap.hideSDKLayer();
+//        mBaiduMap.hideSDKLayer();
 
         BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
                 .fromResource(R.drawable.ic_map_point);
@@ -178,29 +178,7 @@ public class RecordMapActivity extends MapActivity {
         rvRecordMap.setLayoutManager(new LinearLayoutManager(this));
 
         mapAdapter = new RecordMapAdapter();
-//        mapAdapter.setDatas(DataServer.getSampleData(10));
         rvRecordMap.setAdapter(mapAdapter);
-
-        rvRecordMap.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                //判断是当前layoutManager是否为LinearLayoutManager
-                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-                if (layoutManager instanceof LinearLayoutManager) {
-                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
-                    //获取第一个可见view的位置
-                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
-                    Log.i("lin", "onScrollStateChanged: " + firstItemPosition);
-                    if (firstItemPosition > 0) {
-                        mapView.onPause();
-                    } else {
-                        mapView.onResume();
-                    }
-                }
-            }
-        });
 
         mapAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -290,20 +268,6 @@ public class RecordMapActivity extends MapActivity {
 
         String eventId, emergency, titleStr;
 
-        //画轨迹线
-        for (int i = 0; i < coordinateList.size(); i++) {
-            LatLng latLng;
-            if (i == 0) {
-                latLng = enLatLng;
-            } else if (i == coordinateList.size() - 1) {
-                latLng = stLatLng;
-            } else {
-                latLng = new LatLng(coordinateList.get(i).getLatitude(),
-                        coordinateList.get(i).getLongitude());
-            }
-            points.add(latLng);
-        }
-
         //事件上报点+起终点
         for (int i = 0; i < eventList.size() + 2; i++) {
             LatLng latLng;
@@ -327,6 +291,19 @@ public class RecordMapActivity extends MapActivity {
             items.add(new MyItem(latLng, eventId, emergency, titleStr));
         }
 
+        //画轨迹线
+        for (int i = 0; i < coordinateList.size(); i++) {
+            LatLng latLng;
+            if (i == 0) {
+                latLng = enLatLng;
+            } else if (i == coordinateList.size() - 1) {
+                latLng = stLatLng;
+            } else {
+                latLng = new LatLng(coordinateList.get(i).getLatitude(),
+                        coordinateList.get(i).getLongitude());
+            }
+            points.add(latLng);
+        }
 
         mClusterManager.addItems(items);
         OverlayOptions ooPolyline = new PolylineOptions().width(10)
@@ -414,6 +391,7 @@ public class RecordMapActivity extends MapActivity {
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mBaiduMap.setMyLocationEnabled(true);
         mapView.onResume();
     }
 
@@ -421,6 +399,7 @@ public class RecordMapActivity extends MapActivity {
     protected void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+        mBaiduMap.setMyLocationEnabled(false);
         mapView.onPause();
     }
 }
