@@ -118,9 +118,7 @@ public class PatrolSettingActivity extends BaseActivity {
             showToast(R.string.map_init_ing);
             cancelLoadingDialog();
             return;
-        }
-
-        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
+        } else if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
             showToast(R.string.map_init_fail);
             cancelLoadingDialog();
             return;

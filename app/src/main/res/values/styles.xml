@@ -2,8 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
     <style name="Widget.ProgressBar" parent="@android:style/Widget">
@@ -57,6 +57,10 @@
 
     <style name="CheckBoxWhite" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:button">@drawable/checkbox_style</item>
+    </style>
+
+    <style name="CheckBoxPrimary" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_primary_style</item>
     </style>
 
     <style name="SingleActivityStyle" parent="Theme.AppCompat.Light.NoActionBar">

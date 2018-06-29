@@ -117,6 +117,9 @@ public class UploadLocationService extends Service {
     };
 
     private void startCountTime() {
+        if (timerUtils != null) {
+            timerUtils.cancel();
+        }
         timerUtils = CountDownTimerUtils.getCountDownTimer()
                 .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
                 .setCountDownInterval(2 * 60 * 1000)

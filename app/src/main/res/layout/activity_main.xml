@@ -56,7 +56,6 @@
             android:id="@+id/ll_remember_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-5dp"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
@@ -65,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:checked="true"
-                android:paddingLeft="5dp"
+                style="@style/CheckBoxPrimary"
                 android:text="@string/login_remember_password"
                 android:textSize="16dp" />
 

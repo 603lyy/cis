@@ -9,6 +9,7 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:textSize="16dp"
+        style="@style/CheckBoxPrimary"
         android:layout_height="wrap_content"/>
 
     <ImageView
