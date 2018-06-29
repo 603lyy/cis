@@ -41,8 +41,10 @@ public class UploadLocationService extends Service {
     private static final String CHANNEL = "1";
 
 //    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
-
-    private String questionUrl = "http://lyy.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
+//
+//    private String questionUrl = "http://lyy.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
+//
+    private String questionUrl = "http://tlep2.yaheen.com/eapi/realtimeUpload.do";
 
     private NotificationManager mNotificationManager;
 
@@ -122,7 +124,7 @@ public class UploadLocationService extends Service {
         }
         timerUtils = CountDownTimerUtils.getCountDownTimer()
                 .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                .setCountDownInterval(2 * 60 * 1000)
+                .setCountDownInterval(30 * 1000)
                 .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                     @Override
                     public void onTick(long pMillisUntilFinished) {
@@ -158,7 +160,7 @@ public class UploadLocationService extends Service {
         }
 
         curPoint = new LatLng(BDMapUtils.getLocation().getLatitude(), BDMapUtils.getLocation().getLongitude());
-        if (DistanceUtil.getDistance(lastPoint, curPoint) < 100) {
+        if (DistanceUtil.getDistance(lastPoint, curPoint) < 20) {
             if (lastPoint == null) {
                 lastPoint = curPoint;
             }
@@ -166,6 +168,8 @@ public class UploadLocationService extends Service {
         }
 
         lastPoint = curPoint;
+
+        Log.i("lin", "sendRealLocation: "+curPoint.toString());
 
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("longitude",

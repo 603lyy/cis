@@ -6,7 +6,7 @@
 
     <CheckBox
         android:id="@+id/cb_problem"
-        android:textSize="16dp"
+        android:textSize="14dp"
         style="@style/CheckBoxPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
