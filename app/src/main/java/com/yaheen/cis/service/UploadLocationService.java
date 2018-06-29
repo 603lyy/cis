@@ -169,8 +169,6 @@ public class UploadLocationService extends Service {
 
         lastPoint = curPoint;
 
-        Log.i("lin", "sendRealLocation: "+curPoint.toString());
-
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("longitude",
                 BDMapUtils.getLocation().getLongitude() + "");
