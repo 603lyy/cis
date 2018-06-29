@@ -262,6 +262,7 @@ public class RecordMapActivity extends MapActivity {
 
         // 设置定位数据
         mBaiduMap.setMyLocationData(locData);
+        mBaiduMap.showSDKLayer();
 
         if (isFirstLoc) {
             isFirstLoc = false;
@@ -287,8 +288,7 @@ public class RecordMapActivity extends MapActivity {
         LatLng stLatLng = new LatLng(rBean.getStartLatitude(), rBean.getStartLongitude());
         LatLng enLatLng = new LatLng(rBean.getEndLatitude(), rBean.getEndLongitude());
 
-        String eventId;
-        String emergency;
+        String eventId, emergency, titleStr;
 
         //画轨迹线
         for (int i = 0; i < coordinateList.size(); i++) {
@@ -311,27 +311,28 @@ public class RecordMapActivity extends MapActivity {
                 latLng = enLatLng;
                 emergency = "";
                 eventId = "";
+                titleStr = "start";
             } else if (i == eventList.size() + 1) {
                 latLng = stLatLng;
                 emergency = "";
                 eventId = "";
+                titleStr = "end";
             } else {
                 latLng = new LatLng(eventList.get(i - 1).getLatitude(),
                         eventList.get(i - 1).getLongitude());
-                eventId = eventList.get(i - 1).getId();
                 emergency = eventList.get(i - 1).getEmergency();
+                eventId = eventList.get(i - 1).getId();
+                titleStr = "";
             }
-            items.add(new MyItem(latLng, eventId, emergency));
+            items.add(new MyItem(latLng, eventId, emergency, titleStr));
         }
 
 
         mClusterManager.addItems(items);
-
         OverlayOptions ooPolyline = new PolylineOptions().width(10)
                 .color(0xAAFF0000).points(points);
         mBaiduMap.addOverlay(ooPolyline);
         setLocationData(stLatLng);
-        mBaiduMap.showSDKLayer();
     }
 
     /**
@@ -344,10 +345,13 @@ public class RecordMapActivity extends MapActivity {
 
         private final String emergency;
 
-        public MyItem(LatLng latLng, String eventId, String emergency) {
+        private final String title;
+
+        public MyItem(LatLng latLng, String eventId, String emergency, String title) {
             mPosition = latLng;
             this.eventId = eventId;
             this.emergency = emergency;
+            this.title = title;
         }
 
         @Override
@@ -370,6 +374,8 @@ public class RecordMapActivity extends MapActivity {
                 return BitmapDescriptorFactory
                         .fromResource(R.drawable.ic_map_urgency);
             }
+//            View view = getLayoutInflater().inflate(R.layout.item_map_marker,null);
+//            return BitmapDescriptorFactory.fromView(view);
             return BitmapDescriptorFactory
                     .fromResource(R.drawable.ic_map_point_2);
         }
@@ -408,7 +414,6 @@ public class RecordMapActivity extends MapActivity {
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
-        mBaiduMap.setMyLocationEnabled(true);
         mapView.onResume();
     }
 
@@ -416,7 +421,6 @@ public class RecordMapActivity extends MapActivity {
     protected void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        mBaiduMap.setMyLocationEnabled(false);
         mapView.onPause();
     }
 }

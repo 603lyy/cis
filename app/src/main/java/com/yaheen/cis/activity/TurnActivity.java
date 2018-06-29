@@ -266,7 +266,6 @@ public class TurnActivity extends PermissionActivity {
          * 处理二维码扫描结果
          */
         if (requestCode == REQUEST_CODE) {
-            showLoadingDialog();
             //处理扫描结果（在界面上显示）
             if (null != data) {
                 Bundle bundle = data.getExtras();

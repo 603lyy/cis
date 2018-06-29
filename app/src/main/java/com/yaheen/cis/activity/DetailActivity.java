@@ -417,7 +417,6 @@ public class DetailActivity extends PermissionActivity {
                 QuestionBean data = gson.fromJson(result, QuestionBean.class);
                 if (data != null && data.isResult()) {
                     problemAdapter.setDatas(data.getTypeArr());
-                    refreshLayout.finishRefresh(true);
                     clearData();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
@@ -428,12 +427,14 @@ public class DetailActivity extends PermissionActivity {
 //                    finish();
                 }
                 problemAdapter.notifyDataSetChanged();
+                refreshLayout.finishRefresh(true);
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 showToast(R.string.get_question_empty);
                 problemAdapter.notifyDataSetChanged();
+                refreshLayout.finishRefresh(true);
                 problemAdapter.setDatas(null);
 //                finish();
             }
@@ -704,7 +705,9 @@ public class DetailActivity extends PermissionActivity {
             } else {
 //            地图移动回定位位置
                 MapStatus ms;
-                ms = new MapStatus.Builder().target(new LatLng(mLoc.getLatitude(), mLoc.getLongitude())).zoom(19.0f).build();
+                ms = new MapStatus.Builder()
+                        .target(new LatLng(mLoc.getLatitude(), mLoc.getLongitude()))
+                        .zoom(mBaiduMap.getMapStatus().zoom).build();
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
             }
         }
@@ -748,7 +751,7 @@ public class DetailActivity extends PermissionActivity {
         problemAdapter.notifyDataSetChanged();
     }
 
-    private void finishPatrolSetting(){
+    private void finishPatrolSetting() {
         //关闭定时上传坐标服务
         UploadLocationUtils.stopUpload();
         //清空本地记录

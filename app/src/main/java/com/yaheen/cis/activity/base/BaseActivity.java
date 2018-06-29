@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity.base;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,7 @@ import com.yaheen.cis.util.ProgersssDialog;
 import com.yaheen.cis.util.img.CompressImg;
 import com.yaheen.cis.util.toast.ToastUtils;
 
-public class BaseActivity extends AppCompatActivity implements CompressImg {
+public class BaseActivity extends Activity implements CompressImg {
 
     private ProgersssDialog progersssDialog;
 

@@ -73,7 +73,7 @@ public class BDMapUtils {
 //        bd09：百度墨卡托坐标；
 //        海外地区定位，无需设置坐标类型，统一返回wgs84类型坐标
 
-        option.setScanSpan(10 * 1000);
+        option.setScanSpan(1000);
 //        可选，设置发起定位请求的间隔，int类型，单位ms
 //        如果设置为0，则代表单次定位，即仅定位一次，默认为0
 //        如果设置非0，需设置1000ms以上才有效
