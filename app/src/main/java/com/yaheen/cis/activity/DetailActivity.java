@@ -52,6 +52,7 @@ import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
+import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
@@ -653,12 +654,7 @@ public class DetailActivity extends PermissionActivity {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_finish_success);
-                    UploadLocationUtils.stopUpload();
-                    DefaultPrefsUtil.setPatrolqQuestion("");
-                    DefaultPrefsUtil.setPatrolRecordId("");
-                    DefaultPrefsUtil.setPatrolStart(0);
-                    DefaultPrefsUtil.setPatrolType("");
-                    BDMapUtils.stopLocation();
+                    finishPatrolSetting();
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
@@ -750,6 +746,20 @@ public class DetailActivity extends PermissionActivity {
         uploadAdapter.setDatas(null);
         urgencyAdapter.notifyDataSetChanged();
         problemAdapter.notifyDataSetChanged();
+    }
+
+    private void finishPatrolSetting(){
+        //关闭定时上传坐标服务
+        UploadLocationUtils.stopUpload();
+        //清空本地记录
+        DefaultPrefsUtil.setPatrolqQuestion("");
+        DefaultPrefsUtil.setPatrolRecordId("");
+        DefaultPrefsUtil.setPatrolStart(0);
+        DefaultPrefsUtil.setPatrolType("");
+        //停止坐标获取
+        BDMapUtils.stopLocation();
+        //关闭notification
+        NotificationUtils.cancelNofication(getApplicationContext());
     }
 
     @Override
