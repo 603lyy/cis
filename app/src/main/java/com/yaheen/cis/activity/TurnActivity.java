@@ -21,6 +21,7 @@ import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
+import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
@@ -137,6 +138,9 @@ public class TurnActivity extends PermissionActivity {
                     intent.putExtra("type", gson.toJson(data));
                     intent.putExtra("sign", true);
                     startActivity(intent);
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(TurnActivity.this, LoginActivity.class));
+                    finish();
                 } else {
                     cancelLoadingDialog();
                     showToast(R.string.scan_fail);
@@ -284,6 +288,7 @@ public class TurnActivity extends PermissionActivity {
             cancelLoadingDialog();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -298,6 +303,7 @@ public class TurnActivity extends PermissionActivity {
         DialogUtils.showDialog(TurnActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
+                ScreenManager.getScreenManagerInstance(TurnActivity.this).finishActivities();
                 UploadLocationUtils.stopUpload();
                 BaseApp.exit();
             }

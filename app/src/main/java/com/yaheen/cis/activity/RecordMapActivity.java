@@ -228,6 +228,9 @@ public class RecordMapActivity extends MapActivity {
                     mapAdapter.setDatas(data.getEventList());
                     mapAdapter.notifyDataSetChanged();
                     addMarkers(data.getRecordObject(), data.getEventList(), data.getCoordinateList());
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(RecordMapActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
 

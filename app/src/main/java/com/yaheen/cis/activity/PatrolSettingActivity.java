@@ -89,6 +89,9 @@ public class PatrolSettingActivity extends BaseActivity {
                     data.setRecordId(recordId);
                     settingAdapter.setDatas(data.getTypeArr());
                     settingAdapter.notifyDataSetChanged();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(PatrolSettingActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
 
@@ -157,6 +160,9 @@ public class PatrolSettingActivity extends BaseActivity {
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
                     intent.putExtra("type", typeStr);
                     startActivity(intent);
+                    finish();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(PatrolSettingActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     showToast(R.string.setting_start_fail);

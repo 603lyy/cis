@@ -85,6 +85,9 @@ public class RecordActivity extends PermissionActivity {
                 if (data != null && data.isResult()) {
                     recordAdapter.setDatas(data.getRecordArr());
                     recordAdapter.notifyDataSetChanged();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(RecordActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
 

@@ -40,7 +40,7 @@ public class ScreenReceiverUtil {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d("KeepAppAlive","SreenLockReceiver-->监听到系统广播："+action);
+            Log.i("lin","SreenLockReceiver-->监听到系统广播："+action);
             if(mStateReceiverListener == null){
                 return;
             }

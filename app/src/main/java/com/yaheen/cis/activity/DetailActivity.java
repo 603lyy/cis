@@ -418,6 +418,9 @@ public class DetailActivity extends PermissionActivity {
                     problemAdapter.setDatas(data.getTypeArr());
                     refreshLayout.finishRefresh(true);
                     clearData();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    finish();
                 } else {
                     showToast(R.string.get_question_empty);
                     problemAdapter.setDatas(null);
@@ -474,6 +477,12 @@ public class DetailActivity extends PermissionActivity {
                             selectUriList.remove(0);
                         }
                         if (data != null) {
+
+                            if (data.getCode() == 1002) {
+                                startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                                finish();
+                            }
+
                             if (data.isResult()) {
                                 imgUriList.add(uri);
                                 uploadIdList.add(data.getFileId());
@@ -589,6 +598,9 @@ public class DetailActivity extends PermissionActivity {
                     } else {
                         clearData();
                     }
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    finish();
                 } else {
                     showToast(R.string.detail_commit_fail);
                 }
@@ -647,6 +659,9 @@ public class DetailActivity extends PermissionActivity {
                     DefaultPrefsUtil.setPatrolStart(0);
                     DefaultPrefsUtil.setPatrolType("");
                     BDMapUtils.stopLocation();
+                    finish();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     showToast(R.string.detail_finish_fail);

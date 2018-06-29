@@ -119,7 +119,7 @@ public class UploadLocationService extends Service {
     private void startCountTime() {
         timerUtils = CountDownTimerUtils.getCountDownTimer()
                 .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                .setCountDownInterval(60 * 1000)
+                .setCountDownInterval(2 * 60 * 1000)
                 .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                     @Override
                     public void onTick(long pMillisUntilFinished) {

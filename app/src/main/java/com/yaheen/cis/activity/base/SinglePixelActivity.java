@@ -1,5 +1,6 @@
 package com.yaheen.cis.activity.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import android.view.WindowManager;
 import com.yaheen.cis.util.common.FreeHandSystemUtil;
 import com.yaheen.cis.util.common.ScreenManager;
 
-public class SinglePixelActivity extends AppCompatActivity {
+public class SinglePixelActivity extends Activity {
     private static final String TAG = "SinglePixelActivity";
 
 

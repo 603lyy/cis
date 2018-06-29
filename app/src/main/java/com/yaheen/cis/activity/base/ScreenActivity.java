@@ -22,15 +22,17 @@ public class ScreenActivity extends BaseActivity {
         mScreenListener = new ScreenReceiverUtil(this);
         mScreenManager = ScreenManager.getScreenManagerInstance(this);
         mScreenListener.setScreenReceiverListener(mScreenListenerer);
+
+        mScreenManager.setActivities(this);
     }
 
     private ScreenReceiverUtil.SreenStateListener mScreenListenerer = new ScreenReceiverUtil.SreenStateListener() {
         @Override
         public void onSreenOn() {
             // 移除"1像素"
+            Log.i("lin", "onSreenOn: ");
             mScreenManager.finishActivity();
         }
-
 
         @Override
         public void onSreenOff() {
@@ -40,9 +42,9 @@ public class ScreenActivity extends BaseActivity {
 //            startActivity(intent);
             // 如果你觉得，直接跳出SportActivity很不爽
             // 那么，我们就制造个"1像素"惨案
+            Log.i("lin", "onSreenOff: ");
             mScreenManager.startActivity();
         }
-
 
         @Override
         public void onUserPresent() {

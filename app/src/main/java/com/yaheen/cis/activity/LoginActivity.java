@@ -149,7 +149,7 @@ public class LoginActivity extends PermissionActivity {
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         startActivity(intent);
-                        finish();
+//                        finish();
                     } else {
                         showToast(data.getMsg());
                     }

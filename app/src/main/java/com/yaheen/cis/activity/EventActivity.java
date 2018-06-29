@@ -173,6 +173,9 @@ public class EventActivity extends MapActivity {
                     searchAddress(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
                     setLocationData(Float.valueOf(data.getTbEvent().getLatitude()),
                             Float.valueOf(data.getTbEvent().getLongitude()));
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(EventActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
 
