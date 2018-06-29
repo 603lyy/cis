@@ -1,6 +1,9 @@
 package com.yaheen.cis.activity;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,6 +29,7 @@ import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.Base64;
+import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
 
@@ -304,6 +308,7 @@ public class TurnActivity extends PermissionActivity {
             @Override
             public void callback() {
                 ScreenManager.getScreenManagerInstance(TurnActivity.this).finishActivities();
+                NotificationUtils.cancelNofication(getApplicationContext());
                 UploadLocationUtils.stopUpload();
                 BaseApp.exit();
             }

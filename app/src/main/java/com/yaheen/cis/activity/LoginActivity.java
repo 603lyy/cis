@@ -30,11 +30,13 @@ import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.FreeHandSystemUtil;
+import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.AESUtils;
 import com.yaheen.cis.util.nfc.Base64;
+import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
 
@@ -188,6 +190,8 @@ public class LoginActivity extends PermissionActivity {
         DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
             @Override
             public void callback() {
+                ScreenManager.getScreenManagerInstance(LoginActivity.this).finishActivities();
+                NotificationUtils.cancelNofication(getApplicationContext());
                 UploadLocationUtils.stopUpload();
                 BaseApp.exit();
             }
