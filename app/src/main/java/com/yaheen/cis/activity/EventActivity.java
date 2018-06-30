@@ -129,6 +129,8 @@ public class EventActivity extends MapActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (view instanceof ImageView) {
+                    if (((ImageView) view).getDrawable() == null)
+                        return;
                     ArrayList<String> urls = new ArrayList<String>();
                     urls.add(imgUrlList.get(position).getImageUrl());
                     new PhotoPagerUtils.Builder(EventActivity.this)

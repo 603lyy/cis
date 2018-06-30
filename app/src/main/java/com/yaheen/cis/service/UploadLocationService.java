@@ -40,7 +40,7 @@ public class UploadLocationService extends Service {
 
     private static final String CHANNEL = "1";
 
-//    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
+    //    private String questionUrl = "http://192.168.199.113:8080/crs/eapi/realtimeUpload.do";
 //
 //    private String questionUrl = "http://lyy.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
 //
@@ -98,8 +98,6 @@ public class UploadLocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!DefaultPrefsUtil.getIsStop()) {
             connect();
-        } else {
-            cancelConnect();
         }
         return START_STICKY;
     }
@@ -130,7 +128,9 @@ public class UploadLocationService extends Service {
                     public void onTick(long pMillisUntilFinished) {
                         if (DefaultPrefsUtil.getIsStop()) {
                             try {
-                                iaidlUpload.stopApp();
+                                if (iaidlUpload != null) {
+                                    iaidlUpload.stopApp();
+                                }
                                 cancelConnect();
                             } catch (RemoteException e) {
                                 e.printStackTrace();
@@ -160,7 +160,7 @@ public class UploadLocationService extends Service {
         }
 
         curPoint = new LatLng(BDMapUtils.getLocation().getLatitude(), BDMapUtils.getLocation().getLongitude());
-        if (DistanceUtil.getDistance(lastPoint, curPoint) < 20) {
+        if (DistanceUtil.getDistance(lastPoint, curPoint) < 40) {
             if (lastPoint == null) {
                 lastPoint = curPoint;
             }
@@ -243,6 +243,7 @@ public class UploadLocationService extends Service {
         stopService(new Intent(UploadLocationService.this, GuardService.class));
         unbindService(mServiceConnection);
         timerUtils.cancel();
+        stopSelf();
     }
 
     @Override

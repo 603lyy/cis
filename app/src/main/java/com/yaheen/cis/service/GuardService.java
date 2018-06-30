@@ -77,6 +77,7 @@ public class GuardService extends Service {
     private void cancelConnect() {
         stopService(new Intent(GuardService.this, UploadLocationService.class));
         unbindService(mServiceConnection);
+        stopSelf();
     }
 
     @Override
