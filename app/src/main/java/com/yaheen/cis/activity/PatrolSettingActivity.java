@@ -180,6 +180,7 @@ public class PatrolSettingActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
+                cancelLoadingDialog();
             }
         });
     }

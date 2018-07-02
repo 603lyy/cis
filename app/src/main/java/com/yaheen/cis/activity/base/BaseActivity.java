@@ -33,7 +33,9 @@ public class BaseActivity extends Activity implements CompressImg {
 
 //    protected String baseUrl = "http://192.168.199.113:8080/crs";
 
-    protected String baseUrl = "http://tlep2.yaheen.com";
+//    protected String baseUrl = "http://tlep2.yaheen.com";
+
+    protected String baseUrl ="http://47.106.72.58:9180";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
