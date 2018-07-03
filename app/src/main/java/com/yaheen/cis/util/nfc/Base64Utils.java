@@ -2,7 +2,7 @@ package com.yaheen.cis.util.nfc;
 
 import java.io.UnsupportedEncodingException;
 
-public class Base64 {
+public class Base64Utils {
 
 	
 	private static char[] base64EncodeChars = new char[]{

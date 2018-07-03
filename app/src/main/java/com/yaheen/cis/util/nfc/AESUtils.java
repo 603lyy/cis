@@ -24,7 +24,7 @@ public class AESUtils {
 	public static byte[] encrypt(String sSrc, String sKey) {
 		byte[] encrypted = new byte[0];
 		try {
-			byte[] bKeys = Base64.decode(sKey);
+			byte[] bKeys = Base64Utils.decode(sKey);
 			byte[] bSrcs = sSrc.getBytes("UTF-8");
 			encrypted = encrypt(bSrcs, bKeys);
 		} catch (Exception e) {
@@ -35,12 +35,12 @@ public class AESUtils {
 
 	public static String encryptToString(byte[] sSrc, byte[] sKey) {
 		byte[] encrypted = encrypt(sSrc, sKey);
-		return Base64.encode(encrypted);
+		return Base64Utils.encode(encrypted);
 	}
 
 	public static String encryptToString(String sSrc, String sKey) {
 		byte[] encrypted = encrypt(sSrc, sKey);
-		return Base64.encode(encrypted);
+		return Base64Utils.encode(encrypted);
 	}
 
 	public static byte[] decrypt(byte[] sSrc, byte[] sKey) {
@@ -62,8 +62,8 @@ public class AESUtils {
 	public static byte[] decrypt(String sSrc, String sKey) {
 		byte[] original = new byte[0];
 		try {
-			byte[] bKeys = Base64.decode(sKey);
-			byte[] bSrcs = Base64.decode(sSrc);
+			byte[] bKeys = Base64Utils.decode(sKey);
+			byte[] bSrcs = Base64Utils.decode(sSrc);
 			original = decrypt(bSrcs, bKeys);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,63 +1,44 @@
 package com.yaheen.cis.activity;
 
-import android.app.ActivityManager;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.LoginBean;
-import com.yaheen.cis.service.UploadLocationService;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.FreeHandSystemUtil;
 import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
-import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.nfc.AESUtils;
-import com.yaheen.cis.util.nfc.Base64;
+import com.yaheen.cis.util.nfc.Base64Utils;
+import com.yaheen.cis.util.nfc.RSAUtils;
 import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
 
-import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketException;
-import de.tavendo.autobahn.WebSocketHandler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 
 public class LoginActivity extends PermissionActivity {
-
-    //定义notify的id，避免与其它的notification的处理冲突
-    private static final int NOTIFY_ID = 840567289;
-
-    private static final String CHANNEL = "1";
-
-    private NotificationManager mNotificationManager;
-
-    private NotificationCompat.Builder mBuilder;
 
     private LinearLayout llRPsd;
 
@@ -90,7 +71,7 @@ public class LoginActivity extends PermissionActivity {
             @Override
             public void onClick(View view) {
                 login();
-//                setNotification();
+//                read();
             }
         });
     }
@@ -130,10 +111,10 @@ public class LoginActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("username", name);
-        requestParams.addQueryStringParameter("password", Base64.encode(AESUtils.encrypt(psd, key)));
+        requestParams.addQueryStringParameter("password", Base64Utils.encode(AESUtils.encrypt(psd, key)));
         requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
 
-        HttpUtils.getPostHttp(requestParams,new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
 
@@ -183,6 +164,35 @@ public class LoginActivity extends PermissionActivity {
         } else {
             cbRPsd.setChecked(true);
         }
+    }
+
+    private void read() {
+        String in, str = "";
+
+        //读取的内容会随着文件的改变而改变
+        try {
+            //读取的是字节流
+            InputStream is = getResources().getAssets().open("encrypt.key");
+            //UTF-8编码的指定是很重要的
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            BufferedReader bfr = new BufferedReader(isr);
+            while ((in = bfr.readLine()) != null) {
+                str = str + in;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCGKXHz1Kr0PZs6t/usPwvhPbXWhHr4p+4gHMl+IjMH6kjHXEus+TIBRyV3NemCDkQQ447MdQ/DDCTyw4S8xfmUpzLqdaex1+coDq9y5IxVRju9WegKlnGrDppzDd18DeFgScFPRShjQcbIiztFy4/rDeWvLPqtrf8hwGDs+PoBIwIDAQAB";
+
+//        String cSrc = "59M030Of64C6Um51aF2yY3j94SLt5u467EF0O3E1LUuQGBB56pGRQ634t55ikTxQMtueEXOHJDuUs141ui1q1yEj";
+        // 私钥加密
+//        String enString = RSAUtils.encryptByPrivateKeyToString(cSrc, privateKey);
+        // 公钥解密
+//        String DeString = RSAUtils.decryptByPublicKeyToString(enString, publicKey);
+
+        // 公钥解密
+        String DeString = RSAUtils.decryptByPublicKeyToString(str, publicKey);
+        Log.i("lin", "read: " + DeString);
     }
 
     @Override

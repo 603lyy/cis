@@ -27,15 +27,13 @@ import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
-import com.yaheen.cis.util.map.BDMapUtils;
-import com.yaheen.cis.util.nfc.Base64;
+import com.yaheen.cis.util.nfc.Base64Utils;
 import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 public class TurnActivity extends PermissionActivity {
 
@@ -182,7 +180,7 @@ public class TurnActivity extends PermissionActivity {
         jsonObject.addProperty("houseNumberId", id);
 
         RequestParams params = new RequestParams(checkIdUrl);
-        params.addQueryStringParameter("json", Base64.encode(jsonObject.toString().getBytes()));
+        params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
 
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override
