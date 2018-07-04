@@ -19,9 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="5dp"
-            android:shadowColor="@color/white"
             android:text="环保"
-            android:textColor="@color/white"
+            android:textColor="#ec7f71"
             android:textSize="18dp" />
 
     </LinearLayout>
@@ -39,9 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="5dp"
-            android:shadowColor="@color/white"
             android:text="公共"
-            android:textColor="@color/white"
+            android:textColor="#ec7f71"
             android:textSize="18dp" />
 
     </LinearLayout>
@@ -59,9 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="5dp"
-            android:shadowColor="@color/white"
             android:text="交通"
-            android:textColor="@color/white"
+            android:textColor="#ec7f71"
             android:textSize="18dp" />
 
     </LinearLayout>
