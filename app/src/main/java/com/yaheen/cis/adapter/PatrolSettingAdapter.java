@@ -29,19 +29,21 @@ public class PatrolSettingAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean,
     @Override
     protected void convert(BaseViewHolder helper, final TypeBean.TypeArrBean item) {
         checkBox = helper.getView(R.id.cb_setting);
-        helper.setText(R.id.cb_setting, item.getName());
 
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //已经是选中状态
-                if (item.isSelected()) {
-                    item.setSelected(false);
-                } else {
-                    item.setSelected(true);
-                }
+//                if (item.isSelected()) {
+//                    item.setSelected(false);
+//                } else {
+//                    item.setSelected(true);
+//                }
             }
         });
+
+        helper.addOnClickListener(R.id.cb_setting);
+        helper.setText(R.id.cb_setting, item.getName());
     }
 
     //是否已经选择了问题类型
@@ -55,11 +57,11 @@ public class PatrolSettingAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean,
 //    }
 
     //已经选择的问题类型
-    public TypeBean getTypeBean(){
+    public TypeBean getTypeBean() {
         TypeBean typeBean = new TypeBean();
         typeBean.setTypeArr(new ArrayList<TypeBean.TypeArrBean>());
-        for (int i = 0; i <mData.size(); i++) {
-            if(mData.get(i).isSelected()){
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).isSelected()) {
                 typeBean.getTypeArr().add(mData.get(i));
             }
         }

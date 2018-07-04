@@ -59,7 +59,22 @@ public class PatrolSettingActivity extends BaseActivity {
 
         settingAdapter = new PatrolSettingAdapter();
         settingAdapter.addHeaderView(getHeaderView());
+        settingAdapter.addFooterView(getFooterView());
         rvSetting.setAdapter(settingAdapter);
+
+        settingAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof CheckBox) {
+                    //已经是选中状态
+                    if (settingAdapter.getData().get(position).isSelected()) {
+                        settingAdapter.getData().get(position).setSelected(false);
+                    } else {
+                        settingAdapter.getData().get(position).setSelected(true);
+                    }
+                }
+            }
+        });
     }
 
     private View getHeaderView() {
@@ -72,6 +87,38 @@ public class PatrolSettingActivity extends BaseActivity {
             public void onClick(View view) {
                 showLoadingDialog();
                 startPatrol();
+            }
+        });
+        return view;
+    }
+
+    private View getFooterView() {
+
+        View view = getLayoutInflater().inflate(R.layout.footer_patrol_setting,
+                (ViewGroup) rvSetting.getParent(), false);
+        final CheckBox cb1, cb2, cb3;
+        cb1 = view.findViewById(R.id.cb_setting_1);
+        cb2 = view.findViewById(R.id.cb_setting_2);
+        cb3 = view.findViewById(R.id.cb_setting_3);
+        cb1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cb1.setChecked(false);
+                showToast(R.string.app_develop);
+            }
+        });
+        cb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cb2.setChecked(false);
+                showToast(R.string.app_develop);
+            }
+        });
+        cb3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cb3.setChecked(false);
+                showToast(R.string.app_develop);
             }
         });
         return view;
