@@ -11,6 +11,7 @@
     <string name="login_username_empty">用户名不能为空</string>
     <string name="login_password_empty">密码不能为空</string>
     <string name="login_fail">登录失败</string>
+    <string name="cancel_record">请结束上一个账号的巡查，再登录另一个账号</string>
 
     <string name="setting_start_fail">开始失败,请重新点击开始</string>
     <string name="setting_start_select">请选择巡查类型</string>

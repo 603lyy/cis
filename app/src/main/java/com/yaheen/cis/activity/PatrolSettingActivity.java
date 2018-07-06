@@ -40,6 +40,9 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private String recordId = "";
 
+    //是否已经打开了新的页面
+    private boolean isOpen = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +88,11 @@ public class PatrolSettingActivity extends BaseActivity {
         ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoadingDialog();
-                startPatrol();
+                if (!isOpen) {
+                    showLoadingDialog();
+                    startPatrol();
+                    isOpen = true;
+                }
             }
         });
         return view;
@@ -212,6 +218,7 @@ public class PatrolSettingActivity extends BaseActivity {
                 } else {
                     showToast(R.string.setting_start_fail);
                     cancelLoadingDialog();
+                    isOpen = false;
                 }
             }
 
@@ -235,5 +242,8 @@ public class PatrolSettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!isDialogShowing()) {
+            isOpen = false;
+        }
     }
 }

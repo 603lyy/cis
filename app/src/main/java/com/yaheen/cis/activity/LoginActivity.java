@@ -70,7 +70,8 @@ public class LoginActivity extends PermissionActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                checkRecord();
+//                login();
 //                read();
             }
         });
@@ -88,6 +89,18 @@ public class LoginActivity extends PermissionActivity {
         etPsd.setText(DefaultPrefsUtil.getUserPassword());
         etName.setText(DefaultPrefsUtil.getUserName());
 
+    }
+
+    /**
+     * 判断上次巡查是否结束
+     */
+    private void checkRecord() {
+        String typeStr = DefaultPrefsUtil.getPatrolType();
+        if (!TextUtils.isEmpty(typeStr) && !etName.getText().toString().equals(DefaultPrefsUtil.getUserName())) {
+            showToast(R.string.cancel_record);
+        } else {
+            login();
+        }
     }
 
     private void login() {

@@ -35,7 +35,7 @@ public class BaseActivity extends Activity implements CompressImg {
 
 //    protected String baseUrl = "http://tlep2.yaheen.com";
 
-    protected String baseUrl ="http://47.106.72.58:9180";
+    protected String baseUrl = "http://47.106.72.58:9180";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,14 @@ public class BaseActivity extends Activity implements CompressImg {
     public void cancelLoadingDialog() {
         if (progersssDialog != null) {
             progersssDialog.dismiss();
+        }
+    }
+
+    public boolean isDialogShowing() {
+        if (progersssDialog != null && progersssDialog.isShowing()) {
+            return true;
+        } else {
+            return false;
         }
     }
 
