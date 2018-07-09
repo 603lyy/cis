@@ -1,9 +1,7 @@
 package com.yaheen.cis.activity;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,9 +13,11 @@ import android.widget.TextView;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
+import com.yaheen.cis.entity.GetVerBean;
 import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
+import com.yaheen.cis.util.common.CommonUtils;
 import com.yaheen.cis.util.common.FreeHandSystemUtil;
 import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
@@ -27,10 +27,12 @@ import com.yaheen.cis.util.nfc.Base64Utils;
 import com.yaheen.cis.util.nfc.RSAUtils;
 import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,17 +42,27 @@ import java.io.InputStreamReader;
 
 public class LoginActivity extends PermissionActivity {
 
-    private LinearLayout llRPsd;
+    private LinearLayout llRPsd, llVer;
 
     private CheckBox cbRPsd;
 
-    private TextView tvLogin;
+    private TextView tvLogin, tvChange, tvGetVer;
 
-    private EditText etName, etPsd, etIp;
+    private EditText etName, etPsd, etIp, etPhone, etVerification;
+
+    private CountDownTimerUtils countDownTimerUtils;
 
     private String url = baseUrl + "/eapi/login.do";
 
+    private String getVerUrl = baseUrl + "/eapi/getVerifyCode.do";
+
     private String key = "X2Am6tVLnwMMX8kVgdDk5w==";
+
+    //用户获取的验证码
+    private String ver = "";
+
+    //是否手机号登录
+    private boolean isPhone = false, isCount = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +91,51 @@ public class LoginActivity extends PermissionActivity {
 
     private void initView() {
 
+        etVerification = findViewById(R.id.et_verification);
         cbRPsd = findViewById(R.id.cb_remember_password);
         llRPsd = findViewById(R.id.ll_remember_password);
+        llVer = findViewById(R.id.ll_verification);
+        tvGetVer = findViewById(R.id.tv_get_ver);
         etName = findViewById(R.id.et_username);
+        tvChange = findViewById(R.id.tv_change);
         etPsd = findViewById(R.id.et_password);
         tvLogin = findViewById(R.id.tv_login);
+        etPhone = findViewById(R.id.et_phone);
         etIp = findViewById(R.id.et_ip);
 
         etPsd.setText(DefaultPrefsUtil.getUserPassword());
         etName.setText(DefaultPrefsUtil.getUserName());
+
+        tvChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPhone) {
+                    isPhone = false;
+                    llVer.setVisibility(View.GONE);
+                    etPhone.setVisibility(View.GONE);
+                    etPsd.setVisibility(View.VISIBLE);
+                    cbRPsd.setVisibility(View.VISIBLE);
+                    etName.setVisibility(View.VISIBLE);
+                    tvChange.setText(R.string.login_phone);
+                } else {
+                    isPhone = true;
+                    etPsd.setVisibility(View.GONE);
+                    cbRPsd.setVisibility(View.GONE);
+                    etName.setVisibility(View.GONE);
+                    llVer.setVisibility(View.VISIBLE);
+                    etPhone.setVisibility(View.VISIBLE);
+                    tvChange.setText(R.string.login_account);
+                }
+            }
+        });
+
+        tvGetVer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //开始计时
+                setCountTime();
+            }
+        });
 
     }
 
@@ -98,12 +146,162 @@ public class LoginActivity extends PermissionActivity {
         String typeStr = DefaultPrefsUtil.getPatrolType();
         if (!TextUtils.isEmpty(typeStr) && !etName.getText().toString().equals(DefaultPrefsUtil.getUserName())) {
             showToast(R.string.cancel_record);
-        } else {
-            login();
+        } else if(isPhone) {
+            loginPhone();
+        }else {
+            loginUserName();
         }
     }
 
-    private void login() {
+    private void setCountTime() {
+        String phone = etPhone.getText().toString();
+
+        if (TextUtils.isEmpty(phone)) {
+            showToast(R.string.login_phone_empty);
+            return;
+        }
+
+        if (!CommonUtils.isPhoneNumber(phone)) {
+            showToast(R.string.login_phone_not_right);
+            return;
+        }
+
+        if (countDownTimerUtils != null && isCount) {
+            return;
+        }
+
+        //开始计时并请求验证码
+        getVerification(phone);
+        isCount = true;
+
+        countDownTimerUtils = CountDownTimerUtils.getCountDownTimer()
+                .setMillisInFuture(61 * 1000)
+                .setCountDownInterval(1000)
+                .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+                    @Override
+                    public void onTick(long pMillisUntilFinished) {
+                        tvGetVer.setText("重新发送(" + (int) pMillisUntilFinished / 1000 + "秒)");
+                    }
+                })
+                .setFinishDelegate(new CountDownTimerUtils.FinishDelegate() {
+                    @Override
+                    public void onFinish() {
+                        tvGetVer.setText(R.string.login_get_verification);
+                        if (countDownTimerUtils != null) {
+                            countDownTimerUtils.cancel();
+                            countDownTimerUtils = null;
+                            isCount = false;
+                        }
+                    }
+                });
+        countDownTimerUtils.start();
+    }
+
+    private void getVerification(String phone) {
+
+        if (TextUtils.isEmpty(phone)) {
+            showToast(R.string.login_phone_empty);
+            return;
+        }
+
+        ver = "";
+
+        RequestParams requestParams = new RequestParams(getVerUrl);
+        requestParams.addQueryStringParameter("mobile", phone);
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                GetVerBean data = gson.fromJson(result, GetVerBean.class);
+                if (data != null && data.isResult()) {
+                    ver = data.getCode();
+                } else {
+                    showToast(R.string.login_get_verification_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.login_get_verification_fail);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void loginPhone() {
+
+        final String phone = etPhone.getText().toString();
+        final String ver = etVerification.getText().toString();
+
+        if (TextUtils.isEmpty(phone)) {
+            showToast(R.string.login_phone_empty);
+            return;
+        }else if(!CommonUtils.isPhoneNumber(phone)){
+            showToast(R.string.login_phone_not_right);
+            return;
+        }
+
+        if (TextUtils.isEmpty(ver)) {
+            showToast(R.string.login_verification_empty);
+            return;
+        }else if(!this.ver.equals(ver)){
+            showToast(R.string.login_verification_not_right);
+            return;
+        }
+
+        showLoadingDialog();
+
+        RequestParams requestParams = new RequestParams(url);
+        requestParams.addQueryStringParameter("mobile", phone);
+        requestParams.addQueryStringParameter("loginFlag", "M");
+        requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
+
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                LoginBean data = gson.fromJson(result, LoginBean.class);
+                if (data != null) {
+                    if (data.isResult()) {
+                        DefaultPrefsUtil.setToken(data.getToken());
+                        Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
+                        startActivity(intent);
+                    } else {
+                        showToast(data.getMsg());
+                    }
+                } else {
+                    showToast(R.string.login_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.login_fail);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                cancelLoadingDialog();
+            }
+        });
+    }
+
+    private void loginUserName() {
 
         DefaultPrefsUtil.setIpUrl(etIp.getText().toString());
 
@@ -124,6 +322,7 @@ public class LoginActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("username", name);
+        requestParams.addQueryStringParameter("loginFlag", "N");
         requestParams.addQueryStringParameter("password", Base64Utils.encode(AESUtils.encrypt(psd, key)));
         requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
 
@@ -228,5 +427,10 @@ public class LoginActivity extends PermissionActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (countDownTimerUtils != null) {
+            countDownTimerUtils.cancel();
+            countDownTimerUtils = null;
+            isCount = false;
+        }
     }
 }
