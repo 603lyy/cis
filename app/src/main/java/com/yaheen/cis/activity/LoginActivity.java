@@ -144,12 +144,18 @@ public class LoginActivity extends PermissionActivity {
      */
     private void checkRecord() {
         String typeStr = DefaultPrefsUtil.getPatrolType();
-        if (!TextUtils.isEmpty(typeStr) && !etName.getText().toString().equals(DefaultPrefsUtil.getUserName())) {
-            showToast(R.string.cancel_record);
-        } else if(isPhone) {
-            loginPhone();
-        }else {
-            loginUserName();
+        if (isPhone) {
+            if (!TextUtils.isEmpty(typeStr) && !etPhone.getText().toString().equals(DefaultPrefsUtil.getPhone())) {
+                showToast(R.string.cancel_record);
+            } else {
+                loginPhone();
+            }
+        } else {
+            if (!TextUtils.isEmpty(typeStr) && !etName.getText().toString().equals(DefaultPrefsUtil.getUserName())) {
+                showToast(R.string.cancel_record);
+            } else {
+                loginUserName();
+            }
         }
     }
 
@@ -246,7 +252,7 @@ public class LoginActivity extends PermissionActivity {
         if (TextUtils.isEmpty(phone)) {
             showToast(R.string.login_phone_empty);
             return;
-        }else if(!CommonUtils.isPhoneNumber(phone)){
+        } else if (!CommonUtils.isPhoneNumber(phone)) {
             showToast(R.string.login_phone_not_right);
             return;
         }
@@ -254,7 +260,7 @@ public class LoginActivity extends PermissionActivity {
         if (TextUtils.isEmpty(ver)) {
             showToast(R.string.login_verification_empty);
             return;
-        }else if(!this.ver.equals(ver)){
+        } else if (!this.ver.equals(ver)) {
             showToast(R.string.login_verification_not_right);
             return;
         }
@@ -273,6 +279,7 @@ public class LoginActivity extends PermissionActivity {
                 LoginBean data = gson.fromJson(result, LoginBean.class);
                 if (data != null) {
                     if (data.isResult()) {
+                        DefaultPrefsUtil.setPhone(phone);
                         DefaultPrefsUtil.setToken(data.getToken());
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         startActivity(intent);

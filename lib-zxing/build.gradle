@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'cis'
             keyPassword 'yaheen'
-            storeFile file('F:/lyy/project/cis/cis.jks')
+            storeFile file('E:/Example/cis/cis.jks')
             storePassword 'yaheen'
         }
     }
@@ -13,8 +13,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1008
-        versionName "1.0.08"
+        versionCode 1009
+        versionName "1.0.09"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

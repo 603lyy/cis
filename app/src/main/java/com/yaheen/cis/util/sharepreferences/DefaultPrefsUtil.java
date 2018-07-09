@@ -133,4 +133,12 @@ public class DefaultPrefsUtil {
     public static String getPatrolRecordId() {
         return DefaultPrefs.getInstance().getPatrolRecordId();
     }
+
+    public static void setPhone(String phone) {
+        DefaultPrefs.getInstance().setPhone(phone);
+    }
+
+    public static String getPhone() {
+        return DefaultPrefs.getInstance().getPhone();
+    }
 }

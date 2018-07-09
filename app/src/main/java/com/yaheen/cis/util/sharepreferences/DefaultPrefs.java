@@ -102,6 +102,11 @@ final class DefaultPrefs extends AbstractSharePreference {
          * 巡查记录ID
          */
         String PATROL_RECORD_ID = "patrol_record_id";
+
+        /**
+         * 用户手机号
+         */
+        String PHONE = "phone_num";
     }
 
     /**
@@ -278,6 +283,17 @@ final class DefaultPrefs extends AbstractSharePreference {
 
     void setPatrolRecordId(String patrolRecordId) {
         putString(Keys.PATROL_RECORD_ID, patrolRecordId);
+    }
+
+    /**
+     * phone
+     */
+    String getPhone() {
+        return getString(Keys.PHONE, "");
+    }
+
+    void setPhone(String phone) {
+        putString(Keys.PHONE, phone);
     }
 
 }
