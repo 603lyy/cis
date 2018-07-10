@@ -10,10 +10,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.GetVerBean;
+import com.yaheen.cis.entity.HouseNumberBean;
 import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
@@ -83,8 +85,6 @@ public class LoginActivity extends PermissionActivity {
             @Override
             public void onClick(View view) {
                 checkRecord();
-//                login();
-//                read();
             }
         });
     }
@@ -215,7 +215,7 @@ public class LoginActivity extends PermissionActivity {
         RequestParams requestParams = new RequestParams(getVerUrl);
         requestParams.addQueryStringParameter("mobile", phone);
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 GetVerBean data = gson.fromJson(result, GetVerBean.class);

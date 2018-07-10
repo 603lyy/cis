@@ -38,6 +38,7 @@ import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
+import com.yaheen.cis.entity.HouseNumberBean;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
@@ -52,6 +53,7 @@ import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
+import com.yaheen.cis.util.nfc.Base64Utils;
 import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
@@ -76,6 +78,8 @@ public class DetailActivity extends PermissionActivity {
 
     private TextView tvLocation, tvTime, tvCommit, tvFinish;
 
+    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
+
     private EditText etDescribe;
 
     private ImageView ivDelete;
@@ -90,7 +94,7 @@ public class DetailActivity extends PermissionActivity {
 
     private RefreshLayout refreshLayout;
 
-    private View llTitle;
+    private View llTitle, llHouse;
 
     private ProblemAdapter problemAdapter;
 
@@ -108,7 +112,9 @@ public class DetailActivity extends PermissionActivity {
 
     private String endUrl = baseUrl + "/eapi/endPatrol.do";
 
-    private String typeStr, questionStr, recordId;
+    private String houseUrl = baseUrl + "/eapi/endPatrol.do";
+
+    private String typeStr, recordId, houseId;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
@@ -150,16 +156,16 @@ public class DetailActivity extends PermissionActivity {
 
         llDetailTitle = findViewById(R.id.ll_detail_title);
         refreshLayout = findViewById(R.id.refresh_layout);
+        llHouse = findViewById(R.id.ll_house_data);
         llTitle = findViewById(R.id.ll_title_bar);
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
         showLoadingDialog();
 
         isSign = getIntent().getBooleanExtra("sign", false);
-        questionStr = getIntent().getStringExtra("question");
+        houseId = getIntent().getStringExtra("houseId");
         typeStr = getIntent().getStringExtra("type");
 
-//        qData = gson.fromJson(questionStr, QuestionBean.class);
         typeData = gson.fromJson(typeStr, TypeBean.class);
         recordId = DefaultPrefsUtil.getPatrolRecordId();
         startTime = DefaultPrefsUtil.getPatrolStart();
@@ -167,22 +173,20 @@ public class DetailActivity extends PermissionActivity {
         //开始定位
         BDMapUtils.startLocation();
 
-        //开始时间为零，即开始新的巡查
-        if (startTime == 0) {
-            startTime = System.currentTimeMillis();
-            DefaultPrefsUtil.setPatrolStart(startTime);
-        }
-
         if (!TextUtils.isEmpty(recordId)) {
             DefaultPrefsUtil.setPatrolRecordId(recordId);
         }
 
-//        开启后台服务上传坐标
-//        Intent intent = new Intent(getApplicationContext(), UploadLocationService.class);
-//        startService(intent);
-//        bindService(intent, conn, BIND_AUTO_CREATE);
         if (!isSign) {
+            //开始时间为零，即开始新的巡查
+            if (startTime == 0) {
+                startTime = System.currentTimeMillis();
+                DefaultPrefsUtil.setPatrolStart(startTime);
+            }
             UploadLocationUtils.startUpload(getApplicationContext());
+        } else {
+            initHouseData();
+            getHouseData("2c92861663b168390163e9ee7b1c0888");
         }
 
         initView();
@@ -191,9 +195,8 @@ public class DetailActivity extends PermissionActivity {
         initUrgency();
         initMapView();
         initImgUpload();
-        if (qData == null) {
-            getQuestionMsg(typeData.getTypeArr().get(0).getId());
-        }
+
+        getQuestionMsg(typeData.getTypeArr().get(0).getId());
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,12 +265,23 @@ public class DetailActivity extends PermissionActivity {
                             tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
                         }
                     }).start();
+            llHouse.setVisibility(View.GONE);
             llTitle.setVisibility(View.GONE);
             llDetailTitle.setVisibility(View.VISIBLE);
         } else {
+            llHouse.setVisibility(View.VISIBLE);
             llTitle.setVisibility(View.VISIBLE);
             llDetailTitle.setVisibility(View.GONE);
         }
+    }
+
+    private void initHouseData() {
+        tvPUsername = findViewById(R.id.tv_house_username);
+        tvPAddress = findViewById(R.id.tv_patrol_address);
+        tvPLeader = findViewById(R.id.tv_house_leader);
+        tvPPhone = findViewById(R.id.tv_house_phone);
+        tvPTime = findViewById(R.id.tv_patrol_time);
+        tvPArea = findViewById(R.id.tv_house_area);
     }
 
     private void initPatrol() {
@@ -404,6 +418,48 @@ public class DetailActivity extends PermissionActivity {
             }
         });
         return view;
+    }
+
+    private void getHouseData(String houseId) {
+
+        if (TextUtils.isEmpty(houseId)) {
+            return;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("houseNumberId", houseId);
+
+        RequestParams params = new RequestParams("http://lyl.tunnel.echomod.cn/whn/merchants/getAllMechats.do");
+        params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
+        HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                HouseNumberBean data = gson.fromJson(result, HouseNumberBean.class);
+                if (data != null && data.isResult() && data.getEntity().size() > 0) {
+                    tvPArea.setText(data.getEntity().get(0).getBusinessScope());
+                    tvPUsername.setText(data.getEntity().get(0).getUserName());
+                    tvPLeader.setText(data.getEntity().get(0).getFireowner());
+                    tvPAddress.setText(data.getEntity().get(0).getAddress());
+                    tvPPhone.setText(data.getEntity().get(0).getPhone());
+                    tvPTime.setText(data.getEntity().get(0).getTime());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getQuestionMsg(String typeId) {

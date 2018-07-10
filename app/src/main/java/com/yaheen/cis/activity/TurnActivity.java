@@ -44,15 +44,15 @@ public class TurnActivity extends PermissionActivity {
 
     private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
 
-    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
-
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
     private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";
 
-    private TextView tvPatrol, tvRecord, tvFetch,tvUpload;
+    private TextView tvPatrol, tvRecord, tvFetch, tvUpload;
 
     private LinearLayout llBack;
+
+    private String houseId;
 
     //成功扫码则为true，否则为false
     private boolean isFetch = false;
@@ -141,6 +141,7 @@ public class TurnActivity extends PermissionActivity {
                     Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
                     intent.putExtra("type", gson.toJson(data));
                     intent.putExtra("sign", true);
+                    intent.putExtra("houseId", houseId);
                     startActivity(intent);
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(TurnActivity.this, LoginActivity.class));
@@ -171,15 +172,15 @@ public class TurnActivity extends PermissionActivity {
     //请求门牌系统，判断是否是巡查点
     private void checkId(CheckBean.EntityBean data) {
 
-        String id = data.getLink().substring(data.getLink().lastIndexOf("=") + 1);
+        houseId = data.getLink().substring(data.getLink().lastIndexOf("=") + 1);
 
-        if (TextUtils.isEmpty(id)) {
+        if (TextUtils.isEmpty(houseId)) {
             cancelLoadingDialog();
             return;
         }
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("houseNumberId", id);
+        jsonObject.addProperty("houseNumberId", houseId);
 
         RequestParams params = new RequestParams(checkIdUrl);
         params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));

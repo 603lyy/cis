@@ -58,6 +58,10 @@
                 android:id="@+id/ll_title_bar"
                 layout="@layout/item_title_bar" />
 
+            <include
+                android:id="@+id/ll_house_data"
+                layout="@layout/item_house_data"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
