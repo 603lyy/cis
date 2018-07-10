@@ -26,9 +26,10 @@
     <string name="setting_start_fail">开始失败,请重新点击开始</string>
     <string name="setting_start_select">请选择巡查类型</string>
 
-    <string name="turn_patrol_text">巡查</string>
+    <string name="turn_patrol_text">范围巡查</string>
     <string name="turn_record_text">巡查记录</string>
-    <string name="turn_fetch_text">签到</string>
+    <string name="turn_fetch_text">定点巡查</string>
+    <string name="turn_upload_text">上报事件</string>
 
     <string name="detail_finish">结束</string>
     <string name="detail_sign">签到</string>
