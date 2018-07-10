@@ -78,10 +78,10 @@ public class ReportRecordActivity extends PermissionActivity {
         recordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                Intent intent = new Intent(ReportRecordActivity.this, RecordMapActivity.class);
+                Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
 //                recordId = recordAdapter.getData().get(position).getId();
 //                intent.putExtra("recordId", recordId);
-//                startActivity(intent);
+                startActivity(intent);
             }
         });
     }

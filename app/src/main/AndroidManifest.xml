@@ -121,7 +121,8 @@
             android:finishOnTaskLaunch="false"
             android:launchMode="singleInstance"
             android:theme="@style/SingleActivityStyle" />
-        <activity android:name=".activity.ReportRecordActivity"></activity>
+        <activity android:name=".activity.ReportRecordActivity" />
+        <activity android:name=".activity.HandleActivity"></activity>
     </application>
 
 </manifest>
