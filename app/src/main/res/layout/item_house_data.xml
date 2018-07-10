@@ -34,8 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="1"
-                android:text="123545" />
+                android:maxLines="1"/>
 
         </LinearLayout>
 
@@ -55,8 +54,7 @@
                 android:id="@+id/tv_house_username"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="123545" />
+                android:gravity="center"/>
 
         </LinearLayout>
 
@@ -84,8 +82,7 @@
                 android:id="@+id/tv_patrol_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="123545" />
+                android:gravity="center" />
 
         </LinearLayout>
 
@@ -105,8 +102,7 @@
                 android:id="@+id/tv_house_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="13428853826" />
+                android:gravity="center"/>
 
         </LinearLayout>
 
@@ -128,8 +124,7 @@
             android:id="@+id/tv_house_area"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="13428853826" />
+            android:gravity="center"/>
 
     </LinearLayout>
 
@@ -150,8 +145,7 @@
             android:id="@+id/tv_house_leader"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="13428853826" />
+            android:gravity="center" />
 
     </LinearLayout>
 

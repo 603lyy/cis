@@ -642,8 +642,22 @@ public class DetailActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(reportUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
+        requestParams.addQueryStringParameter("recordId", recordId);
+        if (isSign && !TextUtils.isEmpty(houseId)) {
+            requestParams.addQueryStringParameter("businessScope", tvPArea.getText().toString());
+            requestParams.addQueryStringParameter("userName", tvPUsername.getText().toString());
+            requestParams.addQueryStringParameter("address", tvPAddress.getText().toString());
+            requestParams.addQueryStringParameter("fireOwner", tvPLeader.getText().toString());
+            requestParams.addQueryStringParameter("phone", tvPPhone.getText().toString());
+            requestParams.addQueryStringParameter("time", tvPTime.getText().toString());
+//            requestParams.addQueryStringParameter("businessScope", "businessScope");
+//            requestParams.addQueryStringParameter("userName", "userName");
+//            requestParams.addQueryStringParameter("address", "address");
+//            requestParams.addQueryStringParameter("fireOwner", "fireOwner");
+//            requestParams.addQueryStringParameter("phone", "phone");
+//            requestParams.addQueryStringParameter("time", "time");
+        }
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
