@@ -69,6 +69,10 @@
     <string name="save_image_success">保存成功</string>
     <string name="upload_image_fail">上传图片失败</string>
 
+    <string name="report_handle_text">是否处理：</string>
+    <string name="report_is_handle">已处理</string>
+    <string name="report_not_handle">未处理</string>
+
     <!-- android 6.0权限-->
     <string name="permission_tip_camera">缺少(相机)权限，无法使用该功能，点击"设置"去开启此权限\n您可在“设置”>“应用”>“权限”中配置权限</string>
     <string name="permission_tip_audio">缺少(麦克风)权限，无法使用该功能，点击"设置"去开启此权限\n您可在“设置”>“应用”>“权限”中配置权限</string>

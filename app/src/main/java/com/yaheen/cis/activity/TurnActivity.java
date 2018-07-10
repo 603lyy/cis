@@ -50,7 +50,7 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";
 
-    private TextView tvPatrol, tvRecord, tvFetch;
+    private TextView tvPatrol, tvRecord, tvFetch,tvUpload;
 
     private LinearLayout llBack;
 
@@ -66,6 +66,7 @@ public class TurnActivity extends PermissionActivity {
         tvFetch = findViewById(R.id.tv_fetch);
         tvPatrol = findViewById(R.id.tv_patrol);
         tvRecord = findViewById(R.id.tv_record);
+        tvUpload = findViewById(R.id.tv_upload);
 
         tvRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +91,13 @@ public class TurnActivity extends PermissionActivity {
             }
         });
 
-//        llBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onBackPressed();
-//            }
-//        });
+        tvUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TurnActivity.this, ReportRecordActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
