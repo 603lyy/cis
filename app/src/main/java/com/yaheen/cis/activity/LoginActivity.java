@@ -279,8 +279,9 @@ public class LoginActivity extends PermissionActivity {
                 LoginBean data = gson.fromJson(result, LoginBean.class);
                 if (data != null) {
                     if (data.isResult()) {
-                        DefaultPrefsUtil.setPhone(phone);
                         DefaultPrefsUtil.setToken(data.getToken());
+                        DefaultPrefsUtil.setPhone(data.getMobile());
+                        DefaultPrefsUtil.setUserName(data.getUsername());
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         startActivity(intent);
                     } else {
@@ -346,12 +347,12 @@ public class LoginActivity extends PermissionActivity {
                         } else {
                             DefaultPrefsUtil.setUserPassword("");
                         }
-                        DefaultPrefsUtil.setUserName(name);
                         DefaultPrefsUtil.setToken(data.getToken());
+                        DefaultPrefsUtil.setPhone(data.getMobile());
+                        DefaultPrefsUtil.setUserName(data.getUsername());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         startActivity(intent);
-//                        finish();
                     } else {
                         showToast(data.getMsg());
                     }
