@@ -70,12 +70,16 @@ public class HandleDetailActivity extends MapActivity {
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
 
+    //事件是否被处理
+    private boolean handle = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_detail);
 
         showLoadingDialog();
+        handle = getIntent().getBooleanExtra("handle", true);
         eventId = getIntent().getStringExtra("eventId");
 
         //记录ID不可为空
@@ -100,7 +104,7 @@ public class HandleDetailActivity extends MapActivity {
         tvDescribe = findViewById(R.id.tv_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
 
-        if (DefaultPrefsUtil.getRole().equals("LEADER")) {
+        if (DefaultPrefsUtil.getRole().equals("LEADER") && !handle) {
             tvCommit.setVisibility(View.VISIBLE);
         } else {
             tvCommit.setVisibility(View.GONE);

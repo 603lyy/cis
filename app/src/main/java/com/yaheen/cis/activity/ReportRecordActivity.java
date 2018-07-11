@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
@@ -29,6 +31,8 @@ public class ReportRecordActivity extends PermissionActivity {
 
     private RecyclerView rvUrgency, rvRecord;
 
+    private CheckBox cbTrue, cbFalse;
+
     private ReportUrgencyAdapter urgencyAdapter;
 
     private ReportRecordAdapter recordAdapter;
@@ -38,13 +42,38 @@ public class ReportRecordActivity extends PermissionActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_record);
 
-        rvUrgency = findViewById(R.id.rv_urgency);
+        cbFalse = findViewById(R.id.cb_report_not_handle);
+        cbTrue = findViewById(R.id.cb_report_is_handle);
         rvUrgency = findViewById(R.id.rv_urgency);
         rvRecord = findViewById(R.id.rv_record);
 
+        initView();
         initUrgency();
         initRecordList();
         getRecordList();
+    }
+
+    private void initView() {
+
+        if (DefaultPrefsUtil.getRole().equals("LEADER")) {
+            cbTrue.setChecked(false);
+        } else {
+            cbTrue.setChecked(true);
+        }
+
+        cbTrue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRecordList();
+            }
+        });
+
+        cbFalse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRecordList();
+            }
+        });
     }
 
     private void initUrgency() {
@@ -61,10 +90,17 @@ public class ReportRecordActivity extends PermissionActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (urgencyAdapter.getData().get(position).isSelect()) {
                     urgencyAdapter.getData().get(position).setSelect(false);
-                }else {
+                    if (TextUtils.isEmpty(urgencyAdapter.getUrgencyStr())) {
+                        urgencyAdapter.getData().get(position).setSelect(true);
+                    } else {
+                        urgencyAdapter.notifyDataSetChanged();
+                        getRecordList();
+                    }
+                } else {
                     urgencyAdapter.getData().get(position).setSelect(true);
+                    urgencyAdapter.notifyDataSetChanged();
+                    getRecordList();
                 }
-                urgencyAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -80,16 +116,39 @@ public class ReportRecordActivity extends PermissionActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
                 intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+                if(recordAdapter.getData().get(position).getFlag().equals("N")){
+                    intent.putExtra("handle", false);
+                }
                 startActivity(intent);
             }
         });
     }
 
     private void getRecordList() {
+
+        String flag = "";
+
+        if (TextUtils.isEmpty(urgencyAdapter.getUrgencyStr())) {
+            showToast(R.string.record_emergency_empty);
+            return;
+        }
+
+        if (!cbTrue.isChecked() && !cbFalse.isChecked()) {
+            return;
+        } else if (cbFalse.isChecked() && cbTrue.isChecked()) {
+            flag = "";
+        } else if (!cbTrue.isChecked()) {
+            flag = "N";
+        } else {
+            flag = "Y";
+        }
+
+        showLoadingDialog();
+
         RequestParams requestParams = new RequestParams(recordUrl);
+        requestParams.addQueryStringParameter("icons", urgencyAdapter.getUrgencyStr());
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("flag", "N");
-        requestParams.addQueryStringParameter("icons", "1,2,3,4");
+        requestParams.addQueryStringParameter("flag", flag);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override

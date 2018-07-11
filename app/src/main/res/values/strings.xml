@@ -82,6 +82,7 @@
     <string name="report_commit">提交</string>
     <string name="record_time">巡查时长：%s</string>
     <string name="record_emergency">紧急程度：%s</string>
+    <string name="record_emergency_empty">请选择紧急程度</string>
 
     <string name="handle_commit_fail">提交失败</string>
     <string name="handle_describe_empty">处理内容不可为空</string>

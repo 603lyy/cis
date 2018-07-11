@@ -1,6 +1,7 @@
 package com.yaheen.cis.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -62,13 +63,19 @@ public class ReportUrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseView
 
     }
 
-    public String geUrgencyId() {
-        String id = "";
+    //返回选中问题的ID字符串
+    public String getUrgencyStr() {
+        String str = "";
+
         for (int i = 0; i < mData.size(); i++) {
             if (mData.get(i).isSelect()) {
-                id = mData.get(i).getId();
+                if (TextUtils.isEmpty(str)) {
+                    str = mData.get(i).getId();
+                } else {
+                    str = str + "," + mData.get(i).getId();
+                }
             }
         }
-        return id;
+        return str;
     }
 }

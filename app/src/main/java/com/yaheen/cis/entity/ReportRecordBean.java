@@ -6,6 +6,7 @@ public class ReportRecordBean {
 
     /**
      * result : true
+     * eventList : [{"id":"402847ec6483d893016483da133b000d","time":"2018-07-10 19:01:04","longitude":113.40462,"latitude":23.131184,"emergency":"1","describe":"我还是想提醒一下，确保你的域名前缀唯一，这里的方式有很多，比如你的qq或者你的手机号码，甚至你的微信号，这可以对你的项目起到一定的保护作用。","flag":"N"}]
      * code : 1004
      * msg : 成功
      */
@@ -49,12 +50,13 @@ public class ReportRecordBean {
 
     public static class EventListBean {
         /**
-         * id : 402847ec648825c8016488423e1e0007
-         * time : 2018-07-11 15:33:20
-         * longitude : 113.40465
-         * latitude : 23.131239
-         * emergency : 3
-         * describe : 正常
+         * id : 402847ec6483d893016483da133b000d
+         * time : 2018-07-10 19:01:04
+         * longitude : 113.40462
+         * latitude : 23.131184
+         * emergency : 1
+         * describe : 我还是想提醒一下，确保你的域名前缀唯一，这里的方式有很多，比如你的qq或者你的手机号码，甚至你的微信号，这可以对你的项目起到一定的保护作用。
+         * flag : N
          */
 
         private String id;
@@ -63,6 +65,7 @@ public class ReportRecordBean {
         private double latitude;
         private String emergency;
         private String describe;
+        private String flag;
 
         public String getId() {
             return id;
@@ -110,6 +113,14 @@ public class ReportRecordBean {
 
         public void setDescribe(String describe) {
             this.describe = describe;
+        }
+
+        public String getFlag() {
+            return flag;
+        }
+
+        public void setFlag(String flag) {
+            this.flag = flag;
         }
     }
 }
