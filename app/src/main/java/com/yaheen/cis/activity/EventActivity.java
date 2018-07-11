@@ -43,8 +43,6 @@ import java.util.List;
 
 public class EventActivity extends MapActivity {
 
-    private final int REQUEST_CODE_CHOOSE = 1001;
-
     private TextView tvLocation, tvType, tvDescribe, tvUrgency;
 
     private LinearLayout llBack;

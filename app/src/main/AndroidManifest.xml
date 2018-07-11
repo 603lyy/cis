@@ -122,7 +122,8 @@
             android:launchMode="singleInstance"
             android:theme="@style/SingleActivityStyle" />
         <activity android:name=".activity.ReportRecordActivity" />
-        <activity android:name=".activity.HandleActivity"></activity>
+        <activity android:name=".activity.HandleActivity" />
+        <activity android:name=".activity.HandleDetailActivity"></activity>
     </application>
 
 </manifest>

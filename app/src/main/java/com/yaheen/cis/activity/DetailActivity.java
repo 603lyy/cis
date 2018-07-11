@@ -641,6 +641,7 @@ public class DetailActivity extends PermissionActivity {
 
 
         RequestParams requestParams = new RequestParams(reportUrl);
+        requestParams.addQueryStringParameter("area", BDMapUtils.getLocation().getAddrStr());
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         requestParams.addQueryStringParameter("recordId", recordId);
@@ -651,6 +652,7 @@ public class DetailActivity extends PermissionActivity {
             requestParams.addQueryStringParameter("fireOwner", tvPLeader.getText().toString());
             requestParams.addQueryStringParameter("phone", tvPPhone.getText().toString());
             requestParams.addQueryStringParameter("time", tvPTime.getText().toString());
+            requestParams.addParameter("point", true);
 //            requestParams.addQueryStringParameter("businessScope", "businessScope");
 //            requestParams.addQueryStringParameter("userName", "userName");
 //            requestParams.addQueryStringParameter("address", "address");
@@ -763,7 +765,6 @@ public class DetailActivity extends PermissionActivity {
             // 设置定位数据
             mBaiduMap.setMyLocationData(locData);
             tvLocation.setText(mLoc.getAddrStr());
-//            mBaiduMap.showSDKLayer();
 
             if (isFirstLoc) {
                 isFirstLoc = false;
@@ -779,6 +780,7 @@ public class DetailActivity extends PermissionActivity {
                         .target(new LatLng(mLoc.getLatitude(), mLoc.getLongitude()))
                         .zoom(mBaiduMap.getMapStatus().zoom).build();
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+                tvLocation.setText(mLoc.getAddrStr());
             }
         }
 
