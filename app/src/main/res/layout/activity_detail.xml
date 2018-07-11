@@ -132,7 +132,7 @@
                 <EditText
                     android:id="@+id/et_describe"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="150dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/colorHint"
                     android:gravity="start"

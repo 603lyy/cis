@@ -410,6 +410,7 @@ public class DetailActivity extends PermissionActivity {
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                imgUriList.clear();
                 uploadIdList.clear();
                 selectUriList.clear();
                 adapterPathList.clear();
@@ -646,12 +647,12 @@ public class DetailActivity extends PermissionActivity {
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         requestParams.addQueryStringParameter("recordId", recordId);
         if (isSign && !TextUtils.isEmpty(houseId)) {
-            requestParams.addQueryStringParameter("businessScope", tvPArea.getText().toString());
-            requestParams.addQueryStringParameter("userName", tvPUsername.getText().toString());
-            requestParams.addQueryStringParameter("address", tvPAddress.getText().toString());
-            requestParams.addQueryStringParameter("fireOwner", tvPLeader.getText().toString());
-            requestParams.addQueryStringParameter("phone", tvPPhone.getText().toString());
-            requestParams.addQueryStringParameter("time", tvPTime.getText().toString());
+            requestParams.addQueryStringParameter("scopeOfOperation", tvPArea.getText().toString());
+            requestParams.addQueryStringParameter("householdName", tvPUsername.getText().toString());
+            requestParams.addQueryStringParameter("inspectionSite", tvPAddress.getText().toString());
+            requestParams.addQueryStringParameter("fireOfficer", tvPLeader.getText().toString());
+            requestParams.addQueryStringParameter("householdPhone", tvPPhone.getText().toString());
+            requestParams.addQueryStringParameter("businessHours", tvPTime.getText().toString());
             requestParams.addParameter("point", true);
 //            requestParams.addQueryStringParameter("businessScope", "businessScope");
 //            requestParams.addQueryStringParameter("userName", "userName");
