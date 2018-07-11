@@ -141,4 +141,12 @@ public class DefaultPrefsUtil {
     public static String getPhone() {
         return DefaultPrefs.getInstance().getPhone();
     }
+
+    public static void setRole(String role) {
+        DefaultPrefs.getInstance().setRole(role);
+    }
+
+    public static String getRole() {
+        return DefaultPrefs.getInstance().getRole();
+    }
 }

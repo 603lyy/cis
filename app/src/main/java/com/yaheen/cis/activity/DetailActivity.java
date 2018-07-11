@@ -429,7 +429,7 @@ public class DetailActivity extends PermissionActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("houseNumberId", houseId);
 
-        RequestParams params = new RequestParams("http://lyl.tunnel.echomod.cn/whn/merchants/getAllMechats.do");
+        RequestParams params = new RequestParams("http://whn.020szsq.com:8080/merchants/getAllMechats.do");
         params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override

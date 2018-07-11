@@ -193,8 +193,10 @@ public class TurnActivity extends PermissionActivity {
                     if (data.isResult()) {
                         getTypeList();
                     } else if (data.getMsg() == null) {
-                        showToast(R.string.not_id);
-                        cancelLoadingDialog();
+//                        showToast(R.string.not_id);
+                        houseId = "";
+                        getTypeList();
+//                        cancelLoadingDialog();
                     } else {
                         showToast(R.string.scan_not);
                         cancelLoadingDialog();

@@ -4,10 +4,11 @@ public class LoginBean {
 
     /**
      * result : true
-     * token : CRSC9D9F2C382364793AF2C93A685538EA7
+     * token : CRSE914B0169939437AA008D8868B98FCC7
      * username : 林先生
      * mobile : 13428853826
      * expiresTime : 604800000
+     * role : PATROLLER
      */
 
     private boolean result;
@@ -15,6 +16,7 @@ public class LoginBean {
     private String username;
     private String mobile;
     private String expiresTime;
+    private String role;
     private String msg;
 
     public String getMsg() {
@@ -63,5 +65,13 @@ public class LoginBean {
 
     public void setExpiresTime(String expiresTime) {
         this.expiresTime = expiresTime;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

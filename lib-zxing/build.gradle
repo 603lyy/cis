@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'cis'
             keyPassword 'yaheen'
-            storeFile file('E:/Example/cis/cis.jks')
+            storeFile file('F:/lyy/project/cis/cis.jks')
             storePassword 'yaheen'
         }
     }

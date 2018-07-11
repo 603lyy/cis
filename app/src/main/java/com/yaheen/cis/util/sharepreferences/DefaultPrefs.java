@@ -107,6 +107,11 @@ final class DefaultPrefs extends AbstractSharePreference {
          * 用户手机号
          */
         String PHONE = "phone_num";
+
+        /**
+         * 用户类型
+         */
+        String ROLE = "user_role";
     }
 
     /**
@@ -294,6 +299,17 @@ final class DefaultPrefs extends AbstractSharePreference {
 
     void setPhone(String phone) {
         putString(Keys.PHONE, phone);
+    }
+
+    /**
+     * role
+     */
+    String getRole() {
+        return getString(Keys.ROLE, "");
+    }
+
+    void setRole(String role) {
+        putString(Keys.ROLE, role);
     }
 
 }

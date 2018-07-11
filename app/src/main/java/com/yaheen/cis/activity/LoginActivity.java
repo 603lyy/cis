@@ -279,6 +279,7 @@ public class LoginActivity extends PermissionActivity {
                 LoginBean data = gson.fromJson(result, LoginBean.class);
                 if (data != null) {
                     if (data.isResult()) {
+                        DefaultPrefsUtil.setRole(data.getRole());
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
                         DefaultPrefsUtil.setUserName(data.getUsername());
@@ -347,6 +348,7 @@ public class LoginActivity extends PermissionActivity {
                         } else {
                             DefaultPrefsUtil.setUserPassword("");
                         }
+                        DefaultPrefsUtil.setRole(data.getRole());
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
                         DefaultPrefsUtil.setUserName(data.getUsername());
