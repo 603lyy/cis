@@ -13,98 +13,82 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            style="@style/Detail_Title_TextView"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:gravity="center"
+            android:text="@string/detail_patrol_address" />
 
-            <TextView
-                style="@style/Detail_Title_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/detail_patrol_address" />
-
-            <TextView
-                android:id="@+id/tv_patrol_address"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_patrol_address"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
-                style="@style/Detail_Title_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/detail_patrol_username" />
-
-            <TextView
-                android:id="@+id/tv_house_username"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"/>
-
-        </LinearLayout>
+            android:gravity="center"
+            android:maxLines="1" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            style="@style/Detail_Title_TextView"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:gravity="center"
+            android:text="@string/detail_patrol_username" />
 
-            <TextView
-                style="@style/Detail_Title_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/detail_patrol_time" />
-
-            <TextView
-                android:id="@+id/tv_patrol_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_house_username"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:gravity="center" />
 
-            <TextView
-                style="@style/Detail_Title_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/detail_patrol_phone" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_house_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
-        </LinearLayout>
+        <TextView
+            style="@style/Detail_Title_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/detail_patrol_time" />
+
+        <TextView
+            android:id="@+id/tv_patrol_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/Detail_Title_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/detail_patrol_phone" />
+
+        <TextView
+            android:id="@+id/tv_house_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center" />
 
     </LinearLayout>
 
@@ -124,7 +108,7 @@
             android:id="@+id/tv_house_area"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"/>
+            android:gravity="center" />
 
     </LinearLayout>
 

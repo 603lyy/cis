@@ -6,7 +6,7 @@ import org.xutils.x;
 
 public class HttpUtils {
 
-    public static void getPostHttp(RequestParams params, Callback.CommonCallback callback) {
+    public static void getPostHttp(RequestParams params, Callback.CommonCallback<String> callback) {
 
         params.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         params.setConnectTimeout(60 * 1000);

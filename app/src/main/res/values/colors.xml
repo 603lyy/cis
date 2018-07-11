@@ -14,6 +14,7 @@
     <color name="orange_1">#FF5831</color>
     <color name="orange_2">#FE5A00</color>
     <color name="yellow_1">#FFBE34</color>
+    <color name="yellow_2">#FAC035</color>
 
     <color name="listDivider">#d7d7d7</color>
 </resources>

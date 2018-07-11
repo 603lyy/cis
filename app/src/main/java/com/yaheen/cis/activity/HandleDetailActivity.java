@@ -42,7 +42,9 @@ import java.util.List;
 
 public class HandleDetailActivity extends MapActivity {
 
-    private TextView tvLocation, tvType, tvDescribe, tvUrgency;
+    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit;
+
+    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
 
     private LinearLayout llBack;
 
@@ -83,6 +85,7 @@ public class HandleDetailActivity extends MapActivity {
         }
 
         initView();
+        initHouseData();
         initMapView();
         initQuestion();
         initImgUpload();
@@ -92,10 +95,25 @@ public class HandleDetailActivity extends MapActivity {
     private void initView() {
         llBack = findViewById(R.id.back);
         tvType = findViewById(R.id.tv_type);
+        tvCommit = findViewById(R.id.tv_commit);
         ivUrgency = findViewById(R.id.iv_urgency);
         tvUrgency = findViewById(R.id.tv_urgency);
         tvDescribe = findViewById(R.id.tv_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
+
+        if (DefaultPrefsUtil.getRole().equals("LEADER")) {
+            tvCommit.setVisibility(View.VISIBLE);
+        } else {
+            tvCommit.setVisibility(View.GONE);
+        }
+
+        tvCommit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
+                startActivity(intent);
+            }
+        });
 
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +121,15 @@ public class HandleDetailActivity extends MapActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initHouseData() {
+        tvPUsername = findViewById(R.id.tv_house_username);
+        tvPAddress = findViewById(R.id.tv_patrol_address);
+        tvPLeader = findViewById(R.id.tv_house_leader);
+        tvPPhone = findViewById(R.id.tv_house_phone);
+        tvPTime = findViewById(R.id.tv_patrol_time);
+        tvPArea = findViewById(R.id.tv_house_area);
     }
 
     private void initQuestion() {

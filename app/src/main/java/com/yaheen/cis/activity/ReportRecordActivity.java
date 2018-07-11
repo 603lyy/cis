@@ -43,7 +43,6 @@ public class ReportRecordActivity extends PermissionActivity {
 
         initUrgency();
         initRecordList();
-
         getRecordList();
     }
 

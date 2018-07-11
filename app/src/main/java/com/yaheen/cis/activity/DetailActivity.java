@@ -186,7 +186,7 @@ public class DetailActivity extends PermissionActivity {
             UploadLocationUtils.startUpload(getApplicationContext());
         } else {
             initHouseData();
-            getHouseData("2c92861663b168390163e9ee7b1c0888");
+            getHouseData(houseId);
         }
 
         initView();
@@ -430,7 +430,7 @@ public class DetailActivity extends PermissionActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("houseNumberId", houseId);
 
-        RequestParams params = new RequestParams("http://whn.020szsq.com:8080/merchants/getAllMechats.do");
+        RequestParams params = new RequestParams("http://whn.020szsq.com:8088/merchants/getAllMechats.do");
         params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override

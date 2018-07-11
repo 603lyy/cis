@@ -80,6 +80,7 @@
     <string name="report_not_handle">未处理</string>
     <string name="report_handle_hint">处理内容描述</string>
     <string name="report_commit">提交</string>
+    <string name="handle_commit_fail">提交失败</string>
 
     <!-- android 6.0权限-->
     <string name="permission_tip_camera">缺少(相机)权限，无法使用该功能，点击"设置"去开启此权限\n您可在“设置”>“应用”>“权限”中配置权限</string>

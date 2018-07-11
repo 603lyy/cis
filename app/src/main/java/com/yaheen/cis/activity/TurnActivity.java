@@ -46,7 +46,7 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
-    private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";
+    private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
 
     private TextView tvPatrol, tvRecord, tvFetch, tvUpload;
 

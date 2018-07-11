@@ -71,7 +71,7 @@
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/btn_primary_round"
+                android:background="@drawable/btn_yellow_round"
                 android:gravity="center"
                 android:paddingBottom="4dp"
                 android:paddingLeft="8dp"
