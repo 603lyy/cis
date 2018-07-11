@@ -46,7 +46,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
 
-    private LinearLayout llBack;
+    private LinearLayout llBack, llHouse;
 
     private ImageView ivUrgency;
 
@@ -99,8 +99,9 @@ public class HandleDetailActivity extends MapActivity {
         llBack = findViewById(R.id.back);
         tvType = findViewById(R.id.tv_type);
         tvCommit = findViewById(R.id.tv_commit);
-        ivUrgency = findViewById(R.id.iv_urgency);
         tvUrgency = findViewById(R.id.tv_urgency);
+        ivUrgency = findViewById(R.id.iv_urgency);
+        llHouse = findViewById(R.id.ll_house_data);
         tvDescribe = findViewById(R.id.tv_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
 
@@ -228,13 +229,17 @@ public class HandleDetailActivity extends MapActivity {
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());
 
-        //门牌信息
-        tvPUsername.setText(data.getHouseholdName());
-        tvPAddress.setText(data.getInspectionSite());
-        tvPArea.setText(data.getScopeOfOperation());
-        tvPPhone.setText(data.getHouseholdPhone());
-        tvPTime.setText(data.getBusinessHours());
-        tvPLeader.setText(data.getFireOfficer());
+        if (TextUtils.isEmpty(data.getInspectionSite()) || TextUtils.isEmpty(data.getHouseholdName())) {
+            llHouse.setVisibility(View.GONE);
+        } else {
+            //门牌信息
+            tvPUsername.setText(data.getHouseholdName());
+            tvPAddress.setText(data.getInspectionSite());
+            tvPArea.setText(data.getScopeOfOperation());
+            tvPPhone.setText(data.getHouseholdPhone());
+            tvPTime.setText(data.getBusinessHours());
+            tvPLeader.setText(data.getFireOfficer());
+        }
     }
 
     private void setLocationData(double lat, double lon) {

@@ -198,7 +198,7 @@ public class TurnActivity extends PermissionActivity {
                         getTypeList();
 //                        cancelLoadingDialog();
                     } else {
-                        showToast(R.string.scan_not);
+                        showToast(R.string.turn_id_empty);
                         cancelLoadingDialog();
                     }
                 }

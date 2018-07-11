@@ -29,7 +29,8 @@
     <string name="turn_patrol_text">范围巡查</string>
     <string name="turn_record_text">巡查记录</string>
     <string name="turn_fetch_text">定点巡查</string>
-    <string name="turn_upload_text">上报事件</string>
+    <string name="turn_upload_text">上报事件</string>>
+    <string name="turn_id_empty">门牌不存在</string>
 
     <string name="detail_finish">结束</string>
     <string name="detail_sign">签到</string>
