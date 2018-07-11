@@ -8,7 +8,16 @@ public class CommonBean {
      */
 
     private boolean result;
+    private int code;
     private String msg;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public boolean isResult() {
         return result;

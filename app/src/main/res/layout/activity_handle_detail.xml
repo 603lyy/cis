@@ -202,7 +202,7 @@
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="@string/detail_commit" />
+            android:text="@string/handle_commit" />
 
     </LinearLayout>
 

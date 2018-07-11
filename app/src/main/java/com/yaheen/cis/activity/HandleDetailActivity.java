@@ -110,6 +110,7 @@ public class HandleDetailActivity extends MapActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
+                intent.putExtra("eventId", eventId);
                 startActivity(intent);
             }
         });
@@ -221,7 +222,7 @@ public class HandleDetailActivity extends MapActivity {
         imgAdapter.setDatas(data.getFileArr());
         problemAdapter.setDatas(data.getQuestionnaireArr());
         searchAddress(data.getLatitude(), data.getLongitude());
-        setLocationData(data.getLatitude(),data.getLongitude());
+        setLocationData(data.getLatitude(), data.getLongitude());
 
         //门牌信息
         tvPUsername.setText(data.getHouseholdName());
