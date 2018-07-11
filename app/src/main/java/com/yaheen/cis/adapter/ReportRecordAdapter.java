@@ -7,10 +7,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yaheen.cis.R;
 import com.yaheen.cis.entity.RecordBean;
+import com.yaheen.cis.entity.ReportRecordBean;
 
 import java.util.List;
 
-public class ReportRecordAdapter extends BaseQuickAdapter<RecordBean.RecordArrBean, BaseViewHolder> {
+public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.EventListBean, BaseViewHolder> {
 
     private String typeStr = "";
 
@@ -18,24 +19,24 @@ public class ReportRecordAdapter extends BaseQuickAdapter<RecordBean.RecordArrBe
         super(R.layout.item_report_record);
     }
 
-    public void setDatas(@Nullable List<RecordBean.RecordArrBean> data) {
+    public void setDatas(@Nullable List<ReportRecordBean.EventListBean> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, RecordBean.RecordArrBean item) {
+    protected void convert(BaseViewHolder helper, ReportRecordBean.EventListBean item) {
 
-        for (int i = 0; i < item.getTypeArr().size(); i++) {
-            if (i == 0) {
-                typeStr = item.getTypeArr().get(i);
-            } else {
-                typeStr = typeStr + "、" + item.getTypeArr().get(i);
-            }
-        }
-
-        helper.setText(R.id.tv_time, transferStr(R.string.record_patrol_time, item.getStartTime()));
-        helper.setText(R.id.tv_duration, transferStr(R.string.record_patrol_duration, item.getTimeDiffrence()));
-        helper.setText(R.id.tv_type, transferStr(R.string.record_patrol_type, typeStr));
+//        for (int i = 0; i < item.getTypeArr().size(); i++) {
+//            if (i == 0) {
+//                typeStr = item.getTypeArr().get(i);
+//            } else {
+//                typeStr = typeStr + "、" + item.getTypeArr().get(i);
+//            }
+//        }
+//
+        helper.setText(R.id.tv_time, item.getTime());
+        helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, item.getEmergency()));
+        helper.setText(R.id.tv_describe, item.getDescribe());
     }
 
     @SuppressLint("StringFormatInvalid")

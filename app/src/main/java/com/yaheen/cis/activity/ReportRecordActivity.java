@@ -16,6 +16,7 @@ import com.yaheen.cis.adapter.ReportRecordAdapter;
 import com.yaheen.cis.adapter.ReportUrgencyAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.RecordBean;
+import com.yaheen.cis.entity.ReportRecordBean;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
@@ -24,7 +25,7 @@ import org.xutils.http.RequestParams;
 
 public class ReportRecordActivity extends PermissionActivity {
 
-    private String recordUrl = baseUrl + "/eapi/recordList.do";
+    private String recordUrl = baseUrl + "/eapi/findEventListByEmergency.do";
 
     private RecyclerView rvUrgency, rvRecord;
 
@@ -77,9 +78,8 @@ public class ReportRecordActivity extends PermissionActivity {
         recordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
-//                recordId = recordAdapter.getData().get(position).getId();
-//                intent.putExtra("recordId", recordId);
+                Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
+                intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
                 startActivity(intent);
             }
         });
@@ -88,13 +88,15 @@ public class ReportRecordActivity extends PermissionActivity {
     private void getRecordList() {
         RequestParams requestParams = new RequestParams(recordUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("flag", "N");
+        requestParams.addQueryStringParameter("icons", "1,2,3,4");
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                RecordBean data = gson.fromJson(result, RecordBean.class);
+                ReportRecordBean data = gson.fromJson(result, ReportRecordBean.class);
                 if (data != null && data.isResult()) {
-                    recordAdapter.setDatas(data.getRecordArr());
+                    recordAdapter.setDatas(data.getEventList());
                     recordAdapter.notifyDataSetChanged();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(ReportRecordActivity.this, LoginActivity.class));

@@ -71,10 +71,4 @@ public class ReportUrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseView
         }
         return id;
     }
-
-    public void resetData() {
-        for (int i = 0; i < mData.size(); i++) {
-            mData.get(i).setSelect(false);
-        }
-    }
 }

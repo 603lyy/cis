@@ -101,7 +101,8 @@
                     style="@style/CheckBoxPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="@string/report_is_handle"
+                    android:checked="true"
+                    android:text="@string/report_not_handle"
                     android:textSize="14dp" />
 
                 <!--<ImageView-->
