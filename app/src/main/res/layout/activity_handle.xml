@@ -17,7 +17,7 @@
         android:background="@color/colorHint"
         android:gravity="start"
         android:maxEms="6"
-        android:maxLength="3"
+        android:maxLength="300"
         android:hint="@string/report_handle_hint"
         android:padding="5dp"
         android:textSize="14dp" />

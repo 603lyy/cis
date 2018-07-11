@@ -171,8 +171,7 @@ public class EventActivity extends MapActivity {
                     imgAdapter.setDatas(data.getTbEvent().getFileArr());
                     problemAdapter.setDatas(data.getTbEvent().getQuestionnaireArr());
                     searchAddress(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
-                    setLocationData(Float.valueOf(data.getTbEvent().getLatitude()),
-                            Float.valueOf(data.getTbEvent().getLongitude()));
+                    setLocationData(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(EventActivity.this, LoginActivity.class));
                     finish();
@@ -196,7 +195,7 @@ public class EventActivity extends MapActivity {
         });
     }
 
-    private void setLocationData(float lat, float lon) {
+    private void setLocationData(double lat, double lon) {
 
         MyLocationData locData = new MyLocationData.Builder().direction(100)
                 .latitude(lat).longitude(lon).build();

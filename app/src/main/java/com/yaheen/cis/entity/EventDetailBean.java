@@ -4,11 +4,10 @@ import java.util.List;
 
 public class EventDetailBean {
 
-
     /**
      * result : true
      * code : 1004
-     * tbEvent : {"type":"消防","describe":"好大火啊啊啊啊啊","emergency":"3","longitude":"113.40793","latitude":"23.131159","questionnaireArr":[{"questionnaire":"三级火灾"},{"questionnaire":"二级火灾"},{"questionnaire":"一级火灾"}],"fileArr":[{"imageUrl":"http://192.168.199.108:8080/crs/webFile/visit.do?id=402847f663f2f0870163f2f419a10004&showName=6e57dfa1e9fc48e090c738a2caa7d08c.jpg"},{"imageUrl":"http://192.168.199.108:8080/crs/webFile/visit.do?id=402847eb63d91c3a0163d91f05300000&showName=c9b482b4c0374b4aa5f8988b018e69c8.jpg"},{"imageUrl":"http://192.168.199.108:8080/crs/webFile/visit.do?id=402847f763f749e60163f7dd9fb70017&showName=a769d2f6b6744b8bb4b620d08c3e8e64.jpg"}]}
+     * tbEvent : {"type":"消防","describe":"正餐","emergency":"4","longitude":113.40465,"latitude":23.131227,"fireOfficer":"lyy","businessHours":"08:00\u2014\u201418:00","scopeOfOperation":"农家乐特产","householdName":"大众农家乐","householdPhone":"13929327812","inspectionSite":"水唇镇螺洞村大众农家乐","questionnaireArr":[{"questionnaire":"在岗人员"}],"fileArr":[{"imageUrl":"http://lyy.tunnel.echomod.cn/crs/webFile/visit.do?id=402847ec648750150164875bd4cd0005&showName=6dbb8ce42fc34b7a8fb4e42bf3b2c11d.jpg"}]}
      * msg : 查询成功
      */
 
@@ -52,19 +51,31 @@ public class EventDetailBean {
     public static class TbEventBean {
         /**
          * type : 消防
-         * describe : 好大火啊啊啊啊啊
-         * emergency : 3
-         * longitude : 113.40793
-         * latitude : 23.131159
-         * questionnaireArr : [{"questionnaire":"三级火灾"},{"questionnaire":"二级火灾"},{"questionnaire":"一级火灾"}]
-         * fileArr : [{"imageUrl":"http://192.168.199.108:8080/crs/webFile/visit.do?id=402847f663f2f0870163f2f419a10004&showName=6e57dfa1e9fc48e090c738a2caa7d08c.jpg"},{"imageUrl":"http://192.168.199.108:8080/crs/webFile/visit.do?id=402847eb63d91c3a0163d91f05300000&showName=c9b482b4c0374b4aa5f8988b018e69c8.jpg"},{"imageUrl":"http://192.168.199.108:8080/crs/webFile/visit.do?id=402847f763f749e60163f7dd9fb70017&showName=a769d2f6b6744b8bb4b620d08c3e8e64.jpg"}]
+         * describe : 正餐
+         * emergency : 4
+         * longitude : 113.40465
+         * latitude : 23.131227
+         * fireOfficer : lyy
+         * businessHours : 08:00——18:00
+         * scopeOfOperation : 农家乐特产
+         * householdName : 大众农家乐
+         * householdPhone : 13929327812
+         * inspectionSite : 水唇镇螺洞村大众农家乐
+         * questionnaireArr : [{"questionnaire":"在岗人员"}]
+         * fileArr : [{"imageUrl":"http://lyy.tunnel.echomod.cn/crs/webFile/visit.do?id=402847ec648750150164875bd4cd0005&showName=6dbb8ce42fc34b7a8fb4e42bf3b2c11d.jpg"}]
          */
 
         private String type;
         private String describe;
         private String emergency;
-        private String longitude;
-        private String latitude;
+        private double longitude;
+        private double latitude;
+        private String fireOfficer;
+        private String businessHours;
+        private String scopeOfOperation;
+        private String householdName;
+        private String householdPhone;
+        private String inspectionSite;
         private List<QuestionnaireArrBean> questionnaireArr;
         private List<FileArrBean> fileArr;
 
@@ -92,20 +103,68 @@ public class EventDetailBean {
             this.emergency = emergency;
         }
 
-        public String getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(String longitude) {
+        public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
 
-        public String getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(String latitude) {
+        public void setLatitude(double latitude) {
             this.latitude = latitude;
+        }
+
+        public String getFireOfficer() {
+            return fireOfficer;
+        }
+
+        public void setFireOfficer(String fireOfficer) {
+            this.fireOfficer = fireOfficer;
+        }
+
+        public String getBusinessHours() {
+            return businessHours;
+        }
+
+        public void setBusinessHours(String businessHours) {
+            this.businessHours = businessHours;
+        }
+
+        public String getScopeOfOperation() {
+            return scopeOfOperation;
+        }
+
+        public void setScopeOfOperation(String scopeOfOperation) {
+            this.scopeOfOperation = scopeOfOperation;
+        }
+
+        public String getHouseholdName() {
+            return householdName;
+        }
+
+        public void setHouseholdName(String householdName) {
+            this.householdName = householdName;
+        }
+
+        public String getHouseholdPhone() {
+            return householdPhone;
+        }
+
+        public void setHouseholdPhone(String householdPhone) {
+            this.householdPhone = householdPhone;
+        }
+
+        public String getInspectionSite() {
+            return inspectionSite;
+        }
+
+        public void setInspectionSite(String inspectionSite) {
+            this.inspectionSite = inspectionSite;
         }
 
         public List<QuestionnaireArrBean> getQuestionnaireArr() {
@@ -126,7 +185,7 @@ public class EventDetailBean {
 
         public static class QuestionnaireArrBean {
             /**
-             * questionnaire : 三级火灾
+             * questionnaire : 在岗人员
              */
 
             private String questionnaire;
@@ -142,7 +201,7 @@ public class EventDetailBean {
 
         public static class FileArrBean {
             /**
-             * imageUrl : http://192.168.199.108:8080/crs/webFile/visit.do?id=402847f663f2f0870163f2f419a10004&showName=6e57dfa1e9fc48e090c738a2caa7d08c.jpg
+             * imageUrl : http://lyy.tunnel.echomod.cn/crs/webFile/visit.do?id=402847ec648750150164875bd4cd0005&showName=6dbb8ce42fc34b7a8fb4e42bf3b2c11d.jpg
              */
 
             private String imageUrl;

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yaheen.cis.R;
@@ -16,17 +17,20 @@ import org.xutils.http.RequestParams;
 
 public class HandleActivity extends PermissionActivity {
 
-    private String commitUrl = baseUrl + "";
+    private String commitUrl = baseUrl + "/eapi/handleEvent.do";
 
     private EditText etDes;
 
     private TextView tvCommit;
+
+    private LinearLayout llBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle);
 
+        llBack = findViewById(R.id.back);
         etDes = findViewById(R.id.et_describe);
         tvCommit = findViewById(R.id.tv_commit);
 
@@ -34,6 +38,13 @@ public class HandleActivity extends PermissionActivity {
             @Override
             public void onClick(View view) {
                 commitEvent();
+            }
+        });
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

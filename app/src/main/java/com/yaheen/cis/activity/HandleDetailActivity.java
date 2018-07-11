@@ -63,9 +63,9 @@ public class HandleDetailActivity extends MapActivity {
     //图片链接列表
     private List<EventDetailBean.TbEventBean.FileArrBean> imgUrlList = new ArrayList<>();
 
-    private String questionUrl = baseUrl + "/eapi/eventDetail.do";
+    private String eventUrl = baseUrl + "/eapi/eventDetail.do";
 
-    private String recordId, eventId;
+    private String eventId;
 
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
@@ -73,14 +73,13 @@ public class HandleDetailActivity extends MapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.activity_handle_detail);
 
         showLoadingDialog();
         eventId = getIntent().getStringExtra("eventId");
-        recordId = getIntent().getStringExtra("recordId");
 
         //记录ID不可为空
-        if (TextUtils.isEmpty(recordId)) {
+        if (TextUtils.isEmpty(eventId)) {
             finish();
         }
 
@@ -180,9 +179,8 @@ public class HandleDetailActivity extends MapActivity {
     }
 
     private void getEventInfo() {
-        RequestParams requestParams = new RequestParams(questionUrl);
+        RequestParams requestParams = new RequestParams(eventUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-        requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("eventId", eventId);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
@@ -190,15 +188,7 @@ public class HandleDetailActivity extends MapActivity {
             public void onSuccess(String result) {
                 EventDetailBean data = gson.fromJson(result, EventDetailBean.class);
                 if (data != null && data.isResult()) {
-                    tvType.setText(data.getTbEvent().getType());
-                    imgUrlList = (data.getTbEvent().getFileArr());
-                    tvDescribe.setText(data.getTbEvent().getDescribe());
-                    emergencyTransfer(data.getTbEvent().getEmergency());
-                    imgAdapter.setDatas(data.getTbEvent().getFileArr());
-                    problemAdapter.setDatas(data.getTbEvent().getQuestionnaireArr());
-                    searchAddress(data.getTbEvent().getLatitude(), data.getTbEvent().getLongitude());
-                    setLocationData(Float.valueOf(data.getTbEvent().getLatitude()),
-                            Float.valueOf(data.getTbEvent().getLongitude()));
+                    setEventData(data.getTbEvent());
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(HandleDetailActivity.this, LoginActivity.class));
                     finish();
@@ -222,7 +212,27 @@ public class HandleDetailActivity extends MapActivity {
         });
     }
 
-    private void setLocationData(float lat, float lon) {
+    private void setEventData(EventDetailBean.TbEventBean data) {
+
+        tvType.setText(data.getType());
+        imgUrlList = (data.getFileArr());
+        tvDescribe.setText(data.getDescribe());
+        emergencyTransfer(data.getEmergency());
+        imgAdapter.setDatas(data.getFileArr());
+        problemAdapter.setDatas(data.getQuestionnaireArr());
+        searchAddress(data.getLatitude(), data.getLongitude());
+        setLocationData(data.getLatitude(),data.getLongitude());
+
+        //门牌信息
+        tvPUsername.setText(data.getHouseholdName());
+        tvPAddress.setText(data.getInspectionSite());
+        tvPArea.setText(data.getScopeOfOperation());
+        tvPPhone.setText(data.getHouseholdPhone());
+        tvPTime.setText(data.getBusinessHours());
+        tvPLeader.setText(data.getFireOfficer());
+    }
+
+    private void setLocationData(double lat, double lon) {
 
         MyLocationData locData = new MyLocationData.Builder().direction(100)
                 .latitude(lat).longitude(lon).build();

@@ -51,8 +51,8 @@ public class MapActivity extends PermissionActivity implements OnGetGeoCoderResu
     /**
      * 发起搜索
      */
-    public void searchAddress(String lat, String lon) {
-        LatLng ptCenter = new LatLng((Float.valueOf(lat)), (Float.valueOf(lon)));
+    public void searchAddress(double lat, double lon) {
+        LatLng ptCenter = new LatLng(lat,lon);
         // 反Geo搜索
         mSearch.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(ptCenter).newVersion(1));

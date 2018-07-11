@@ -638,29 +638,24 @@ public class DetailActivity extends PermissionActivity {
         jsonObject.addProperty("describe", etDescribe.getText().toString());
         jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
         jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
+        jsonObject.addProperty("area", BDMapUtils.getLocation().getAddrStr());
         jsonObject.addProperty("webFileids", s);
+
+        if (isSign && !TextUtils.isEmpty(houseId)) {
+            jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
+            jsonObject.addProperty("householdName", tvPUsername.getText().toString());
+            jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
+            jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
+            jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
+            jsonObject.addProperty("businessHours", tvPTime.getText().toString());
+        }
 
 
         RequestParams requestParams = new RequestParams(reportUrl);
-        requestParams.addQueryStringParameter("area", BDMapUtils.getLocation().getAddrStr());
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         requestParams.addQueryStringParameter("recordId", recordId);
-        if (isSign && !TextUtils.isEmpty(houseId)) {
-            requestParams.addQueryStringParameter("scopeOfOperation", tvPArea.getText().toString());
-            requestParams.addQueryStringParameter("householdName", tvPUsername.getText().toString());
-            requestParams.addQueryStringParameter("inspectionSite", tvPAddress.getText().toString());
-            requestParams.addQueryStringParameter("fireOfficer", tvPLeader.getText().toString());
-            requestParams.addQueryStringParameter("householdPhone", tvPPhone.getText().toString());
-            requestParams.addQueryStringParameter("businessHours", tvPTime.getText().toString());
-            requestParams.addParameter("point", true);
-//            requestParams.addQueryStringParameter("businessScope", "businessScope");
-//            requestParams.addQueryStringParameter("userName", "userName");
-//            requestParams.addQueryStringParameter("address", "address");
-//            requestParams.addQueryStringParameter("fireOwner", "fireOwner");
-//            requestParams.addQueryStringParameter("phone", "phone");
-//            requestParams.addQueryStringParameter("time", "time");
-        }
+        requestParams.addParameter("point", true);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
