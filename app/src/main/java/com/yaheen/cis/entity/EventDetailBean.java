@@ -66,6 +66,7 @@ public class EventDetailBean {
          */
 
         private String type;
+        private String username;
         private String describe;
         private String emergency;
         private double longitude;
@@ -81,6 +82,14 @@ public class EventDetailBean {
 
         public String getType() {
             return type;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
         }
 
         public void setType(String type) {

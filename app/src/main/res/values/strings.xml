@@ -60,6 +60,8 @@
     <string name="detail_patrol_area">经营范围：</string>
     <string name="detail_patrol_leader">消防负责人：</string>
 
+    <string name="event_patrol_username">巡查人员：</string>
+
     <string name="record_detail">查看详情</string>
     <string name="record_title_content">巡查记录</string>
     <string name="record_event_title">事件记录</string>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.baidu.location.BDLocation;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,6 +31,8 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private RecyclerView rvSetting;
 
+    private LinearLayout llBack;
+
     private PatrolSettingAdapter settingAdapter;
 
     private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
@@ -48,12 +51,21 @@ public class PatrolSettingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patrol_setting);
 
+        llBack = findViewById(R.id.back);
+
         //开始定位
         BDMapUtils.startLocation();
 
         showLoadingDialog();
         initSettingView();
         getTypeList();
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initSettingView() {

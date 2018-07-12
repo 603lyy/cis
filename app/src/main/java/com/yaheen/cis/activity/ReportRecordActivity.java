@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
@@ -31,11 +32,15 @@ public class ReportRecordActivity extends PermissionActivity {
 
     private RecyclerView rvUrgency, rvRecord;
 
+    private LinearLayout llBack;
+
     private CheckBox cbTrue, cbFalse;
 
     private ReportUrgencyAdapter urgencyAdapter;
 
     private ReportRecordAdapter recordAdapter;
+
+    private boolean isFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class ReportRecordActivity extends PermissionActivity {
         cbTrue = findViewById(R.id.cb_report_is_handle);
         rvUrgency = findViewById(R.id.rv_urgency);
         rvRecord = findViewById(R.id.rv_record);
+        llBack = findViewById(R.id.back);
 
         initView();
         initUrgency();
@@ -72,6 +78,13 @@ public class ReportRecordActivity extends PermissionActivity {
             @Override
             public void onClick(View view) {
                 getRecordList();
+            }
+        });
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
@@ -114,19 +127,36 @@ public class ReportRecordActivity extends PermissionActivity {
         recordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
-                intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
-                if(recordAdapter.getData().get(position).getFlag().equals("N")){
-                    intent.putExtra("handle", false);
+            }
+        });
+
+        recordAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.tv_detail) {
+                    showLoadingDialog();
+                    Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
+                    intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+                    if (recordAdapter.getData().get(position).getFlag().equals("N")) {
+                        intent.putExtra("handle", false);
+                    }
+                    startActivity(intent);
+                } else if (view.getId() == R.id.tv_state && DefaultPrefsUtil.getRole().equals("LEADER")) {
+                    if (DefaultPrefsUtil.getRole().equals("LEADER")
+                            && recordAdapter.getData().get(position).getFlag().equals("N")) {
+                        showLoadingDialog();
+                        Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
+                        intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+                        startActivity(intent);
+                    }
                 }
-                startActivity(intent);
             }
         });
     }
 
     private void getRecordList() {
 
-        String flag = "";
+        String flag;
 
         if (TextUtils.isEmpty(urgencyAdapter.getUrgencyStr())) {
             showToast(R.string.record_emergency_empty);
@@ -178,5 +208,15 @@ public class ReportRecordActivity extends PermissionActivity {
                 cancelLoadingDialog();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isFirst) {
+            isFirst = false;
+        } else {
+            cancelLoadingDialog();
+        }
     }
 }

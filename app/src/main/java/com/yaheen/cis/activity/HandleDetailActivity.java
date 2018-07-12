@@ -42,7 +42,7 @@ import java.util.List;
 
 public class HandleDetailActivity extends MapActivity {
 
-    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit;
+    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit,tvUsername;
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
 
@@ -102,6 +102,7 @@ public class HandleDetailActivity extends MapActivity {
         tvUrgency = findViewById(R.id.tv_urgency);
         ivUrgency = findViewById(R.id.iv_urgency);
         llHouse = findViewById(R.id.ll_house_data);
+        tvUsername = findViewById(R.id.tv_username);
         tvDescribe = findViewById(R.id.tv_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
 
@@ -139,7 +140,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private void initQuestion() {
         rvProblem = findViewById(R.id.rv_problem);
-        rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
+        rvProblem.setLayoutManager(new GridLayoutManager(this, 1));
         problemAdapter = new EventProblemAdapter();
         rvProblem.setAdapter(problemAdapter);
     }
@@ -225,6 +226,7 @@ public class HandleDetailActivity extends MapActivity {
         tvDescribe.setText(data.getDescribe());
         emergencyTransfer(data.getEmergency());
         imgAdapter.setDatas(data.getFileArr());
+        tvUsername.setText(data.getUsername());
         problemAdapter.setDatas(data.getQuestionnaireArr());
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());

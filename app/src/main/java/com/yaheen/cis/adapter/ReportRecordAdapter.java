@@ -13,8 +13,6 @@ import java.util.List;
 
 public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.EventListBean, BaseViewHolder> {
 
-    private String typeStr = "";
-
     public ReportRecordAdapter() {
         super(R.layout.item_report_record);
     }
@@ -26,16 +24,19 @@ public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.Event
     @Override
     protected void convert(BaseViewHolder helper, ReportRecordBean.EventListBean item) {
 
-        if (item.getFlag().equals("N")) {
-            helper.setText(R.id.tv_state, R.string.report_not_handle);
-            helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_gray_round);
-        } else {
-            helper.setText(R.id.tv_state, R.string.report_is_handle);
-            helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_yellow_round);
-        }
+        helper.addOnClickListener(R.id.tv_state);
+        helper.addOnClickListener(R.id.tv_detail);
 
         helper.setText(R.id.tv_time, item.getTime());
         helper.setText(R.id.tv_describe, item.getDescribe());
+
+        if (item.getFlag().equals("N")) {
+            helper.setText(R.id.tv_state, R.string.report_not_handle);
+            helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_yellow_round);
+        } else {
+            helper.setText(R.id.tv_state, R.string.report_is_handle);
+            helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_gray_round);
+        }
 
         if (item.getEmergency().equals("4")) {
             helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, R.string.detail_urgency_urgent));

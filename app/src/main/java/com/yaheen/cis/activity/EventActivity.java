@@ -43,7 +43,7 @@ import java.util.List;
 
 public class EventActivity extends MapActivity {
 
-    private TextView tvLocation, tvType, tvDescribe, tvUrgency;
+    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvUsername;
 
     private LinearLayout llBack;
 
@@ -96,6 +96,7 @@ public class EventActivity extends MapActivity {
         ivUrgency = findViewById(R.id.iv_urgency);
         tvUrgency = findViewById(R.id.tv_urgency);
         tvDescribe = findViewById(R.id.tv_describe);
+        tvUsername = findViewById(R.id.tv_username);
         tvLocation = findViewById(R.id.tv_location_describe);
 
         llBack.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +109,7 @@ public class EventActivity extends MapActivity {
 
     private void initQuestion() {
         rvProblem = findViewById(R.id.rv_problem);
-        rvProblem.setLayoutManager(new GridLayoutManager(this, 4));
+        rvProblem.setLayoutManager(new GridLayoutManager(this, 1));
         problemAdapter = new EventProblemAdapter();
         rvProblem.setAdapter(problemAdapter);
     }
@@ -166,6 +167,7 @@ public class EventActivity extends MapActivity {
                 if (data != null && data.isResult()) {
                     tvType.setText(data.getTbEvent().getType());
                     imgUrlList = (data.getTbEvent().getFileArr());
+                    tvUsername.setText(data.getTbEvent().getUsername());
                     tvDescribe.setText(data.getTbEvent().getDescribe());
                     emergencyTransfer(data.getTbEvent().getEmergency());
                     imgAdapter.setDatas(data.getTbEvent().getFileArr());

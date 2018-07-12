@@ -655,7 +655,10 @@ public class DetailActivity extends PermissionActivity {
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         requestParams.addQueryStringParameter("recordId", recordId);
-        requestParams.addParameter("point", true);
+        if (isSign && !TextUtils.isEmpty(houseId)) {
+            requestParams.addParameter("point", true);
+        }
+
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
