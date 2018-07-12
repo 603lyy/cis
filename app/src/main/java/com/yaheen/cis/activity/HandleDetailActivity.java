@@ -241,6 +241,7 @@ public class HandleDetailActivity extends MapActivity {
             tvPPhone.setText(data.getHouseholdPhone());
             tvPTime.setText(data.getBusinessHours());
             tvPLeader.setText(data.getFireOfficer());
+            llHouse.setVisibility(View.VISIBLE);
         }
     }
 
