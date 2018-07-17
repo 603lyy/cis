@@ -320,7 +320,7 @@ public class DetailActivity extends PermissionActivity {
 
         problemAdapter = new ProblemAdapter();
         if (!TextUtils.isEmpty(typeStr) && qData != null) {
-            problemAdapter.setDatas(qData.getTypeArr());
+            problemAdapter.setDatas(qData.getQuestionaireArr());
         }
         rvProblem.setAdapter(problemAdapter);
     }
@@ -473,7 +473,7 @@ public class DetailActivity extends PermissionActivity {
             public void onSuccess(String result) {
                 QuestionBean data = gson.fromJson(result, QuestionBean.class);
                 if (data != null && data.isResult()) {
-                    problemAdapter.setDatas(data.getTypeArr());
+                    problemAdapter.setDatas(data.getQuestionaireArr());
                     clearData();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));

@@ -14,7 +14,7 @@ import com.yaheen.cis.entity.TypeBean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProblemAdapter extends BaseQuickAdapter<QuestionBean.TypeArrBean, BaseViewHolder> {
+public class ProblemAdapter extends BaseQuickAdapter<QuestionBean.QuestionaireArrBean, BaseViewHolder> {
 
     private CheckBox checkBox;
 
@@ -22,12 +22,12 @@ public class ProblemAdapter extends BaseQuickAdapter<QuestionBean.TypeArrBean, B
         super(R.layout.item_problem);
     }
 
-    public void setDatas(@Nullable List<QuestionBean.TypeArrBean> data) {
+    public void setDatas(@Nullable List<QuestionBean.QuestionaireArrBean> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, final QuestionBean.TypeArrBean item) {
+    protected void convert(BaseViewHolder helper, final QuestionBean.QuestionaireArrBean item) {
         checkBox = helper.getView(R.id.cb_problem);
         helper.setText(R.id.cb_problem, item.getName());
 
