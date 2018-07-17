@@ -29,6 +29,7 @@ public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.Event
 
         helper.setText(R.id.tv_time, item.getTime());
         helper.setText(R.id.tv_describe, item.getDescribe());
+        helper.setText(R.id.tv_name, transferStr(R.string.record_patrol_name, item.getUsername()));
 
         if (item.getFlag().equals("N")) {
             helper.setText(R.id.tv_state, R.string.report_not_handle);
@@ -40,11 +41,11 @@ public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.Event
 
         if (item.getEmergency().equals("4")) {
             helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, R.string.detail_urgency_urgent));
-        }else if (item.getEmergency().equals("3")){
+        } else if (item.getEmergency().equals("3")) {
             helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, R.string.detail_urgency_suspicious));
-        }else if (item.getEmergency().equals("2")){
+        } else if (item.getEmergency().equals("2")) {
             helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, R.string.detail_urgency_normal));
-        }else {
+        } else {
             helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, R.string.detail_urgency_record));
         }
     }
@@ -52,5 +53,10 @@ public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.Event
     @SuppressLint("StringFormatInvalid")
     private String transferStr(int id, int string) {
         return String.format(mContext.getResources().getString(id), mContext.getResources().getString(string));
+    }
+
+    @SuppressLint("StringFormatInvalid")
+    private String transferStr(int id, String string) {
+        return String.format(mContext.getResources().getString(id), string);
     }
 }

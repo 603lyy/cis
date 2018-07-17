@@ -69,6 +69,7 @@
     <string name="record_patrol_time">巡查时间：%s</string>
     <string name="record_patrol_duration">巡查时长：%s</string>
     <string name="record_patrol_type">巡查类型：%s</string>
+    <string name="record_patrol_name">巡查人员：%s</string>
 
     <string name="photo_album">相册</string>
     <string name="take_photo">拍照</string>
