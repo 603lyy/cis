@@ -27,9 +27,9 @@
     <string name="setting_start_select">请选择巡查类型</string>
 
     <string name="turn_patrol_text">范围巡查</string>
-    <string name="turn_record_text">巡查记录</string>
+    <string name="turn_record_text">轨迹记录</string>
     <string name="turn_fetch_text">定点巡查</string>
-    <string name="turn_upload_text">上报事件</string>>
+    <string name="turn_upload_text">巡查记录</string>
     <string name="turn_id_empty">门牌不存在</string>
 
     <string name="detail_finish">结束</string>

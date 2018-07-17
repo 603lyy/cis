@@ -66,7 +66,7 @@ public class TypeBean implements Serializable {
 
         private String id;
         private String name;
-        private boolean selected;
+        private boolean selected = true;
 
         public boolean isSelected() {
             return selected;
