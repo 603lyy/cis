@@ -78,7 +78,6 @@ public class HandleDetailActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_detail);
 
-        showLoadingDialog();
         handle = getIntent().getBooleanExtra("handle", true);
         eventId = getIntent().getStringExtra("eventId");
 
@@ -92,7 +91,6 @@ public class HandleDetailActivity extends MapActivity {
         initMapView();
         initQuestion();
         initImgUpload();
-        getEventInfo();
     }
 
     private void initView() {
@@ -306,6 +304,11 @@ public class HandleDetailActivity extends MapActivity {
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mBaiduMap.setMyLocationEnabled(true);
         mapView.onResume();
+
+        if(isFirstLoc){
+            showLoadingDialog();
+            getEventInfo();
+        }
     }
 
     @Override

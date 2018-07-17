@@ -219,4 +219,5 @@ public class ReportRecordActivity extends PermissionActivity {
             cancelLoadingDialog();
         }
     }
+
 }
