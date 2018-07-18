@@ -64,12 +64,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+public class DetailPointActivity extends PermissionActivity {
 
-public class DetailActivity extends PermissionActivity {
-
-    private TextView tvLocation, tvTime, tvCommit, tvFinish;
+    private TextView tvLocation, tvCommit;
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
+
+    private LinearLayout llBack;
 
     private EditText etDescribe;
 
@@ -81,11 +82,7 @@ public class DetailActivity extends PermissionActivity {
 
     private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
 
-    private LinearLayout llDetailTitle;
-
     private RefreshLayout refreshLayout;
-
-    private View llTitle, llHouse;
 
     private ProblemAdapter problemAdapter;
 
@@ -101,21 +98,13 @@ public class DetailActivity extends PermissionActivity {
 
     private String reportUrl = baseUrl + "/eapi/report.do";
 
-    private String endUrl = baseUrl + "/eapi/endPatrol.do";
-
-    private String typeStr, recordId, houseId;
+    private String typeStr,  houseId;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
 
     //判断地图是否是第一次定位
     private boolean isFirstLoc = true;
-
-    //判断是否签到按钮进入，是则取消巡查功能，只提供上报功能
-    private boolean isSign = false;
-
-    //记录开始巡查的时间戳,方便计算时间
-    private long startTime;
 
     //被选择的图片路径列表
     private List<Uri> selectUriList = new ArrayList<>();
@@ -129,54 +118,21 @@ public class DetailActivity extends PermissionActivity {
     //已上传图片的ID列表
     private List<String> uploadIdList = new ArrayList<>();
 
-    //定时上传的坐标点列表
-    private List<UploadLocationListBean.LocationBean> locationList = new ArrayList<>();
-
     //问题类型实体
     private TypeBean typeData;
-
-    //问题实体
-    private QuestionBean qData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
-
-        llDetailTitle = findViewById(R.id.ll_detail_title);
-        refreshLayout = findViewById(R.id.refresh_layout);
-        llHouse = findViewById(R.id.ll_house_data);
-        llTitle = findViewById(R.id.ll_title_bar);
-        tvCommit = findViewById(R.id.tv_commit);
-        tvFinish = findViewById(R.id.tv_finish);
+        setContentView(R.layout.activity_detail_point);
         showLoadingDialog();
 
-        isSign = getIntent().getBooleanExtra("sign", false);
         houseId = getIntent().getStringExtra("houseId");
         typeStr = getIntent().getStringExtra("type");
-
         typeData = gson.fromJson(typeStr, TypeBean.class);
-        recordId = DefaultPrefsUtil.getPatrolRecordId();
-        startTime = DefaultPrefsUtil.getPatrolStart();
 
         //开始定位
         BDMapUtils.startLocation();
-
-        if (!TextUtils.isEmpty(recordId)) {
-            DefaultPrefsUtil.setPatrolRecordId(recordId);
-        }
-
-        if (!isSign) {
-            //开始时间为零，即开始新的巡查
-            if (startTime == 0) {
-                startTime = System.currentTimeMillis();
-                DefaultPrefsUtil.setPatrolStart(startTime);
-            }
-            UploadLocationUtils.startUpload(getApplicationContext());
-        } else {
-            initHouseData();
-            getHouseData(houseId);
-        }
 
         initView();
         initPatrol();
@@ -184,29 +140,15 @@ public class DetailActivity extends PermissionActivity {
         initUrgency();
         initMapView();
         initImgUpload();
+        initHouseData();
 
+        getHouseData(houseId);
         getQuestionMsg(typeData.getTypeArr().get(0).getId());
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendReport();
-            }
-        });
-
-        tvFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogUtils.showDialog(DetailActivity.this, "是否要结束本次巡查？", new DialogCallback() {
-                    @Override
-                    public void callback() {
-                        finishPatrol();
-                    }
-                }, new IDialogCancelCallback() {
-                    @Override
-                    public void cancelCallback() {
-                    }
-                });
             }
         });
 
@@ -230,8 +172,10 @@ public class DetailActivity extends PermissionActivity {
     }
 
     private void initView() {
-        tvTime = findViewById(R.id.tv_time);
+        llBack = findViewById(R.id.back);
+        tvCommit = findViewById(R.id.tv_commit);
         etDescribe = findViewById(R.id.et_describe);
+        refreshLayout = findViewById(R.id.refresh_layout);
         tvLocation = findViewById(R.id.tv_location_describe);
 
         tvLocation.setOnClickListener(new View.OnClickListener() {
@@ -243,25 +187,13 @@ public class DetailActivity extends PermissionActivity {
             }
         });
 
-        if (!isSign) {
-            CountDownTimerUtils.getCountDownTimer()
-                    .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                    .setCountDownInterval(1000)
-                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                        @Override
-                        public void onTick(long pMillisUntilFinished) {
-                            long time = System.currentTimeMillis() - startTime - 28800000L;
-                            tvTime.setText(TimeTransferUtils.getHMSStrTime(time + ""));
-                        }
-                    }).start();
-            llHouse.setVisibility(View.GONE);
-            llTitle.setVisibility(View.GONE);
-            llDetailTitle.setVisibility(View.VISIBLE);
-        } else {
-            llHouse.setVisibility(View.VISIBLE);
-            llTitle.setVisibility(View.VISIBLE);
-            llDetailTitle.setVisibility(View.GONE);
-        }
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     private void initHouseData() {
@@ -308,9 +240,6 @@ public class DetailActivity extends PermissionActivity {
         rvProblem.setLayoutManager(new GridLayoutManager(this, 3));
 
         problemAdapter = new ProblemAdapter();
-        if (!TextUtils.isEmpty(typeStr) && qData != null) {
-            problemAdapter.setDatas(qData.getQuestionaireArr());
-        }
         rvProblem.setAdapter(problemAdapter);
     }
 
@@ -357,7 +286,7 @@ public class DetailActivity extends PermissionActivity {
                 if (view instanceof ImageView) {
                     ArrayList<String> urls = new ArrayList<String>();
                     urls.add(imgUriList.get(position) + "");
-                    new PhotoPagerUtils.Builder(DetailActivity.this)
+                    new PhotoPagerUtils.Builder(DetailPointActivity.this)
                             .setBigImageUrls(urls)
                             .setBigBitmap(((ImageView) view).getDrawable())
                             .setSavaImage(true)
@@ -372,7 +301,6 @@ public class DetailActivity extends PermissionActivity {
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
-//        mBaiduMap.hideSDKLayer();
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.NORMAL, true, null));
         BDMapUtils.setMapViewListener(new LocationListener());
@@ -389,7 +317,7 @@ public class DetailActivity extends PermissionActivity {
             public void onClick(View view) {
                 if (uploadIdList.size() < 9) {
                     ImgUploadHelper.showUserAvatarUploadDialog(
-                            DetailActivity.this, imgListener, 9 - uploadIdList.size());
+                            DetailPointActivity.this, imgListener, 9 - uploadIdList.size());
                 } else {
                     showToast(R.string.detail_img_limit);
                 }
@@ -465,7 +393,7 @@ public class DetailActivity extends PermissionActivity {
                     problemAdapter.setDatas(data.getQuestionaireArr());
                     clearData();
                 } else if (data != null && data.getCode() == 1002) {
-                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    startActivity(new Intent(DetailPointActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     showToast(R.string.get_question_empty);
@@ -502,7 +430,7 @@ public class DetailActivity extends PermissionActivity {
 //        final String imgPath;
 //
 //        if (!isTakePhoto) {
-//            imgPath = UriUtil.getPath(DetailActivity.this, uri);
+//            imgPath = UriUtil.getPath(DetailPointActivity.this, uri);
 //        } else {
 //            imgPath = path;
 //        }
@@ -527,7 +455,7 @@ public class DetailActivity extends PermissionActivity {
                         if (data != null) {
 
                             if (data.getCode() == 1002) {
-                                startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                                startActivity(new Intent(DetailPointActivity.this, LoginActivity.class));
                                 finish();
                             }
 
@@ -553,8 +481,8 @@ public class DetailActivity extends PermissionActivity {
 
                         //图片路径不为空，继续上传剩余图片
                         if (selectUriList.size() > 0) {
-                            ImgUploadHelper.compressImage(DetailActivity.this,
-                                    UriUtil.getPath(DetailActivity.this,
+                            ImgUploadHelper.compressImage(DetailPointActivity.this,
+                                    UriUtil.getPath(DetailPointActivity.this,
                                             selectUriList.get(0)), isTakePhoto);
                         }
                     }
@@ -630,7 +558,7 @@ public class DetailActivity extends PermissionActivity {
         jsonObject.addProperty("area", BDMapUtils.getLocation().getAddrStr());
         jsonObject.addProperty("webFileids", s);
 
-        if (isSign && !TextUtils.isEmpty(houseId)) {
+        if (!TextUtils.isEmpty(houseId)) {
             jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
             jsonObject.addProperty("householdName", tvPUsername.getText().toString());
             jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
@@ -643,8 +571,7 @@ public class DetailActivity extends PermissionActivity {
         RequestParams requestParams = new RequestParams(reportUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
-        requestParams.addQueryStringParameter("recordId", recordId);
-        if (isSign && !TextUtils.isEmpty(houseId)) {
+        if (!TextUtils.isEmpty(houseId)) {
             requestParams.addParameter("point", true);
         }
 
@@ -655,13 +582,9 @@ public class DetailActivity extends PermissionActivity {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
                     showToast(R.string.detail_commit_success);
-                    if (isSign) {
-                        finish();
-                    } else {
-                        clearData();
-                    }
+                    finish();
                 } else if (data != null && data.getCode() == 1002) {
-                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    startActivity(new Intent(DetailPointActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     showToast(R.string.detail_commit_fail);
@@ -671,63 +594,6 @@ public class DetailActivity extends PermissionActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 showToast(R.string.detail_commit_fail);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                cancelLoadingDialog();
-            }
-        });
-    }
-
-    private void finishPatrol() {
-
-        if (BDMapUtils.getLocation() == null) {
-            showToast(R.string.map_init_ing);
-            return;
-        }
-
-        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
-            showToast(R.string.map_init_fail);
-            return;
-        }
-
-        showLoadingDialog();
-
-        UploadLocationListBean.LocationBean bean = new UploadLocationListBean.LocationBean();
-        bean.setLatitude(BDMapUtils.getLocation().getLatitude() + "");
-        bean.setLongitude(BDMapUtils.getLocation().getLongitude() + "");
-        locationList.add(bean);
-
-        RequestParams requestParams = new RequestParams(endUrl);
-        requestParams.addQueryStringParameter("recordId", recordId);
-        requestParams.addQueryStringParameter("data", gson.toJson(locationList));
-        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
-
-        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                ReportBean data = gson.fromJson(result, ReportBean.class);
-                if (data != null && data.isResult()) {
-                    showToast(R.string.detail_finish_success);
-                    finishPatrolSetting();
-                    finish();
-                } else if (data != null && data.getCode() == 1002) {
-                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    showToast(R.string.detail_finish_fail);
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
             }
 
             @Override
@@ -783,8 +649,8 @@ public class DetailActivity extends PermissionActivity {
                 return;
             }
             selectUriList = list;
-            ImgUploadHelper.compressImage(DetailActivity.this,
-                    UriUtil.getPath(DetailActivity.this, list.get(0)), isTakePhoto);
+            ImgUploadHelper.compressImage(DetailPointActivity.this,
+                    UriUtil.getPath(DetailPointActivity.this, list.get(0)), isTakePhoto);
         }
     };
 

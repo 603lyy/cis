@@ -138,7 +138,7 @@ public class TurnActivity extends PermissionActivity {
                 TypeBean data = gson.fromJson(result, TypeBean.class);
                 if (data != null && data.isResult()) {
 //                    getQuestion(data);
-                    Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
+                    Intent intent = new Intent(TurnActivity.this, DetailPointActivity.class);
                     intent.putExtra("type", gson.toJson(data));
                     intent.putExtra("sign", true);
                     intent.putExtra("houseId", houseId);

@@ -125,7 +125,8 @@
             android:name=".activity.ReportRecordActivity"
             android:launchMode="singleTask" />
         <activity android:name=".activity.HandleActivity" />
-        <activity android:name=".activity.HandleDetailActivity"></activity>
+        <activity android:name=".activity.HandleDetailActivity" />
+        <activity android:name=".activity.DetailPointActivity"></activity>
     </application>
 
 </manifest>
