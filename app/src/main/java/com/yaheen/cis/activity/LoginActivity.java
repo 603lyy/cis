@@ -31,6 +31,7 @@ import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
+import com.yaheen.cis.util.version.VersionUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -73,6 +74,8 @@ public class LoginActivity extends PermissionActivity {
 
         setTitleContent(R.string.login_title);
         initView();
+
+        VersionUtils.checkVersion(getApplicationContext());
 
         llRPsd.setOnClickListener(new View.OnClickListener() {
             @Override
