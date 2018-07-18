@@ -1,11 +1,16 @@
 package com.yaheen.cis.util.version;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 
 import com.google.gson.Gson;
 import com.yaheen.cis.entity.VersionBean;
+import com.yaheen.cis.util.DialogUtils;
+import com.yaheen.cis.util.dialog.DialogCallback;
+import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -30,20 +35,20 @@ public class VersionUtils {
                 Gson g = new Gson();
                 final VersionBean bean = g.fromJson(result, VersionBean.class);
                 if (bean.getVersion() > version) {
-//                    DialogUtils.showDialog(context, "有新版本更新，请点击确定跳转至浏览器下载最新安装包", new DialogCallback() {
-//                        @Override
-//                        public void callback() {
-//                            Intent intent = new Intent();
-//                            intent.setAction(Intent.ACTION_VIEW);
-//                            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-//                            intent.setData(Uri.parse(bean.getUrl()));
-//                            context.startActivity(intent);
-//                        }
-//                    }, new IDialogCancelCallback() {
-//                        @Override
-//                        public void cancelCallback() {
-//                        }
-//                    });
+                    DialogUtils.showDialog(context, "有新版本更新，请点击确定跳转至浏览器下载最新安装包", new DialogCallback() {
+                        @Override
+                        public void callback() {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                            intent.setData(Uri.parse(bean.getUrl()));
+                            context.startActivity(intent);
+                        }
+                    }, new IDialogCancelCallback() {
+                        @Override
+                        public void cancelCallback() {
+                        }
+                    });
                 }
             }
 

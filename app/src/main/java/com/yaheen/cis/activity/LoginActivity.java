@@ -75,7 +75,7 @@ public class LoginActivity extends PermissionActivity {
         setTitleContent(R.string.login_title);
         initView();
 
-        VersionUtils.checkVersion(getApplicationContext());
+        VersionUtils.checkVersion(LoginActivity.this);
 
         llRPsd.setOnClickListener(new View.OnClickListener() {
             @Override
