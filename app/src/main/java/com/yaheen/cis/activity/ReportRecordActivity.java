@@ -16,10 +16,12 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.RecordAdapter;
 import com.yaheen.cis.adapter.ReportRecordAdapter;
+import com.yaheen.cis.adapter.ReportTypeAdapter;
 import com.yaheen.cis.adapter.ReportUrgencyAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
 import com.yaheen.cis.entity.RecordBean;
 import com.yaheen.cis.entity.ReportRecordBean;
+import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 
@@ -30,7 +32,9 @@ public class ReportRecordActivity extends PermissionActivity {
 
     private String recordUrl = baseUrl + "/eapi/findEventListByEmergency.do";
 
-    private RecyclerView rvUrgency, rvRecord;
+    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
+
+    private RecyclerView rvUrgency, rvRecord, rvType;
 
     private LinearLayout llBack;
 
@@ -39,6 +43,8 @@ public class ReportRecordActivity extends PermissionActivity {
     private ReportUrgencyAdapter urgencyAdapter;
 
     private ReportRecordAdapter recordAdapter;
+
+    private ReportTypeAdapter typeAdapter;
 
     private boolean isFirst = true;
 
@@ -51,12 +57,15 @@ public class ReportRecordActivity extends PermissionActivity {
         cbTrue = findViewById(R.id.cb_report_is_handle);
         rvUrgency = findViewById(R.id.rv_urgency);
         rvRecord = findViewById(R.id.rv_record);
+        rvType = findViewById(R.id.rv_type);
         llBack = findViewById(R.id.back);
 
         initView();
         initUrgency();
+        initType();
         initRecordList();
         getRecordList();
+        getTypeList();
     }
 
     private void initView() {
@@ -118,6 +127,34 @@ public class ReportRecordActivity extends PermissionActivity {
         });
     }
 
+    private void initType() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvType.setLayoutManager(layoutManager);
+
+        typeAdapter = new ReportTypeAdapter();
+        rvType.setAdapter(typeAdapter);
+
+        typeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                if (typeAdapter.getData().get(position).isSelect()) {
+//                    typeAdapter.getData().get(position).setSelect(false);
+//                    if (TextUtils.isEmpty(typeAdapter.getUrgencyStr())) {
+//                        typeAdapter.getData().get(position).setSelect(true);
+//                    } else {
+//                        typeAdapter.notifyDataSetChanged();
+//                        getRecordList();
+//                    }
+//                } else {
+//                    typeAdapter.getData().get(position).setSelect(true);
+//                    typeAdapter.notifyDataSetChanged();
+//                    getRecordList();
+//                }
+            }
+        });
+    }
+
     private void initRecordList() {
 
         recordAdapter = new ReportRecordAdapter();
@@ -150,6 +187,40 @@ public class ReportRecordActivity extends PermissionActivity {
                         startActivity(intent);
                     }
                 }
+            }
+        });
+    }
+
+    private void getTypeList() {
+        RequestParams requestParams = new RequestParams(typeUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                TypeBean data = gson.fromJson(result, TypeBean.class);
+                if (data != null && data.isResult()) {
+                    typeAdapter.setDatas(data.getTypeArr());
+                    typeAdapter.notifyDataSetChanged();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(ReportRecordActivity.this, LoginActivity.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }
