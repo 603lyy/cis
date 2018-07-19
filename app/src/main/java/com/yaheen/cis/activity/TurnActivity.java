@@ -48,7 +48,9 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
 
-    private TextView tvPatrol, tvRecord, tvFetch, tvUpload;
+    private TextView tvPatrol, tvRecord, tvUpload;
+
+    private TextView tvFetch;
 
     private LinearLayout llBack;
 
@@ -60,10 +62,10 @@ public class TurnActivity extends PermissionActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_turn);
+        setContentView(R.layout.activity_turn_2);
 
         llBack = findViewById(R.id.back);
-        tvFetch = findViewById(R.id.tv_fetch);
+//        tvFetch = findViewById(R.id.tv_fetch);
         tvPatrol = findViewById(R.id.tv_patrol);
         tvRecord = findViewById(R.id.tv_record);
         tvUpload = findViewById(R.id.tv_upload);
@@ -84,12 +86,12 @@ public class TurnActivity extends PermissionActivity {
             }
         });
 
-        tvFetch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFetch();
-            }
-        });
+//        tvFetch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openFetch();
+//            }
+//        });
 
         tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override

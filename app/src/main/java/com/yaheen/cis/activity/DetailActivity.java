@@ -28,7 +28,9 @@ import com.google.gson.JsonObject;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.FetchActivity;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
@@ -65,9 +67,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DetailActivity extends PermissionActivity {
+public class DetailActivity extends FetchActivity {
 
-    private TextView tvLocation, tvTime, tvCommit, tvFinish;
+    private TextView tvLocation, tvTime, tvCommit, tvFinish, tvFetch;
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
 
@@ -231,6 +233,7 @@ public class DetailActivity extends PermissionActivity {
 
     private void initView() {
         tvTime = findViewById(R.id.tv_time);
+        tvFetch = findViewById(R.id.tv_fetch);
         etDescribe = findViewById(R.id.et_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
 
@@ -240,6 +243,13 @@ public class DetailActivity extends PermissionActivity {
                 if (BDMapUtils.getLocation() != null) {
                     tvLocation.setText(BDMapUtils.getLocation().getAddrStr());
                 }
+            }
+        });
+
+        tvFetch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFetch();
             }
         });
 
@@ -792,6 +802,16 @@ public class DetailActivity extends PermissionActivity {
     public void compress(Uri uri, String imgPath, boolean isTakePhoto) {
         showLoadingDialog();
         upLoadImg(uri, imgPath, isTakePhoto);
+    }
+
+    @Override
+    public void getHouseId(String type, String houseId) {
+        super.getHouseId(type, houseId);
+        Intent intent = new Intent(DetailActivity.this, DetailPointActivity.class);
+        intent.putExtra("sign", true);
+        intent.putExtra("houseId", houseId);
+        intent.putExtra("type", type);
+        startActivity(intent);
     }
 
     //上报成功后重置数据

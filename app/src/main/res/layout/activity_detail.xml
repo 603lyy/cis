@@ -27,13 +27,11 @@
                 android:paddingRight="20dp">
 
                 <TextView
-                    android:id="@+id/tv_sign"
+                    android:id="@+id/tv_fetch"
                     style="@style/Detail_Toolbar_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_orange"
-                    android:text="@string/detail_sign"
-                    android:visibility="invisible" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_scan" />
 
                 <TextView
                     android:id="@+id/tv_time"
