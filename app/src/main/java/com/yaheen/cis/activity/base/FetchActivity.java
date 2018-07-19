@@ -37,6 +37,8 @@ public class FetchActivity extends PermissionActivity {
 
     private String houseId;
 
+    protected boolean isFetch = false;
+
     public void openFetch() {
         showLoadingDialog();
         Intent intent = new Intent(getApplication(), CaptureActivity.class);
@@ -193,6 +195,7 @@ public class FetchActivity extends PermissionActivity {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
                     if (result != null) {
                         showLoadingDialog();
+                        isFetch = true;
                         check(result);
                     } else {
                         cancelLoadingDialog();
@@ -210,5 +213,14 @@ public class FetchActivity extends PermissionActivity {
 
     public void getHouseId(String type, String houseId) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isFetch) {
+            cancelLoadingDialog();
+        }
+        isFetch = false;
     }
 }
