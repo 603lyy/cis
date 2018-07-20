@@ -3,26 +3,26 @@ package com.yaheen.cis.entity;
 public class VersionBean {
 
     /**
-     * version : 30
-     * url : http://192.168.250.103:8080/loles/apk/online.apk
+     * SHUICHUNversion : 1011
+     * SHUICHUNurl : https://www.yaheen.com/app/zongzhi.apk
      */
 
-    private int version;
-    private String url;
+    private int SHUICHUNversion;
+    private String SHUICHUNurl;
 
     public int getVersion() {
-        return version;
+        return SHUICHUNversion;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void setVersion(int SHUICHUNversion) {
+        this.SHUICHUNversion = SHUICHUNversion;
     }
 
     public String getUrl() {
-        return url;
+        return SHUICHUNurl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrl(String SHUICHUNurl) {
+        this.SHUICHUNurl = SHUICHUNurl;
     }
 }

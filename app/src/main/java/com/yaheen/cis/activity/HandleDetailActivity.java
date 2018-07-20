@@ -242,7 +242,7 @@ public class HandleDetailActivity extends MapActivity {
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());
 
-        if (TextUtils.isEmpty(data.getInspectionSite()) || TextUtils.isEmpty(data.getHouseholdName())) {
+        if (TextUtils.isEmpty(data.getInspectionSite())) {
             llHouse.setVisibility(View.GONE);
         } else {
             //门牌信息
