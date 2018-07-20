@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dp"
+    android:layout_width="wrap_content"
     android:layout_height="35dp"
     android:orientation="horizontal">
 
@@ -8,15 +8,8 @@
         android:id="@+id/cb_type"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:textSize="16dp"
+        android:textSize="14dp"
         style="@style/CheckBoxPrimary"
+        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"/>
-
-    <ImageView
-        android:id="@+id/iv_type"
-        android:layout_width="24dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="3dp"
-        android:layout_marginBottom="1dp"
-        android:layout_height="22dp" />
 </LinearLayout>

@@ -135,22 +135,29 @@ public class ReportRecordActivity extends PermissionActivity {
         typeAdapter = new ReportTypeAdapter();
         rvType.setAdapter(typeAdapter);
 
+        typeAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof CheckBox) {
+                    if (typeAdapter.getData().get(position).isSelected()) {
+                        typeAdapter.getData().get(position).setSelected(false);
+                        if (TextUtils.isEmpty(typeAdapter.getTypeIdStr())) {
+                            typeAdapter.getData().get(position).setSelected(true);
+                        } else {
+                            getRecordList();
+                        }
+                    } else {
+                        typeAdapter.getData().get(position).setSelected(true);
+                        getRecordList();
+                    }
+                    typeAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         typeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                if (typeAdapter.getData().get(position).isSelect()) {
-//                    typeAdapter.getData().get(position).setSelect(false);
-//                    if (TextUtils.isEmpty(typeAdapter.getUrgencyStr())) {
-//                        typeAdapter.getData().get(position).setSelect(true);
-//                    } else {
-//                        typeAdapter.notifyDataSetChanged();
-//                        getRecordList();
-//                    }
-//                } else {
-//                    typeAdapter.getData().get(position).setSelect(true);
-//                    typeAdapter.notifyDataSetChanged();
-//                    getRecordList();
-//                }
             }
         });
     }
@@ -249,6 +256,7 @@ public class ReportRecordActivity extends PermissionActivity {
         RequestParams requestParams = new RequestParams(recordUrl);
         requestParams.addQueryStringParameter("icons", urgencyAdapter.getUrgencyStr());
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("types", typeAdapter.getTypeIdStr());
         requestParams.addQueryStringParameter("flag", flag);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {

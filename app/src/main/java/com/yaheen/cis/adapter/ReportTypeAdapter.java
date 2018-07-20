@@ -1,6 +1,7 @@
 package com.yaheen.cis.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.widget.CheckBox;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -12,12 +13,10 @@ import java.util.List;
 
 public class ReportTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, BaseViewHolder> {
 
-    private CheckBox checkBox;
-
     private int changeTime = 0;
 
     public ReportTypeAdapter() {
-        super(R.layout.item_patrol_type);
+        super(R.layout.item_record_type);
     }
 
     public void setDatas(@Nullable List<TypeBean.TypeArrBean> data) {
@@ -26,7 +25,6 @@ public class ReportTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, TypeBean.TypeArrBean item) {
-        checkBox = helper.getView(R.id.cb_type);
         helper.addOnClickListener(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());
 
@@ -36,27 +34,23 @@ public class ReportTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         }
 
         if (item.isSelected()) {
-            checkBox.setChecked(true);
+            helper.setChecked(R.id.cb_type,true);
         } else {
-            checkBox.setChecked(false);
+            helper.setChecked(R.id.cb_type,false);
         }
 
-        if (item.getName().equals("国土")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
-        } else if (item.getName().equals("禁毒")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
-        } else {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
-        }
     }
 
     //返回选中问题的ID字符串
-    public String getTypeId() {
+    public String getTypeIdStr() {
         String str = "";
-
         for (int i = 0; i < mData.size(); i++) {
             if (mData.get(i).isSelected()) {
-                return mData.get(i).getId();
+                if (TextUtils.isEmpty(str)) {
+                    str = mData.get(i).getId();
+                } else {
+                    str = str + "," + mData.get(i).getId();
+                }
             }
         }
         return str;

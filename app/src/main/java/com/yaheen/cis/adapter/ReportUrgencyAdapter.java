@@ -66,7 +66,6 @@ public class ReportUrgencyAdapter extends BaseQuickAdapter<UrgencyBean, BaseView
     //返回选中问题的ID字符串
     public String getUrgencyStr() {
         String str = "";
-
         for (int i = 0; i < mData.size(); i++) {
             if (mData.get(i).isSelect()) {
                 if (TextUtils.isEmpty(str)) {
