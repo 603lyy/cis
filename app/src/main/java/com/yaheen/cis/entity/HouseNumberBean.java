@@ -4,10 +4,11 @@ import java.util.List;
 
 public class HouseNumberBean {
 
+
     /**
      * result : true
      * msg : save success
-     * entity : [{"modifiedUserName":"","createUserId":"","groupPropertyNameList":[],"deleteUnitId":"","operatedDate":"","createUserName":"","operatedUnitCode":"","type":"餐饮","operatedUnitName":"","operateRelationMap":{},"operateRelation":{},"criterionAlias":"","modifiedUserCode":"","deleteUserCode":"","id":"40284700648301a9016483067628000a","longModifiedDate":0,"longitude":0,"operateValue":{},"longDeleteDate":0,"operatedName":"","businessScope":"法大师傅撒","defCriterion":null,"createUnitCode":"","modifiedUnitCode":"","coverimage":"","filterMap":{},"phone":"发士大夫地方","excludeCopyValueFieldNames":["operatedUnitCode","operatedUnitName","operatedUnitId","createUnitCode","createUnitName","createUnitId","modifiedUnitCode","modifiedUnitName","modifiedUnitId","deleteUnitCode","deleteUnitName","deleteUnitId","longOperatedDate","longCreateDate","longModifiedDate","longDeleteDate","operatedName","operatedUserCode","createName","createUserCode","modifiedName","modifiedUserCode","deleteName","deleteUserCode","operatedUserName","operatedUserId","operatedDate","createUserName","createUserId","modifiedUserName","modifiedUserId","deleteUserName","deleteUserId","createDate","modifiedDate","deleteDate","delete","criteriaLogicExpression","operateRelationMap","operateValue","defCriterion","onlyCopyValueFieldNames","excludeCopyValueFieldNames","criterionAlias","criterionOrders","filterMap","groupPropertyNameList","modelDTOSearchOnField","dealRemaind","criteriaConfig","interrupt"],"modifiedDate":"","name":"撒旦飞洒地方","criteriaLogicExpression":"","createName":"","modifiedUnitId":"","status":"","createUnitId":"","modifiedName":"","createUnitName":"","flag":"","houseId":"2c92861663b168390163e9ee7b1c0888","operatedUserName":"","longCreateDate":0,"latitude":0,"criterionOrders":[],"criteriaConfig":null,"delete":false,"modelDTOSearchOnField":false,"operatedUserId":"","modifiedUnitName":"","deleteUnitName":"","deleteUserId":"","createDate":"","deleteDate":"","address":"南万镇长田分水村1号","createUserCode":"","userName":"罗洪达","operatedUnitId":"","userId":"2c92861663b168390163e9cee1a60833","dealRemaind":true,"fireowner":"顺丰到付","longOperatedDate":0,"deleteUnitCode":"","modifiedUserId":"","operatedUserCode":"","storephotos":"","onlyCopyValueFieldNames":[],"time":"飞洒发的","deleteName":"","deleteUserName":""}]
+     * entity : [{"modifiedUserName":"","createUserId":"","groupPropertyNameList":[],"deleteUnitId":"","operatedDate":"","createUserName":"","operatedUnitCode":"","type":"家私","operatedUnitName":"","operateRelationMap":{},"operateRelation":{},"criterionAlias":"","modifiedUserCode":"","deleteUserCode":"","id":"00000000642be11d0164315227560065","longModifiedDate":0,"longitude":0,"operateValue":{},"longDeleteDate":0,"operatedName":"","businessScope":"家私","defCriterion":null,"createUnitCode":"","modifiedUnitCode":"","houseOwner":"0000000064a8e8450164b596ccf41023","coverimage":"","filterMap":{},"phone":"13729537242","excludeCopyValueFieldNames":["operatedUnitCode","operatedUnitName","operatedUnitId","createUnitCode","createUnitName","createUnitId","modifiedUnitCode","modifiedUnitName","modifiedUnitId","deleteUnitCode","deleteUnitName","deleteUnitId","longOperatedDate","longCreateDate","longModifiedDate","longDeleteDate","operatedName","operatedUserCode","createName","createUserCode","modifiedName","modifiedUserCode","deleteName","deleteUserCode","operatedUserName","operatedUserId","operatedDate","createUserName","createUserId","modifiedUserName","modifiedUserId","deleteUserName","deleteUserId","createDate","modifiedDate","deleteDate","delete","criteriaLogicExpression","operateRelationMap","operateValue","defCriterion","onlyCopyValueFieldNames","excludeCopyValueFieldNames","criterionAlias","criterionOrders","filterMap","groupPropertyNameList","modelDTOSearchOnField","dealRemaind","criteriaConfig","interrupt"],"modifiedDate":"","name":"营发傢俬门市","criteriaLogicExpression":"","createName":"","modifiedUnitId":"","status":"","createUnitId":"","modifiedName":"","createUnitName":"","flag":"","houseId":"0000000063ec9ae30163f405265f01dc","operatedUserName":"","longCreateDate":0,"latitude":0,"criterionOrders":[],"criteriaConfig":null,"delete":false,"modelDTOSearchOnField":false,"operatedUserId":"","houseOwnerName":"朱先生","modifiedUnitName":"","deleteUnitName":"","deleteUserId":"","createDate":"","deleteDate":"","address":"河口镇营下一街56号","createUserCode":"","userName":"张木浪","operatedUnitId":"","userId":"0000000064a8e8450164b644451511f9","dealRemaind":true,"fireowner":"李先生","longOperatedDate":0,"deleteUnitCode":"","modifiedUserId":"","operatedUserCode":"","storephotos":"","onlyCopyValueFieldNames":[],"time":"10:00-18:00","deleteName":"","deleteUserName":""}]
      */
 
     private boolean result;
@@ -47,29 +48,30 @@ public class HouseNumberBean {
          * operatedDate :
          * createUserName :
          * operatedUnitCode :
-         * type : 餐饮
+         * type : 家私
          * operatedUnitName :
          * operateRelationMap : {}
          * operateRelation : {}
          * criterionAlias :
          * modifiedUserCode :
          * deleteUserCode :
-         * id : 40284700648301a9016483067628000a
+         * id : 00000000642be11d0164315227560065
          * longModifiedDate : 0
          * longitude : 0
          * operateValue : {}
          * longDeleteDate : 0
          * operatedName :
-         * businessScope : 法大师傅撒
+         * businessScope : 家私
          * defCriterion : null
          * createUnitCode :
          * modifiedUnitCode :
+         * houseOwner : 0000000064a8e8450164b596ccf41023
          * coverimage :
          * filterMap : {}
-         * phone : 发士大夫地方
+         * phone : 13729537242
          * excludeCopyValueFieldNames : ["operatedUnitCode","operatedUnitName","operatedUnitId","createUnitCode","createUnitName","createUnitId","modifiedUnitCode","modifiedUnitName","modifiedUnitId","deleteUnitCode","deleteUnitName","deleteUnitId","longOperatedDate","longCreateDate","longModifiedDate","longDeleteDate","operatedName","operatedUserCode","createName","createUserCode","modifiedName","modifiedUserCode","deleteName","deleteUserCode","operatedUserName","operatedUserId","operatedDate","createUserName","createUserId","modifiedUserName","modifiedUserId","deleteUserName","deleteUserId","createDate","modifiedDate","deleteDate","delete","criteriaLogicExpression","operateRelationMap","operateValue","defCriterion","onlyCopyValueFieldNames","excludeCopyValueFieldNames","criterionAlias","criterionOrders","filterMap","groupPropertyNameList","modelDTOSearchOnField","dealRemaind","criteriaConfig","interrupt"]
          * modifiedDate :
-         * name : 撒旦飞洒地方
+         * name : 营发傢俬门市
          * criteriaLogicExpression :
          * createName :
          * modifiedUnitId :
@@ -78,7 +80,7 @@ public class HouseNumberBean {
          * modifiedName :
          * createUnitName :
          * flag :
-         * houseId : 2c92861663b168390163e9ee7b1c0888
+         * houseId : 0000000063ec9ae30163f405265f01dc
          * operatedUserName :
          * longCreateDate : 0
          * latitude : 0
@@ -87,25 +89,26 @@ public class HouseNumberBean {
          * delete : false
          * modelDTOSearchOnField : false
          * operatedUserId :
+         * houseOwnerName : 朱先生
          * modifiedUnitName :
          * deleteUnitName :
          * deleteUserId :
          * createDate :
          * deleteDate :
-         * address : 南万镇长田分水村1号
+         * address : 河口镇营下一街56号
          * createUserCode :
-         * userName : 罗洪达
+         * userName : 张木浪
          * operatedUnitId :
-         * userId : 2c92861663b168390163e9cee1a60833
+         * userId : 0000000064a8e8450164b644451511f9
          * dealRemaind : true
-         * fireowner : 顺丰到付
+         * fireowner : 李先生
          * longOperatedDate : 0
          * deleteUnitCode :
          * modifiedUserId :
          * operatedUserCode :
          * storephotos :
          * onlyCopyValueFieldNames : []
-         * time : 飞洒发的
+         * time : 10:00-18:00
          * deleteName :
          * deleteUserName :
          */
@@ -133,6 +136,7 @@ public class HouseNumberBean {
         private Object defCriterion;
         private String createUnitCode;
         private String modifiedUnitCode;
+        private String houseOwner;
         private String coverimage;
         private FilterMapBean filterMap;
         private String phone;
@@ -154,6 +158,7 @@ public class HouseNumberBean {
         private boolean delete;
         private boolean modelDTOSearchOnField;
         private String operatedUserId;
+        private String houseOwnerName;
         private String modifiedUnitName;
         private String deleteUnitName;
         private String deleteUserId;
@@ -363,6 +368,14 @@ public class HouseNumberBean {
             this.modifiedUnitCode = modifiedUnitCode;
         }
 
+        public String getHouseOwner() {
+            return houseOwner;
+        }
+
+        public void setHouseOwner(String houseOwner) {
+            this.houseOwner = houseOwner;
+        }
+
         public String getCoverimage() {
             return coverimage;
         }
@@ -529,6 +542,14 @@ public class HouseNumberBean {
 
         public void setOperatedUserId(String operatedUserId) {
             this.operatedUserId = operatedUserId;
+        }
+
+        public String getHouseOwnerName() {
+            return houseOwnerName;
+        }
+
+        public void setHouseOwnerName(String houseOwnerName) {
+            this.houseOwnerName = houseOwnerName;
         }
 
         public String getModifiedUnitName() {

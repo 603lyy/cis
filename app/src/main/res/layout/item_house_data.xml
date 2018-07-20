@@ -35,6 +35,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginTop="10dp">
 
         <TextView
@@ -106,6 +107,26 @@
 
         <TextView
             android:id="@+id/tv_house_area"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/Detail_Title_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/detail_patrol_owner" />
+
+        <TextView
+            android:id="@+id/tv_house_owner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center" />

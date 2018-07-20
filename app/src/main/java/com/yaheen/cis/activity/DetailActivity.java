@@ -71,7 +71,7 @@ public class DetailActivity extends FetchActivity {
 
     private TextView tvLocation, tvTime, tvCommit, tvFinish, tvFetch;
 
-    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
+    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
 
     private EditText etDescribe;
 
@@ -249,7 +249,12 @@ public class DetailActivity extends FetchActivity {
         tvFetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFetch();
+//                openFetch();
+                Intent intent = new Intent(DetailActivity.this, DetailPointActivity.class);
+                intent.putExtra("sign", true);
+                intent.putExtra("houseId", houseId);
+                intent.putExtra("type", typeStr);
+                startActivity(intent);
             }
         });
 
@@ -280,6 +285,7 @@ public class DetailActivity extends FetchActivity {
         tvPLeader = findViewById(R.id.tv_house_leader);
         tvPPhone = findViewById(R.id.tv_house_phone);
         tvPTime = findViewById(R.id.tv_patrol_time);
+        tvOwner = findViewById(R.id.tv_house_owner);
         tvPArea = findViewById(R.id.tv_house_area);
     }
 
@@ -436,10 +442,11 @@ public class DetailActivity extends FetchActivity {
             public void onSuccess(String result) {
                 HouseNumberBean data = gson.fromJson(result, HouseNumberBean.class);
                 if (data != null && data.isResult() && data.getEntity().size() > 0) {
+                    tvPUsername.setText(data.getEntity().get(0).getHouseOwnerName());
                     tvPArea.setText(data.getEntity().get(0).getBusinessScope());
-                    tvPUsername.setText(data.getEntity().get(0).getUserName());
                     tvPLeader.setText(data.getEntity().get(0).getFireowner());
                     tvPAddress.setText(data.getEntity().get(0).getAddress());
+                    tvOwner.setText(data.getEntity().get(0).getUserName());
                     tvPPhone.setText(data.getEntity().get(0).getPhone());
                     tvPTime.setText(data.getEntity().get(0).getTime());
                 }

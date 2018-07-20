@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.baidu.location.BDLocation;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
@@ -107,6 +110,12 @@ public class PatrolSettingActivity extends BaseActivity {
                 }
             }
         });
+
+//        Glide.with(this)
+//                .load(R.drawable.dong)
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                .into(ivStart);
+
         return view;
     }
 

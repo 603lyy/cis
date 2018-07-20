@@ -68,7 +68,7 @@ public class DetailPointActivity extends PermissionActivity {
 
     private TextView tvLocation, tvCommit;
 
-    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
+    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
 
     private LinearLayout llBack;
 
@@ -98,7 +98,7 @@ public class DetailPointActivity extends PermissionActivity {
 
     private String reportUrl = baseUrl + "/eapi/report.do";
 
-    private String typeStr,  houseId;
+    private String typeStr, houseId;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
@@ -201,6 +201,7 @@ public class DetailPointActivity extends PermissionActivity {
         tvPAddress = findViewById(R.id.tv_patrol_address);
         tvPLeader = findViewById(R.id.tv_house_leader);
         tvPPhone = findViewById(R.id.tv_house_phone);
+        tvOwner = findViewById(R.id.tv_house_owner);
         tvPTime = findViewById(R.id.tv_patrol_time);
         tvPArea = findViewById(R.id.tv_house_area);
     }
@@ -346,18 +347,19 @@ public class DetailPointActivity extends PermissionActivity {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("houseNumberId", houseId);
-
         RequestParams params = new RequestParams("http://whn.020szsq.com:8088/merchants/getAllMechats.do");
+//        RequestParams params = new RequestParams("http://lyl.tunnel.echomod.cn/whnsubhekou/merchants/getAllMechats.do");
         params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 HouseNumberBean data = gson.fromJson(result, HouseNumberBean.class);
                 if (data != null && data.isResult() && data.getEntity().size() > 0) {
+                    tvPUsername.setText(data.getEntity().get(0).getHouseOwnerName());
                     tvPArea.setText(data.getEntity().get(0).getBusinessScope());
-                    tvPUsername.setText(data.getEntity().get(0).getUserName());
                     tvPLeader.setText(data.getEntity().get(0).getFireowner());
                     tvPAddress.setText(data.getEntity().get(0).getAddress());
+                    tvOwner.setText(data.getEntity().get(0).getUserName());
                     tvPPhone.setText(data.getEntity().get(0).getPhone());
                     tvPTime.setText(data.getEntity().get(0).getTime());
                 }
@@ -565,6 +567,7 @@ public class DetailPointActivity extends PermissionActivity {
             jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
             jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
             jsonObject.addProperty("businessHours", tvPTime.getText().toString());
+            jsonObject.addProperty("responsiblePerson", tvOwner.getText().toString());
         }
 
 
