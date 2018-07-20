@@ -528,10 +528,10 @@ public class DetailPointActivity extends PermissionActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(etDescribe.getText())) {
-            showToast(R.string.detail_describe_empty);
-            return;
-        }
+//        if (TextUtils.isEmpty(etDescribe.getText())) {
+//            showToast(R.string.detail_describe_empty);
+//            return;
+//        }
 
         if (TextUtils.isEmpty(urgencyAdapter.geUrgencyId())) {
             showToast(R.string.detail_urgency_empty);
