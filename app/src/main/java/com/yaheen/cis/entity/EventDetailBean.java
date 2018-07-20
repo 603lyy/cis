@@ -77,8 +77,17 @@ public class EventDetailBean {
         private String householdName;
         private String householdPhone;
         private String inspectionSite;
+        private String responsiblePerson;
         private List<QuestionnaireArrBean> questionnaireArr;
         private List<FileArrBean> fileArr;
+
+        public String getResponsiblePerson() {
+            return responsiblePerson;
+        }
+
+        public void setResponsiblePerson(String responsiblePerson) {
+            this.responsiblePerson = responsiblePerson;
+        }
 
         public String getType() {
             return type;

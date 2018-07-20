@@ -44,7 +44,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit, tvUsername;
 
-    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
+    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
 
     private LinearLayout llBack, llHouse;
 
@@ -144,6 +144,7 @@ public class HandleDetailActivity extends MapActivity {
         tvPAddress = findViewById(R.id.tv_patrol_address);
         tvPLeader = findViewById(R.id.tv_house_leader);
         tvPPhone = findViewById(R.id.tv_house_phone);
+        tvOwner = findViewById(R.id.tv_house_owner);
         tvPTime = findViewById(R.id.tv_patrol_time);
         tvPArea = findViewById(R.id.tv_house_area);
     }
@@ -245,6 +246,7 @@ public class HandleDetailActivity extends MapActivity {
             llHouse.setVisibility(View.GONE);
         } else {
             //门牌信息
+            tvOwner.setText(data.getResponsiblePerson());
             tvPUsername.setText(data.getHouseholdName());
             tvPAddress.setText(data.getInspectionSite());
             tvPArea.setText(data.getScopeOfOperation());

@@ -249,12 +249,12 @@ public class DetailActivity extends FetchActivity {
         tvFetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                openFetch();
-                Intent intent = new Intent(DetailActivity.this, DetailPointActivity.class);
-                intent.putExtra("sign", true);
-                intent.putExtra("houseId", houseId);
-                intent.putExtra("type", typeStr);
-                startActivity(intent);
+                openFetch();
+//                Intent intent = new Intent(DetailActivity.this, DetailPointActivity.class);
+//                intent.putExtra("sign", true);
+//                intent.putExtra("houseId", houseId);
+//                intent.putExtra("type", typeStr);
+//                startActivity(intent);
             }
         });
 
