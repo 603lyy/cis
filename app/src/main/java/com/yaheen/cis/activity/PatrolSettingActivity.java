@@ -77,7 +77,7 @@ public class PatrolSettingActivity extends BaseActivity {
 
         settingAdapter = new PatrolSettingAdapter();
         settingAdapter.addHeaderView(getHeaderView());
-        settingAdapter.addFooterView(getFooterView());
+//        settingAdapter.addFooterView(getFooterView());
         rvSetting.setAdapter(settingAdapter);
 
         settingAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {

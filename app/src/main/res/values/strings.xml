@@ -26,10 +26,10 @@
     <string name="setting_start_fail">开始失败,请重新点击开始</string>
     <string name="setting_start_select">请选择巡查类型</string>
 
-    <string name="turn_patrol_text">范围巡查</string>
-    <string name="turn_record_text">轨迹记录</string>
+    <string name="turn_patrol_text">巡查</string>
+    <string name="turn_record_text">轨迹</string>
     <string name="turn_fetch_text">定点巡查</string>
-    <string name="turn_upload_text">巡查记录</string>
+    <string name="turn_upload_text">事件</string>
     <string name="turn_id_empty">门牌不存在</string>
 
     <string name="detail_finish">结束</string>
@@ -55,11 +55,11 @@
     <string name="detail_img_limit">最多只能选择9张图片</string>
     <string name="detail_patrol_address">巡查地点：</string>
     <string name="detail_patrol_username">户主名称：</string>
-    <string name="detail_patrol_owner">责任人名称：</string>
+    <string name="detail_patrol_owner">店名：</string>
     <string name="detail_patrol_time">营业时间：</string>
     <string name="detail_patrol_phone">联系电话：</string>
     <string name="detail_patrol_area">经营范围：</string>
-    <string name="detail_patrol_leader">消防负责人：</string>
+    <string name="detail_patrol_leader">检查负责人：</string>
 
     <string name="event_patrol_username">巡查人员：</string>
 

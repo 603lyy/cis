@@ -47,10 +47,14 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
             checkBox.setChecked(false);
         }
 
-        if (item.getName().equals("国土")) {
+        if (item.getName().equals("“两违”行为")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
         } else if (item.getName().equals("禁毒")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
+        }  else if (item.getName().equals("环保")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_protection);
+        }   else if (item.getName().equals("环境卫生")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_weisheng);
         } else {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
         }
