@@ -1,6 +1,9 @@
 package com.yaheen.cis.activity.base;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -25,17 +28,17 @@ public class BaseActivity extends Activity implements CompressImg {
     //标题栏title内容
     private TextView tvContent;
 
-    private LinearLayout llBack;
+    public LinearLayout llBack, llRightBtn;
 
     protected Gson gson = new Gson();
 
-//    protected String baseUrl = "http://lyy.tunnel.echomod.cn/crs";
+    protected String baseUrl = "http://lyy.tunnel.echomod.cn/crs";
 
 //    protected String baseUrl = "http://192.168.199.113:8080/crs";
 
 //    protected String baseUrl = "http://tlep2.yaheen.com";
 
-    protected String baseUrl = "http://47.106.72.58:9180";
+//    protected String baseUrl = "http://47.106.72.58:9180";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,17 @@ public class BaseActivity extends Activity implements CompressImg {
                 llBack.setVisibility(View.VISIBLE);
             } else {
                 llBack.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    protected void setRightBtnVisible(boolean visible) {
+        llRightBtn = findViewById(R.id.right_btn);
+        if (llRightBtn != null) {
+            if (visible) {
+                llRightBtn.setVisibility(View.VISIBLE);
+            } else {
+                llRightBtn.setVisibility(View.GONE);
             }
         }
     }
@@ -100,6 +114,17 @@ public class BaseActivity extends Activity implements CompressImg {
             return;
         }
         baseUrl = "http://" + ip + "8080/crs";
+    }
+
+    public void copyToClipboard(String text, String toast) {
+        //获取剪贴板管理器：
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建普通字符型ClipData
+        ClipData mClipData = ClipData.newPlainText("text", text);
+        // 将ClipData内容放到系统剪贴板里。
+        cm.setPrimaryClip(mClipData);
+
+        showToast(toast);
     }
 
     @Override

@@ -42,7 +42,7 @@ import java.util.List;
 
 public class HandleDetailActivity extends MapActivity {
 
-    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit,tvUsername;
+    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit, tvUsername;
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader;
 
@@ -65,6 +65,8 @@ public class HandleDetailActivity extends MapActivity {
 
     private String eventUrl = baseUrl + "/eapi/eventDetail.do";
 
+    private String copyUrl = baseUrl + "/guidanceCenter/detailed.do?eventId=";
+
     private String eventId;
 
     //判断地图是否是第一次定位
@@ -77,6 +79,7 @@ public class HandleDetailActivity extends MapActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_detail);
+        setRightBtnVisible(true);
 
         handle = getIntent().getBooleanExtra("handle", true);
         eventId = getIntent().getStringExtra("eventId");
@@ -125,6 +128,15 @@ public class HandleDetailActivity extends MapActivity {
                 onBackPressed();
             }
         });
+
+        if (llRightBtn != null) {
+            llRightBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    copyToClipboard(copyUrl + eventId, getString(R.string.report_share));
+                }
+            });
+        }
     }
 
     private void initHouseData() {
@@ -305,7 +317,7 @@ public class HandleDetailActivity extends MapActivity {
         mBaiduMap.setMyLocationEnabled(true);
         mapView.onResume();
 
-        if(isFirstLoc){
+        if (isFirstLoc) {
             showLoadingDialog();
             getEventInfo();
         }

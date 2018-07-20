@@ -41,15 +41,26 @@
     <LinearLayout
         android:id="@+id/right_btn"
         android:layout_width="35dp"
-        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
-        android:layout_height="match_parent">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:src="@drawable/setting" />
+            android:src="@drawable/setting"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="37dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="分享"
+            android:textColor="#ffffff"
+            android:textSize="16dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>
