@@ -7,22 +7,25 @@ public class VersionBean {
      * SHUICHUNurl : https://www.yaheen.com/app/zongzhi.apk
      */
 
-    private int SHUICHUNversion;
-    private String SHUICHUNurl;
+//    private int SHUICHUNversion;
+//    private String SHUICHUNurl;
+
+    private int HEKOUversion;
+    private String HEKOUurl;
 
     public int getVersion() {
-        return SHUICHUNversion;
+        return HEKOUversion;
     }
 
-    public void setVersion(int SHUICHUNversion) {
-        this.SHUICHUNversion = SHUICHUNversion;
+    public void setVersion(int HEKOUversion) {
+        this.HEKOUversion = HEKOUversion;
     }
 
     public String getUrl() {
-        return SHUICHUNurl;
+        return HEKOUurl;
     }
 
-    public void setUrl(String SHUICHUNurl) {
-        this.SHUICHUNurl = SHUICHUNurl;
+    public void setUrl(String HEKOUurl) {
+        this.HEKOUurl = HEKOUurl;
     }
 }

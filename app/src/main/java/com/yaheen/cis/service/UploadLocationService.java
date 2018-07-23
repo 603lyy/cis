@@ -45,7 +45,11 @@ public class UploadLocationService extends Service {
 //    private String questionUrl = "http://lyy.tunnel.echomod.cn/crs/eapi/realtimeUpload.do";
 //
 //    private String questionUrl = "http://tlep2.yaheen.com/eapi/realtimeUpload.do";
-//
+
+    //水唇镇系统
+//    private String questionUrl = "http://47.106.72.58:9180/eapi/realtimeUpload.do";
+
+    //河口镇系统
     private String questionUrl = "http://47.106.72.58:9180/eapi/realtimeUpload.do";
 
     private NotificationManager mNotificationManager;
