@@ -22,6 +22,7 @@
 
             <include
                 android:id="@+id/ll_house_data"
+                android:visibility="gone"
                 layout="@layout/item_house_data"/>
 
             <LinearLayout

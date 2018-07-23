@@ -55,7 +55,7 @@
     <string name="detail_img_limit">最多只能选择9张图片</string>
     <string name="detail_patrol_address">巡查地点：</string>
     <string name="detail_patrol_username">户主名称：</string>
-    <string name="detail_patrol_owner">店名：</string>
+    <string name="detail_patrol_owner">责任人：</string>
     <string name="detail_patrol_time">营业时间：</string>
     <string name="detail_patrol_phone">联系电话：</string>
     <string name="detail_patrol_area">经营范围：</string>

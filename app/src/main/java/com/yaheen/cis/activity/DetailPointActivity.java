@@ -70,7 +70,7 @@ public class DetailPointActivity extends PermissionActivity {
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
 
-    private LinearLayout llBack;
+    private LinearLayout llBack,llHouse;
 
     private EditText etDescribe;
 
@@ -97,6 +97,12 @@ public class DetailPointActivity extends PermissionActivity {
     private String uploadImgUrl = baseUrl + "/eapi/uploadPhoto.do";
 
     private String reportUrl = baseUrl + "/eapi/report.do";
+
+    //水唇镇系统
+//    private String houseUrl = "http://whn.020szsq.com:8088/merchants/getAllMechats.do";
+
+    //河口镇系统
+    private String houseUrl = "https://lhhk.020szsq.com/merchants/getAllMechats.do";
 
     private String typeStr, houseId;
 
@@ -203,6 +209,7 @@ public class DetailPointActivity extends PermissionActivity {
         tvPPhone = findViewById(R.id.tv_house_phone);
         tvOwner = findViewById(R.id.tv_house_owner);
         tvPTime = findViewById(R.id.tv_patrol_time);
+        llHouse = findViewById(R.id.ll_house_data);
         tvPArea = findViewById(R.id.tv_house_area);
     }
 
@@ -347,7 +354,7 @@ public class DetailPointActivity extends PermissionActivity {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("houseNumberId", houseId);
-        RequestParams params = new RequestParams("http://whn.020szsq.com:8088/merchants/getAllMechats.do");
+        RequestParams params = new RequestParams(houseUrl);
 //        RequestParams params = new RequestParams("http://lyl.tunnel.echomod.cn/whnsubhekou/merchants/getAllMechats.do");
         params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
@@ -362,6 +369,9 @@ public class DetailPointActivity extends PermissionActivity {
                     tvOwner.setText(data.getEntity().get(0).getUserName());
                     tvPPhone.setText(data.getEntity().get(0).getPhone());
                     tvPTime.setText(data.getEntity().get(0).getTime());
+                    llHouse.setVisibility(View.VISIBLE);
+                }else {
+                    llHouse.setVisibility(View.GONE);
                 }
             }
 
