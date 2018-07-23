@@ -50,7 +50,7 @@ public class UploadLocationService extends Service {
 //    private String questionUrl = "http://47.106.72.58:9180/eapi/realtimeUpload.do";
 
     //河口镇系统
-    private String questionUrl = "http://47.106.72.58:9180/eapi/realtimeUpload.do";
+    private String questionUrl = "http://47.106.72.58:9280/eapi/realtimeUpload.do";
 
     private NotificationManager mNotificationManager;
 
