@@ -296,6 +296,7 @@ public class ReportRecordActivity extends PermissionActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        cancelLoadingDialog();
     }
 
 }
