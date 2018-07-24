@@ -64,7 +64,7 @@ public class ReportRecordActivity extends PermissionActivity {
         initUrgency();
         initType();
         initRecordList();
-        getRecordList();
+//        getRecordList();
         getTypeList();
     }
 
@@ -209,6 +209,10 @@ public class ReportRecordActivity extends PermissionActivity {
                 if (data != null && data.isResult()) {
                     typeAdapter.setDatas(data.getTypeArr());
                     typeAdapter.notifyDataSetChanged();
+                    if (isFirst) {
+                        getRecordList();
+                        isFirst = false;
+                    }
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(ReportRecordActivity.this, LoginActivity.class));
                     finish();
@@ -292,11 +296,6 @@ public class ReportRecordActivity extends PermissionActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isFirst) {
-            isFirst = false;
-        } else {
-            cancelLoadingDialog();
-        }
     }
 
 }
