@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
+import com.yaheen.cis.util.common.FreeHandScreenUtil;
 import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
@@ -50,6 +52,8 @@ public class TurnActivity extends PermissionActivity {
 
     private TextView tvPatrol, tvRecord, tvUpload;
 
+    private ImageView ivTurn;
+
     private TextView tvFetch;
 
     private LinearLayout llBack;
@@ -65,10 +69,12 @@ public class TurnActivity extends PermissionActivity {
         setContentView(R.layout.activity_turn_2);
 
         llBack = findViewById(R.id.back);
-//        tvFetch = findViewById(R.id.tv_fetch);
+        ivTurn = findViewById(R.id.iv_turn);
         tvPatrol = findViewById(R.id.tv_patrol);
         tvRecord = findViewById(R.id.tv_record);
         tvUpload = findViewById(R.id.tv_upload);
+
+        changeView();
 
         tvRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,13 +92,6 @@ public class TurnActivity extends PermissionActivity {
             }
         });
 
-//        tvFetch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                openFetch();
-//            }
-//        });
-
         tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,12 +100,6 @@ public class TurnActivity extends PermissionActivity {
             }
         });
 
-    }
-
-    private void openFetch() {
-        showLoadingDialog();
-        Intent intent = new Intent(getApplication(), CaptureActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
     /**
@@ -263,6 +256,12 @@ public class TurnActivity extends PermissionActivity {
             public void onFinished() {
             }
         });
+    }
+
+    private void changeView() {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ivTurn.getLayoutParams();
+        params.height = (int) (FreeHandScreenUtil.getScreenWidthAveragePart(getApplicationContext(), 1) / 8 * 5);
+        ivTurn.setLayoutParams(params);
     }
 
     @Override
