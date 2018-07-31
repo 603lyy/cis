@@ -6,10 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".activity.FlashActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="@drawable/bg_flash"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/bg_flash_1"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_flash"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_flash_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="@string/flash_text_1"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <TextView
+                android:id="@+id/tv_flash_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/flash_text_2"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_flash_3"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:text="@string/flash_text_3"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_white_round"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tv_flash_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="50dp"
+                    android:text="@string/flash_text_bottom"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
 
 </LinearLayout>
