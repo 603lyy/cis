@@ -117,7 +117,9 @@
 
     <string name="flash_text_1">以防为主  防控结合</string>
     <string name="flash_text_2">建设平安、和谐水唇</string>
+    <string name="flash_text_2_hekou">建设平安、和谐河口</string>
     <string name="flash_text_3">进入系统</string>
     <string name="flash_text_bottom">陆河县水唇镇人民政府</string>
+    <string name="flash_text_bottom_hekou">陆河县河口镇人民政府</string>
 
 </resources>
