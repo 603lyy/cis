@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -20,6 +22,7 @@ import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.CommonUtils;
+import com.yaheen.cis.util.common.FreeHandScreenUtil;
 import com.yaheen.cis.util.common.FreeHandSystemUtil;
 import com.yaheen.cis.util.common.ScreenManager;
 import com.yaheen.cis.util.dialog.DialogCallback;
@@ -45,9 +48,11 @@ import java.io.InputStreamReader;
 
 public class LoginActivity extends PermissionActivity {
 
-    private LinearLayout llRPsd, llVer;
-
     private CheckBox cbRPsd;
+
+    private ImageView ivLogin;
+
+    private LinearLayout llRPsd, llVer;
 
     private TextView tvLogin, tvChange, tvGetVer;
 
@@ -102,12 +107,15 @@ public class LoginActivity extends PermissionActivity {
         etName = findViewById(R.id.et_username);
         tvChange = findViewById(R.id.tv_change);
         etPsd = findViewById(R.id.et_password);
+        ivLogin = findViewById(R.id.iv_login);
         tvLogin = findViewById(R.id.tv_login);
         etPhone = findViewById(R.id.et_phone);
         etIp = findViewById(R.id.et_ip);
 
         etPsd.setText(DefaultPrefsUtil.getUserPassword());
         etName.setText(DefaultPrefsUtil.getUserName());
+
+        changeView();
 
         tvChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -418,6 +426,12 @@ public class LoginActivity extends PermissionActivity {
         // 公钥解密
         String DeString = RSAUtils.decryptByPublicKeyToString(str, publicKey);
         Log.i("lin", "read: " + DeString);
+    }
+
+    private void changeView() {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ivLogin.getLayoutParams();
+        params.height = (int) (FreeHandScreenUtil.getScreenWidthAveragePart(getApplicationContext(), 1) / 8 * 5);
+        ivLogin.setLayoutParams(params);
     }
 
     @Override
