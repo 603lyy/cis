@@ -44,7 +44,7 @@ public class BaseActivity extends Activity implements CompressImg {
     //河口镇系统
 //    protected String baseUrl = "http://47.106.72.58:9280";
 
-    //测试系统
+    //广东系统
 //    protected String baseUrl = "http://47.106.72.58:10080";
 
     @Override
