@@ -2,27 +2,24 @@ package com.yaheen.cis.entity;
 
 public class VersionBean {
 
-    /**
-     * SHUICHUNversion : 1011
-     * SHUICHUNurl : https://www.yaheen.com/app/zongzhi.apk
-     */
-
     private int SHUICHUNversion;
     private String SHUICHUNurl;
+    private int GUANGDONGversion;
+    private String GUANGDONGurl;
 
     public int getVersion() {
-        return SHUICHUNversion;
+        return GUANGDONGversion;
     }
 
-    public void setVersion(int SHUICHUNversion) {
-        this.SHUICHUNversion = SHUICHUNversion;
+    public void setVersion(int GUANGDONGversion) {
+        this.GUANGDONGversion = GUANGDONGversion;
     }
 
     public String getUrl() {
-        return SHUICHUNurl;
+        return GUANGDONGurl;
     }
 
-    public void setUrl(String SHUICHUNurl) {
-        this.SHUICHUNurl = SHUICHUNurl;
+    public void setUrl(String GUANGDONGurl) {
+        this.GUANGDONGurl = GUANGDONGurl;
     }
 }
