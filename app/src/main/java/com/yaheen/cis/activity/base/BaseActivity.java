@@ -42,7 +42,10 @@ public class BaseActivity extends Activity implements CompressImg {
     protected String baseUrl = "http://47.106.72.58:9180";
 
     //河口镇系统
-//    protected String baseUrl = "http://47.106.72.58:9180";
+//    protected String baseUrl = "http://47.106.72.58:9280";
+
+    //测试系统
+//    protected String baseUrl = "http://47.106.72.58:10080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

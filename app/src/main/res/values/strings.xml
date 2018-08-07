@@ -117,7 +117,9 @@
 
     <string name="flash_text_1">以防为主  防控结合</string>
     <string name="flash_text_2">建设平安、和谐水唇</string>
+    <string name="flash_text_2_guangdong">建设平安、和谐广东</string>
     <string name="flash_text_3">进入系统</string>
     <string name="flash_text_bottom">陆河县水唇镇人民政府</string>
+    <string name="flash_text_bottom_guangdong">广东省人民政府</string>
 
 </resources>

@@ -48,6 +48,8 @@ public class UploadLocationService extends Service {
 //
     private String questionUrl = "http://47.106.72.58:9180/eapi/realtimeUpload.do";
 
+//    private String questionUrl = "http://47.106.72.58:10080/eapi/realtimeUpload.do";
+
     private NotificationManager mNotificationManager;
 
     private NotificationCompat.Builder mBuilder;
