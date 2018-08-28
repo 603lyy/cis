@@ -9,9 +9,7 @@ import com.google.gson.JsonObject;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.yaheen.cis.R;
-import com.yaheen.cis.activity.DetailPointActivity;
 import com.yaheen.cis.activity.LoginActivity;
-import com.yaheen.cis.activity.TurnActivity;
 import com.yaheen.cis.entity.CheckBean;
 import com.yaheen.cis.entity.CommonBean;
 import com.yaheen.cis.entity.TypeBean;
@@ -33,8 +31,11 @@ public class FetchActivity extends PermissionActivity {
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
-    //水唇镇
-    private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
+    //旧水唇镇
+//    private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
+
+    //新水唇镇
+    private String checkIdUrl = "http://lhsc.020szsq.com/houseNumbers/getGridInspectionPoint.do";
 
     //河口镇
 //    private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";
