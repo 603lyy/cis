@@ -80,6 +80,9 @@ public class FetchActivity extends PermissionActivity {
                         showToast(R.string.turn_id_empty);
                         cancelLoadingDialog();
                     }
+                }else {
+                    houseId = "";
+                    getTypeList();
                 }
             }
 
