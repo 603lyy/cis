@@ -128,7 +128,7 @@ public class HouseNumberBean {
         private String deleteUserCode;
         private String id;
         private int longModifiedDate;
-        private int longitude;
+        private String longitude;
         private OperateValueBean operateValue;
         private int longDeleteDate;
         private String operatedName;
@@ -153,7 +153,7 @@ public class HouseNumberBean {
         private String houseId;
         private String operatedUserName;
         private int longCreateDate;
-        private int latitude;
+        private String latitude;
         private Object criteriaConfig;
         private boolean delete;
         private boolean modelDTOSearchOnField;
@@ -304,11 +304,11 @@ public class HouseNumberBean {
             this.longModifiedDate = longModifiedDate;
         }
 
-        public int getLongitude() {
+        public String getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(int longitude) {
+        public void setLongitude(String longitude) {
             this.longitude = longitude;
         }
 
@@ -504,11 +504,11 @@ public class HouseNumberBean {
             this.longCreateDate = longCreateDate;
         }
 
-        public int getLatitude() {
+        public String getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(int latitude) {
+        public void setLatitude(String latitude) {
             this.latitude = latitude;
         }
 
