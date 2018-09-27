@@ -187,7 +187,17 @@ public class DetailActivity extends FetchActivity {
         initMapView();
         initImgUpload();
 
-        getQuestionMsg(typeData.getTypeArr().get(0).getId());
+        //默认选择消防类型的问题，不存在消防类型则选择第一位
+        boolean isGetMsg = false;
+        for (int i = 0; i < typeData.getTypeArr().size(); i++) {
+            if (typeData.getTypeArr().get(i).getName().equals("消防")) {
+                getQuestionMsg(typeData.getTypeArr().get(i).getId());
+                isGetMsg = true;
+            }
+        }
+        if (!isGetMsg) {
+            getQuestionMsg(typeData.getTypeArr().get(0).getId());
+        }
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -23,7 +23,24 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         super(R.layout.item_patrol_type);
     }
 
+    /**
+     * 默认选择消防类型,不存在消防类型则选择第一位
+     */
     public void setDatas(@Nullable List<TypeBean.TypeArrBean> data) {
+        if (data != null && data.size() > 0) {
+            boolean isFirst = true;
+            for (int i = 0; i < data.size(); i++) {
+                if (data.get(i).getName().equals("消防")) {
+                    data.get(i).setSelected(true);
+                    isFirst = false;
+                } else {
+                    data.get(i).setSelected(false);
+                }
+            }
+            if (isFirst) {
+                data.get(0).setSelected(true);
+            }
+        }
         setNewData(data);
     }
 
@@ -33,13 +50,13 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         helper.addOnClickListener(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());
 
-        if (changeTime == 0) {
-            item.setSelected(true);
-            changeTime++;
-        } else if (changeTime < getData().size()) {
-            item.setSelected(false);
-            changeTime++;
-        }
+//        if (changeTime == 0) {
+//            item.setSelected(true);
+//            changeTime++;
+//        } else if (changeTime < getData().size()) {
+//            item.setSelected(false);
+//            changeTime++;
+//        }
 
         if (item.isSelected()) {
             checkBox.setChecked(true);
@@ -51,9 +68,9 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
         } else if (item.getName().equals("禁毒")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
-        }  else if (item.getName().equals("环保")) {
+        } else if (item.getName().equals("环保")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_protection);
-        }   else if (item.getName().equals("环境卫生")) {
+        } else if (item.getName().equals("环境卫生")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_weisheng);
         } else {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
