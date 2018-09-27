@@ -35,7 +35,7 @@ public class FetchActivity extends PermissionActivity {
 //    private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
 
     //新水唇镇
-    private String checkIdUrl = "http://lhsc.020szsq.com/houseNumbers/getGridInspectionPoint.do";
+    private String checkIdUrl = "https://lhsc.020szsq.com/houseNumbers/getGridInspectionPoint.do";
 
     //河口镇
 //    private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";

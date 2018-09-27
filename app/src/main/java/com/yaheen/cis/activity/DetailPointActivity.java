@@ -102,7 +102,7 @@ public class DetailPointActivity extends PermissionActivity {
 //    private String houseUrl = "http://whn.020szsq.com:8088/merchants/getAllMechats.do";
 
     //新水唇镇系统
-    private String houseUrl = "http://lhsc.020szsq.com/merchants/getAllMechats.do";
+    private String houseUrl = "https://lhsc.020szsq.com/merchants/getAllMechats.do";
 
     //河口镇系统
 //    private String houseUrl = "https://lhhk.020szsq.com/merchants/getAllMechats.do";
