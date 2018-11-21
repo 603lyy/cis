@@ -106,7 +106,6 @@ public class PatrolSettingActivity extends BaseActivity {
                 if (!isOpen) {
                     showLoadingDialog();
                     startPatrol();
-                    isOpen = true;
                 }
             }
         });
@@ -232,6 +231,7 @@ public class PatrolSettingActivity extends BaseActivity {
                     Intent intent = new Intent(PatrolSettingActivity.this, DetailActivity.class);
                     intent.putExtra("type", typeStr);
                     startActivity(intent);
+                    isOpen = true;
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(PatrolSettingActivity.this, LoginActivity.class));
