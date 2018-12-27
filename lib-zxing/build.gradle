@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'cis'
             keyPassword 'yaheen'
-            storeFile file('F:/lyy/project/cis/cis.jks')
+            storeFile file('E:/project/cis/cis.jks')
             storePassword 'yaheen'
         }
     }
@@ -25,6 +25,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             debuggable true
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
