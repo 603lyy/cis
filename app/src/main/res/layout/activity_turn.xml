@@ -20,7 +20,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:background="@drawable/ic_turn_bannar"
+                android:background="@drawable/ic_turn_bannar_4"
                 android:scaleType="center" />
 
             <LinearLayout
