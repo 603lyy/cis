@@ -39,13 +39,16 @@ public class BaseActivity extends Activity implements CompressImg {
 //    protected String baseUrl = "http://tlep2.yaheen.com";
 
 //    //水唇镇系统
-    protected String baseUrl = "http://47.106.72.58:9180";
+//    protected String baseUrl = "http://47.106.72.58:9180";
 
     //河口镇系统
 //    protected String baseUrl = "http://47.106.72.58:9280";
 
     //广东系统
 //    protected String baseUrl = "http://47.106.72.58:10080";
+
+    //鄂州系统
+    protected String baseUrl = "http://47.106.142.29:9090";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
