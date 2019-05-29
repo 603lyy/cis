@@ -33,8 +33,12 @@ public class FetchActivity extends PermissionActivity {
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
-    //水唇镇
-//    private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
+    //水唇镇系统
+//    private String checkIdUrl = "http://whn.020szsq.com:8088/merchants/getAllMechats.do";
+
+    //广东系统
+//    private String checkIdUrl = "http://47.107.101.37:8080/merchants/getAllMechats.do";
+
 
     //河口镇
     private String checkIdUrl = "https://lhhk.020szsq.com/houseNumbers/getGridInspectionPoint.do";

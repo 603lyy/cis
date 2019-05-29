@@ -4,11 +4,10 @@ import java.util.List;
 
 public class HouseNumberBean {
 
-
     /**
      * result : true
      * msg : save success
-     * entity : [{"modifiedUserName":"","createUserId":"","groupPropertyNameList":[],"deleteUnitId":"","operatedDate":"","createUserName":"","operatedUnitCode":"","type":"家私","operatedUnitName":"","operateRelationMap":{},"operateRelation":{},"criterionAlias":"","modifiedUserCode":"","deleteUserCode":"","id":"00000000642be11d0164315227560065","longModifiedDate":0,"longitude":0,"operateValue":{},"longDeleteDate":0,"operatedName":"","businessScope":"家私","defCriterion":null,"createUnitCode":"","modifiedUnitCode":"","houseOwner":"0000000064a8e8450164b596ccf41023","coverimage":"","filterMap":{},"phone":"13729537242","excludeCopyValueFieldNames":["operatedUnitCode","operatedUnitName","operatedUnitId","createUnitCode","createUnitName","createUnitId","modifiedUnitCode","modifiedUnitName","modifiedUnitId","deleteUnitCode","deleteUnitName","deleteUnitId","longOperatedDate","longCreateDate","longModifiedDate","longDeleteDate","operatedName","operatedUserCode","createName","createUserCode","modifiedName","modifiedUserCode","deleteName","deleteUserCode","operatedUserName","operatedUserId","operatedDate","createUserName","createUserId","modifiedUserName","modifiedUserId","deleteUserName","deleteUserId","createDate","modifiedDate","deleteDate","delete","criteriaLogicExpression","operateRelationMap","operateValue","defCriterion","onlyCopyValueFieldNames","excludeCopyValueFieldNames","criterionAlias","criterionOrders","filterMap","groupPropertyNameList","modelDTOSearchOnField","dealRemaind","criteriaConfig","interrupt"],"modifiedDate":"","name":"营发傢俬门市","criteriaLogicExpression":"","createName":"","modifiedUnitId":"","status":"","createUnitId":"","modifiedName":"","createUnitName":"","flag":"","houseId":"0000000063ec9ae30163f405265f01dc","operatedUserName":"","longCreateDate":0,"latitude":0,"criterionOrders":[],"criteriaConfig":null,"delete":false,"modelDTOSearchOnField":false,"operatedUserId":"","houseOwnerName":"朱先生","modifiedUnitName":"","deleteUnitName":"","deleteUserId":"","createDate":"","deleteDate":"","address":"河口镇营下一街56号","createUserCode":"","userName":"张木浪","operatedUnitId":"","userId":"0000000064a8e8450164b644451511f9","dealRemaind":true,"fireowner":"李先生","longOperatedDate":0,"deleteUnitCode":"","modifiedUserId":"","operatedUserCode":"","storephotos":"","onlyCopyValueFieldNames":[],"time":"10:00-18:00","deleteName":"","deleteUserName":""}]
+     * entity : [{"modifiedUserName":"","createUserId":"","groupPropertyNameList":[],"deleteUnitId":"","operatedDate":"","createUserName":"","operatedUnitCode":"","type":"自营","operatedUnitName":"","operateRelationMap":{},"operateRelation":{},"criterionAlias":"","modifiedUserCode":"","deleteUserCode":"","id":"0000000065f24e5c0165f6ff22d8006d","longModifiedDate":0,"longitude":115.6560591512138,"operateValue":{},"longDeleteDate":0,"operatedName":"","businessScope":"百货","defCriterion":null,"createUnitCode":"","modifiedUnitCode":"","houseOwner":"000000006469ab2f0164793ea3f50b0a","coverimage":"","filterMap":{},"phone":"13421581478","excludeCopyValueFieldNames":["operatedUnitCode","operatedUnitName","operatedUnitId","createUnitCode","createUnitName","createUnitId","modifiedUnitCode","modifiedUnitName","modifiedUnitId","deleteUnitCode","deleteUnitName","deleteUnitId","longOperatedDate","longCreateDate","longModifiedDate","longDeleteDate","operatedName","operatedUserCode","createName","createUserCode","modifiedName","modifiedUserCode","deleteName","deleteUserCode","operatedUserName","operatedUserId","operatedDate","createUserName","createUserId","modifiedUserName","modifiedUserId","deleteUserName","deleteUserId","createDate","modifiedDate","deleteDate","delete","criteriaLogicExpression","operateRelationMap","operateValue","defCriterion","onlyCopyValueFieldNames","excludeCopyValueFieldNames","criterionAlias","criterionOrders","filterMap","groupPropertyNameList","modelDTOSearchOnField","dealRemaind","criteriaConfig","interrupt"],"modifiedDate":"","name":"振兴百货","criteriaLogicExpression":"","createName":"","modifiedUnitId":"","status":"","createUnitId":"","modifiedName":"","createUnitName":"","flag":"","houseId":"000000006469ab2f01647f1ab6680f95","operatedUserName":"","longCreateDate":0,"latitude":23.19345915580839,"criterionOrders":[],"criteriaConfig":null,"delete":false,"modelDTOSearchOnField":false,"operatedUserId":"","houseOwnerName":"朱昌振","modifiedUnitName":"","deleteUnitName":"","deleteUserId":"","createDate":"","deleteDate":"","address":"河口镇北中衣屋村42号","createUserCode":"","userName":"朱昌振","operatedUnitId":"","userId":"000000006469ab2f0164793ea3f50b0a","dealRemaind":true,"fireowner":"","longOperatedDate":0,"deleteUnitCode":"","modifiedUserId":"","operatedUserCode":"","storephotos":"0000000065f24e5c0165f6fe9aae006a,0000000065f24e5c0165f6fea1cb006b,0000000065f24e5c0165f6fe907d0069,0000000065f24e5c0165f6feb272006c","onlyCopyValueFieldNames":[],"time":"-","deleteName":"","deleteUserName":""}]
      */
 
     private boolean result;
@@ -48,30 +47,30 @@ public class HouseNumberBean {
          * operatedDate :
          * createUserName :
          * operatedUnitCode :
-         * type : 家私
+         * type : 自营
          * operatedUnitName :
          * operateRelationMap : {}
          * operateRelation : {}
          * criterionAlias :
          * modifiedUserCode :
          * deleteUserCode :
-         * id : 00000000642be11d0164315227560065
+         * id : 0000000065f24e5c0165f6ff22d8006d
          * longModifiedDate : 0
-         * longitude : 0
+         * longitude : 115.6560591512138
          * operateValue : {}
          * longDeleteDate : 0
          * operatedName :
-         * businessScope : 家私
+         * businessScope : 百货
          * defCriterion : null
          * createUnitCode :
          * modifiedUnitCode :
-         * houseOwner : 0000000064a8e8450164b596ccf41023
+         * houseOwner : 000000006469ab2f0164793ea3f50b0a
          * coverimage :
          * filterMap : {}
-         * phone : 13729537242
+         * phone : 13421581478
          * excludeCopyValueFieldNames : ["operatedUnitCode","operatedUnitName","operatedUnitId","createUnitCode","createUnitName","createUnitId","modifiedUnitCode","modifiedUnitName","modifiedUnitId","deleteUnitCode","deleteUnitName","deleteUnitId","longOperatedDate","longCreateDate","longModifiedDate","longDeleteDate","operatedName","operatedUserCode","createName","createUserCode","modifiedName","modifiedUserCode","deleteName","deleteUserCode","operatedUserName","operatedUserId","operatedDate","createUserName","createUserId","modifiedUserName","modifiedUserId","deleteUserName","deleteUserId","createDate","modifiedDate","deleteDate","delete","criteriaLogicExpression","operateRelationMap","operateValue","defCriterion","onlyCopyValueFieldNames","excludeCopyValueFieldNames","criterionAlias","criterionOrders","filterMap","groupPropertyNameList","modelDTOSearchOnField","dealRemaind","criteriaConfig","interrupt"]
          * modifiedDate :
-         * name : 营发傢俬门市
+         * name : 振兴百货
          * criteriaLogicExpression :
          * createName :
          * modifiedUnitId :
@@ -80,35 +79,35 @@ public class HouseNumberBean {
          * modifiedName :
          * createUnitName :
          * flag :
-         * houseId : 0000000063ec9ae30163f405265f01dc
+         * houseId : 000000006469ab2f01647f1ab6680f95
          * operatedUserName :
          * longCreateDate : 0
-         * latitude : 0
+         * latitude : 23.19345915580839
          * criterionOrders : []
          * criteriaConfig : null
          * delete : false
          * modelDTOSearchOnField : false
          * operatedUserId :
-         * houseOwnerName : 朱先生
+         * houseOwnerName : 朱昌振
          * modifiedUnitName :
          * deleteUnitName :
          * deleteUserId :
          * createDate :
          * deleteDate :
-         * address : 河口镇营下一街56号
+         * address : 河口镇北中衣屋村42号
          * createUserCode :
-         * userName : 张木浪
+         * userName : 朱昌振
          * operatedUnitId :
-         * userId : 0000000064a8e8450164b644451511f9
+         * userId : 000000006469ab2f0164793ea3f50b0a
          * dealRemaind : true
-         * fireowner : 李先生
+         * fireowner :
          * longOperatedDate : 0
          * deleteUnitCode :
          * modifiedUserId :
          * operatedUserCode :
-         * storephotos :
+         * storephotos : 0000000065f24e5c0165f6fe9aae006a,0000000065f24e5c0165f6fea1cb006b,0000000065f24e5c0165f6fe907d0069,0000000065f24e5c0165f6feb272006c
          * onlyCopyValueFieldNames : []
-         * time : 10:00-18:00
+         * time : -
          * deleteName :
          * deleteUserName :
          */
@@ -128,7 +127,7 @@ public class HouseNumberBean {
         private String deleteUserCode;
         private String id;
         private int longModifiedDate;
-        private int longitude;
+        private double longitude;
         private OperateValueBean operateValue;
         private int longDeleteDate;
         private String operatedName;
@@ -153,7 +152,7 @@ public class HouseNumberBean {
         private String houseId;
         private String operatedUserName;
         private int longCreateDate;
-        private int latitude;
+        private double latitude;
         private Object criteriaConfig;
         private boolean delete;
         private boolean modelDTOSearchOnField;
@@ -304,11 +303,11 @@ public class HouseNumberBean {
             this.longModifiedDate = longModifiedDate;
         }
 
-        public int getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(int longitude) {
+        public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
 
@@ -504,11 +503,11 @@ public class HouseNumberBean {
             this.longCreateDate = longCreateDate;
         }
 
-        public int getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(int latitude) {
+        public void setLatitude(double latitude) {
             this.latitude = latitude;
         }
 
