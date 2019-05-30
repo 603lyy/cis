@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'cis'
             keyPassword 'yaheen'
-            storeFile file('F:/lyy/project/cis/cis.jks')
+            storeFile file('E:/project/cis/cis.jks')
             storePassword 'yaheen'
         }
     }
@@ -14,7 +14,7 @@ android {
         applicationId "com.yaheen.cis"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1012
+        versionCode 1013
         versionName "0.9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
