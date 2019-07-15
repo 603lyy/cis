@@ -41,9 +41,8 @@
         </LinearLayout>
 
         <include
-            android:id="@+id/ll_house_data"
-            layout="@layout/item_house_data"
-            android:visibility="gone" />
+            android:id="@+id/ll_house_data_1"
+            layout="@layout/item_house_data" />
 
         <LinearLayout
             android:layout_width="match_parent"

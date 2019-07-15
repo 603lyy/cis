@@ -26,9 +26,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
 import com.yaheen.cis.activity.base.PermissionActivity;
+import com.yaheen.cis.adapter.CommonImgAdapter;
 import com.yaheen.cis.adapter.EventImgAdapter;
 import com.yaheen.cis.adapter.EventProblemAdapter;
 import com.yaheen.cis.entity.EventDetailBean;
+import com.yaheen.cis.entity.HouseBean;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
@@ -44,9 +46,13 @@ public class HandleDetailActivity extends MapActivity {
 
     private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit, tvUsername;
 
-    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
+    private TextView tvHOwner, tvHNumber, tvHAreaType, tvHInspectionPoint, tvHAdderss;
 
-    private LinearLayout llBack, llHouse;
+    private TextView tvPUser, tvPPosition, tvPCommitment, tvPPhone, tvPTime;
+
+    private TextView tvMUser, tvMType, tvMName, tvMTime, tvMOwner;
+
+    private LinearLayout llBack, llHouse, llParty, llMerchant;
 
     private ImageView ivUrgency;
 
@@ -54,18 +60,25 @@ public class HandleDetailActivity extends MapActivity {
 
     private BaiduMap mBaiduMap;
 
-    private RecyclerView rvProblem, rvImg;
+    private RecyclerView rvProblem, rvImg, rvHouseImg;
 
     private EventProblemAdapter problemAdapter;
 
     private EventImgAdapter imgAdapter;
 
+    private CommonImgAdapter commonImgAdapter;
+
     //图片链接列表
     private List<EventDetailBean.TbEventBean.FileArrBean> imgUrlList = new ArrayList<>();
+
+    private List<String> imgUrlList2 = new ArrayList<>();
 
     private String eventUrl = baseUrl + "/eapi/eventDetail.do";
 
     private String copyUrl = baseUrl + "/guidanceCenter/detailed.do?eventId=";
+
+    //岳阳
+    private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
 
     private String eventId;
 
@@ -91,6 +104,7 @@ public class HandleDetailActivity extends MapActivity {
 
         initView();
         initHouseData();
+        initHouseImgView();
         initMapView();
         initQuestion();
         initImgUpload();
@@ -140,13 +154,55 @@ public class HandleDetailActivity extends MapActivity {
     }
 
     private void initHouseData() {
-        tvPUsername = findViewById(R.id.tv_house_username);
-        tvPAddress = findViewById(R.id.tv_patrol_address);
-        tvPLeader = findViewById(R.id.tv_house_leader);
-        tvPPhone = findViewById(R.id.tv_house_phone);
-        tvOwner = findViewById(R.id.tv_house_owner);
-        tvPTime = findViewById(R.id.tv_patrol_time);
-        tvPArea = findViewById(R.id.tv_house_area);
+        tvHNumber = findViewById(R.id.tv_house_number);
+        tvHAdderss = findViewById(R.id.tv_house_address);
+        tvHOwner = findViewById(R.id.tv_patrol_username);
+        tvHAreaType = findViewById(R.id.tv_house_area_type);
+        tvHInspectionPoint = findViewById(R.id.tv_house_inspection_point);
+
+        tvPTime = findViewById(R.id.tv_party_time);
+        tvPPhone = findViewById(R.id.tv_party_phone);
+        tvPUser = findViewById(R.id.tv_party_username);
+        tvPPosition = findViewById(R.id.tv_party_position);
+        tvPCommitment = findViewById(R.id.tv_party_commitment);
+
+        tvMName = findViewById(R.id.tv_merchant_name);
+        tvMType = findViewById(R.id.tv_merchant_type);
+        tvMUser = findViewById(R.id.tv_merchant_user);
+        tvMTime = findViewById(R.id.tv_merchant_time);
+        tvMOwner = findViewById(R.id.tv_merchant_owner);
+
+        llHouse = findViewById(R.id.ll_house_data);
+        llParty = findViewById(R.id.ll_party_data);
+        llMerchant = findViewById(R.id.ll_merchant_data);
+    }
+
+    private void initHouseImgView() {
+        rvHouseImg = findViewById(R.id.rv_house_img);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvHouseImg.setLayoutManager(layoutManager);
+
+        commonImgAdapter = new CommonImgAdapter(this);
+        rvHouseImg.setAdapter(commonImgAdapter);
+
+        commonImgAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof ImageView) {
+                    if (((ImageView) view).getDrawable() == null)
+                        return;
+                    ArrayList<String> urls = new ArrayList<String>();
+                    urls.add(imgUrlList2.get(position));
+                    new PhotoPagerUtils.Builder(HandleDetailActivity.this)
+                            .setBigImageUrls(urls)
+                            .setBigBitmap(((ImageView) view).getDrawable())
+                            .setSavaImage(true)
+                            .build();
+                }
+            }
+        });
     }
 
     private void initQuestion() {
@@ -232,6 +288,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private void setEventData(EventDetailBean.TbEventBean data) {
 
+        getHouseData(data.getHouseId());
         tvType.setText(data.getType());
         imgUrlList = (data.getFileArr());
         tvDescribe.setText(data.getDescribe());
@@ -241,19 +298,201 @@ public class HandleDetailActivity extends MapActivity {
         problemAdapter.setDatas(data.getQuestionnaireArr());
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());
+    }
 
-        if (TextUtils.isEmpty(data.getInspectionSite())) {
-            llHouse.setVisibility(View.GONE);
+    private void getHouseData(String houseId) {
+
+        if (TextUtils.isEmpty(houseId)) {
+            return;
+        }
+
+        RequestParams params = new RequestParams(mHhouseUrl);
+        params.addQueryStringParameter("houseNumberId", houseId);
+        HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                HouseBean data = gson.fromJson(result, HouseBean.class);
+                if (data != null && data.isResult() && data.getJson().size() > 0) {
+                    showHouseData(data.getJson().get(0));
+                } else {
+                    llHouse.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 显示门牌信息，没有数据的不显示
+     */
+    public void showHouseData(HouseBean.JsonBean jsonBean) {
+        if (jsonBean != null) {
+
+            if (jsonBean.getHouseNumber() != null || jsonBean.getUser() != null) {
+
+                if (jsonBean.getUser().size() > 0 && !TextUtils.isEmpty(jsonBean.getUser().get(0).getName())) {
+                    tvHOwner.setText(jsonBean.getUser().get(0).getName());
+                    tvHOwner.setVisibility(View.VISIBLE);
+                } else {
+                    tvHOwner.setVisibility(View.GONE);
+                }
+
+                if (jsonBean.getHouseNumber() != null) {
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getPeopleNumber())) {
+                        tvHNumber.setText(jsonBean.getHouseNumber().getPeopleNumber());
+                        tvHNumber.setVisibility(View.VISIBLE);
+                    } else {
+                        tvHNumber.setVisibility(View.GONE);
+                    }
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getCommunity())) {
+                        if (jsonBean.getHouseNumber().getCommunity().equals("A")) {
+                            tvHAreaType.setText(getString(R.string.detail_house_type_a));
+                            tvHAreaType.setVisibility(View.VISIBLE);
+                        } else if (jsonBean.getHouseNumber().getCommunity().equals("N")) {
+                            tvHAreaType.setText(getString(R.string.detail_house_type_n));
+                            tvHAreaType.setVisibility(View.VISIBLE);
+                        } else {
+                            tvHAreaType.setVisibility(View.GONE);
+                        }
+                    } else {
+                        tvHAreaType.setVisibility(View.GONE);
+                    }
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getGridInspectionPoint())) {
+                        if (jsonBean.getHouseNumber().getGridInspectionPoint().equals("Y")) {
+                            tvHInspectionPoint.setText(getString(R.string.text_yes));
+                        } else {
+                            tvHInspectionPoint.setText(getString(R.string.text_no));
+                        }
+                        tvHInspectionPoint.setVisibility(View.VISIBLE);
+                    } else {
+                        tvHInspectionPoint.setVisibility(View.GONE);
+                    }
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getAddress())) {
+                        tvHAdderss.setText(jsonBean.getHouseNumber().getAddress());
+                        tvHAdderss.setVisibility(View.VISIBLE);
+                    } else {
+                        tvHAdderss.setVisibility(View.GONE);
+                    }
+                }
+                llHouse.setVisibility(View.VISIBLE);
+            } else {
+                llHouse.setVisibility(View.GONE);
+            }
+
+            if (jsonBean.getPartyMember() != null && jsonBean.getPartyMember().size() > 0) {
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getName())) {
+                    tvPUser.setText(jsonBean.getPartyMember().get(0).getName());
+                    tvPUser.setVisibility(View.VISIBLE);
+                } else {
+                    tvPUser.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getPosition())) {
+                    tvPPosition.setText(jsonBean.getPartyMember().get(0).getPosition());
+                    tvPPosition.setVisibility(View.VISIBLE);
+                } else {
+                    tvPPosition.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getPromise())) {
+                    tvPCommitment.setText(jsonBean.getPartyMember().get(0).getPromise());
+                    tvPCommitment.setVisibility(View.VISIBLE);
+                } else {
+                    tvPCommitment.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getPhone())) {
+                    tvPPhone.setText(jsonBean.getPartyMember().get(0).getPhone());
+                    tvPPhone.setVisibility(View.VISIBLE);
+                } else {
+                    tvPPhone.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getTime())) {
+                    tvPTime.setText(jsonBean.getPartyMember().get(0).getTime());
+                    tvPTime.setVisibility(View.VISIBLE);
+                } else {
+                    tvPTime.setVisibility(View.GONE);
+                }
+                llParty.setVisibility(View.VISIBLE);
+            } else {
+                llParty.setVisibility(View.GONE);
+            }
+
+            if (jsonBean.getMerchants() != null) {
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getHouseOwnerName())) {
+                    tvMUser.setText(jsonBean.getMerchants().getHouseOwnerName());
+                    tvMUser.setVisibility(View.VISIBLE);
+                } else {
+                    tvMUser.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getType())) {
+                    tvMType.setText(jsonBean.getMerchants().getType());
+                    tvMType.setVisibility(View.VISIBLE);
+                } else {
+                    tvMType.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getName())) {
+                    tvMName.setText(jsonBean.getMerchants().getName());
+                    tvMName.setVisibility(View.VISIBLE);
+                } else {
+                    tvMName.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getTime())) {
+                    tvMTime.setText(jsonBean.getMerchants().getTime());
+                    tvMTime.setVisibility(View.VISIBLE);
+                } else {
+                    tvMTime.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getUserName())) {
+                    tvMOwner.setText(jsonBean.getMerchants().getUserName());
+                    tvMOwner.setVisibility(View.VISIBLE);
+                } else {
+                    tvMOwner.setVisibility(View.GONE);
+                }
+
+                String url = jsonBean.getMerchants().getStorephotos();
+                if (!TextUtils.isEmpty(url)) {
+                    while (url.indexOf(",") > 0) {
+                        imgUrlList2.add(houseUrl + "/webFile/visit.do?id=" + url.substring(0, url.indexOf(",")));
+                        url = url.substring(url.indexOf(",") + 1);
+                    }
+                    imgUrlList2.add(houseUrl + "/webFile/visit.do?id=" + url);
+
+                    commonImgAdapter.setDatas(imgUrlList2);
+                }
+                llMerchant.setVisibility(View.VISIBLE);
+            } else {
+                llMerchant.setVisibility(View.GONE);
+            }
         } else {
-            //门牌信息
-            tvOwner.setText(data.getResponsiblePerson());
-            tvPUsername.setText(data.getHouseholdName());
-            tvPAddress.setText(data.getInspectionSite());
-            tvPArea.setText(data.getScopeOfOperation());
-            tvPPhone.setText(data.getHouseholdPhone());
-            tvPTime.setText(data.getBusinessHours());
-            tvPLeader.setText(data.getFireOfficer());
-            llHouse.setVisibility(View.VISIBLE);
+            llHouse.setVisibility(View.GONE);
+            llParty.setVisibility(View.GONE);
+            llMerchant.setVisibility(View.GONE);
         }
     }
 

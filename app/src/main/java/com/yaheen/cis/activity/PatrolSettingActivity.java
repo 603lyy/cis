@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;

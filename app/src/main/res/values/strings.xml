@@ -2,6 +2,8 @@
     <string name="app_name">数字治理</string>
     <string name="app_exit">确定要退出该APP吗？</string>
     <string name="app_develop">正在开发中</string>
+    <string name="text_yes">是</string>
+    <string name="text_no">否</string>
 
     <string name="login_title">登录</string>
     <string name="login_username_hint">用户名</string>
@@ -53,8 +55,29 @@
     <string name="detail_finish_fail">结束巡查失败，请重新结束</string>
     <string name="detail_finish_success">结束巡查成功</string>
     <string name="detail_img_limit">最多只能选择9张图片</string>
-    <string name="detail_patrol_address">巡查地点：</string>
-    <string name="detail_patrol_username">户主名称：</string>
+    <string name="detail_patrol_username">户主姓名：</string>
+    <string name="detail_patrol_number">人数：</string>
+    <string name="detail_patrol_area_type">社区：</string>
+    <string name="detail_patrol_inspection_point">网络巡查点：</string>
+    <string name="detail_patrol_address">地址：</string>
+    <string name="detail_patrol_party_data">党员信息：</string>
+    <string name="detail_patrol_party_username">姓名：</string>
+    <string name="detail_patrol_party_position">职务：</string>
+    <string name="detail_patrol_party_commitment">承诺：</string>
+    <string name="detail_patrol_party_phone">电话：</string>
+    <string name="detail_patrol_party_time">入党时间：</string>
+    <string name="detail_patrol_merchant_data">商户信息：</string>
+    <string name="detail_patrol_merchant_user">责任人：</string>
+    <string name="detail_patrol_merchant_type">商户类别：</string>
+    <string name="detail_patrol_merchant_name">商户名称：</string>
+    <string name="detail_patrol_merchant_time">营业时间：</string>
+    <string name="detail_patrol_merchant_owner">检查责任人：</string>
+    <string name="detail_patrol_merchant_photo">门店照片：</string>
+    <string name="detail_house_type_a">行政村</string>
+    <string name="detail_house_type_n">自然村</string>
+
+    <string name="detail_patrol_address_2">巡查地点：</string>
+    <string name="detail_patrol_username_2">户主名称：</string>
     <string name="detail_patrol_owner">责任人：</string>
     <string name="detail_patrol_time">营业时间：</string>
     <string name="detail_patrol_phone">联系电话：</string>
@@ -118,6 +141,7 @@
     <string name="flash_text_1">以防为主  防控结合</string>
     <string name="flash_text_2">建设平安、和谐水唇</string>
     <string name="flash_text_2_guangdong">建设平安、和谐广东</string>
+    <string name="flash_text_2_china">建设平安、和谐中国</string>
     <string name="flash_text_3">进入系统</string>
     <string name="flash_text_bottom">陆河县水唇镇人民政府</string>
     <string name="flash_text_bottom_guangdong">广东省人民政府</string>

@@ -28,15 +28,13 @@ import com.google.gson.JsonObject;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.FetchActivity;
-import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
-import com.yaheen.cis.entity.HouseNumberBean;
+import com.yaheen.cis.entity.HouseBean;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
@@ -153,7 +151,7 @@ public class DetailActivity extends FetchActivity {
         tvFinish = findViewById(R.id.tv_finish);
         showLoadingDialog();
 
-        isSign = getIntent().getBooleanExtra("sign", false);
+//        isSign = getIntent().getBooleanExtra("sign", false);
         houseId = getIntent().getStringExtra("houseId");
         typeStr = getIntent().getStringExtra("type");
 
@@ -176,8 +174,8 @@ public class DetailActivity extends FetchActivity {
             }
             UploadLocationUtils.startUpload(getApplicationContext());
         } else {
-            initHouseData();
-            getHouseData(houseId);
+//            initHouseData();
+//            getHouseData(houseId);
         }
 
         initView();
@@ -280,13 +278,13 @@ public class DetailActivity extends FetchActivity {
     }
 
     private void initHouseData() {
-        tvPUsername = findViewById(R.id.tv_house_username);
-        tvPAddress = findViewById(R.id.tv_patrol_address);
-        tvPLeader = findViewById(R.id.tv_house_leader);
-        tvPPhone = findViewById(R.id.tv_house_phone);
-        tvPTime = findViewById(R.id.tv_patrol_time);
-        tvOwner = findViewById(R.id.tv_house_owner);
-        tvPArea = findViewById(R.id.tv_house_area);
+//        tvPUsername = findViewById(R.id.tv_house_username);
+//        tvPAddress = findViewById(R.id.tv_patrol_address);
+//        tvPLeader = findViewById(R.id.tv_house_leader);
+//        tvPPhone = findViewById(R.id.tv_house_phone);
+//        tvPTime = findViewById(R.id.tv_patrol_time);
+//        tvOwner = findViewById(R.id.tv_house_owner);
+//        tvPArea = findViewById(R.id.tv_house_area);
     }
 
     private void initPatrol() {
@@ -440,16 +438,16 @@ public class DetailActivity extends FetchActivity {
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                HouseNumberBean data = gson.fromJson(result, HouseNumberBean.class);
-                if (data != null && data.isResult() && data.getEntity().size() > 0) {
-                    tvPUsername.setText(data.getEntity().get(0).getHouseOwnerName());
-                    tvPArea.setText(data.getEntity().get(0).getBusinessScope());
-                    tvPLeader.setText(data.getEntity().get(0).getFireowner());
-                    tvPAddress.setText(data.getEntity().get(0).getAddress());
-                    tvOwner.setText(data.getEntity().get(0).getUserName());
-                    tvPPhone.setText(data.getEntity().get(0).getPhone());
-                    tvPTime.setText(data.getEntity().get(0).getTime());
-                }
+                HouseBean data = gson.fromJson(result, HouseBean.class);
+//                if (data != null && data.isResult() && data.getEntity().size() > 0) {
+//                    tvPUsername.setText(data.getEntity().get(0).getHouseOwnerName());
+//                    tvPArea.setText(data.getEntity().get(0).getBusinessScope());
+//                    tvPLeader.setText(data.getEntity().get(0).getFireowner());
+//                    tvPAddress.setText(data.getEntity().get(0).getAddress());
+//                    tvOwner.setText(data.getEntity().get(0).getUserName());
+//                    tvPPhone.setText(data.getEntity().get(0).getPhone());
+//                    tvPTime.setText(data.getEntity().get(0).getTime());
+//                }
             }
 
             @Override
@@ -646,16 +644,16 @@ public class DetailActivity extends FetchActivity {
         jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
         jsonObject.addProperty("area", BDMapUtils.getLocation().getAddrStr());
         jsonObject.addProperty("webFileids", s);
+        jsonObject.addProperty("houseId", houseId);
 
-        if (isSign && !TextUtils.isEmpty(houseId)) {
-            jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
-            jsonObject.addProperty("householdName", tvPUsername.getText().toString());
-            jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
-            jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
-            jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
-            jsonObject.addProperty("businessHours", tvPTime.getText().toString());
-        }
-
+//        if (isSign && !TextUtils.isEmpty(houseId)) {
+//            jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
+//            jsonObject.addProperty("householdName", tvPUsername.getText().toString());
+//            jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
+//            jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
+//            jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
+//            jsonObject.addProperty("businessHours", tvPTime.getText().toString());
+//        }
 
         RequestParams requestParams = new RequestParams(reportUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());

@@ -9,15 +9,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
 import com.yaheen.cis.BaseApp;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.GetVerBean;
-import com.yaheen.cis.entity.HouseNumberBean;
 import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
@@ -38,7 +35,6 @@ import com.yaheen.cis.util.version.VersionUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,7 +60,7 @@ public class LoginActivity extends PermissionActivity {
 
     private String getVerUrl = baseUrl + "/eapi/getVerifyCode.do";
 
-    private String key = "X2Am6tVLnwMMX8kVgdDk5w==";
+    private String key = "TkxwSEowNVBUT2hoN3lYTQ==";
 
     //用户获取的验证码
     private String ver = "";

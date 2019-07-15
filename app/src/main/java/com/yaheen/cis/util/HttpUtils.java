@@ -14,4 +14,13 @@ public class HttpUtils {
 
         x.http().post(params, callback);
     }
+
+    public static void getGetHttp(RequestParams params, Callback.CommonCallback<String> callback) {
+
+        params.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        params.setConnectTimeout(60 * 1000);
+        params.setReadTimeout(60 * 1000);
+
+        x.http().get(params, callback);
+    }
 }
