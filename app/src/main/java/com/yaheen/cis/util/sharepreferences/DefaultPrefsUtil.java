@@ -149,4 +149,20 @@ public class DefaultPrefsUtil {
     public static String getRole() {
         return DefaultPrefs.getInstance().getRole();
     }
+
+    public static void setBaseUrl(String baseUrl) {
+        DefaultPrefs.getInstance().setBaseUrl(baseUrl);
+    }
+
+    public static String getBaseUrl() {
+        return DefaultPrefs.getInstance().getBaseUrl();
+    }
+
+    public static void setHouseUrl(String houseUrl) {
+        DefaultPrefs.getInstance().setHouseUrl(houseUrl);
+    }
+
+    public static String getHouseUrl() {
+        return DefaultPrefs.getInstance().getHouseUrl();
+    }
 }

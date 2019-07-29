@@ -16,7 +16,16 @@ public class TypeBean implements Serializable {
     private int code;
     private String msg;
     private String recordId = "";
+    private String recordStartTime;
     private List<TypeArrBean> typeArr;
+
+    public String getRecordStartTime() {
+        return recordStartTime;
+    }
+
+    public void setRecordStartTime(String recordStartTime) {
+        this.recordStartTime = recordStartTime;
+    }
 
     public String getRecordId() {
         return recordId;
@@ -56,40 +65,5 @@ public class TypeBean implements Serializable {
 
     public void setTypeArr(List<TypeArrBean> typeArr) {
         this.typeArr = typeArr;
-    }
-
-    public static class TypeArrBean {
-        /**
-         * id : 402847f26390cebb016390d3a8db0001
-         * name : 国土
-         */
-
-        private String id;
-        private String name;
-        private boolean selected = true;
-
-        public boolean isSelected() {
-            return selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
     }
 }

@@ -9,6 +9,15 @@ public class GetVerBean {
 
     private boolean result;
     private String code;
+    private String number;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public boolean isResult() {
         return result;

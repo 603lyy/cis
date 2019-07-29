@@ -7,11 +7,12 @@ import android.widget.CheckBox;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yaheen.cis.R;
+import com.yaheen.cis.entity.TypeArrBean;
 import com.yaheen.cis.entity.TypeBean;
 
 import java.util.List;
 
-public class ReportTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, BaseViewHolder> {
+public class ReportTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHolder> {
 
     private int changeTime = 0;
 
@@ -19,12 +20,12 @@ public class ReportTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         super(R.layout.item_record_type);
     }
 
-    public void setDatas(@Nullable List<TypeBean.TypeArrBean> data) {
+    public void setDatas(@Nullable List<TypeArrBean> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TypeBean.TypeArrBean item) {
+    protected void convert(BaseViewHolder helper, TypeArrBean item) {
         helper.addOnClickListener(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());
 
@@ -34,9 +35,9 @@ public class ReportTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         }
 
         if (item.isSelected()) {
-            helper.setChecked(R.id.cb_type,true);
+            helper.setChecked(R.id.cb_type, true);
         } else {
-            helper.setChecked(R.id.cb_type,false);
+            helper.setChecked(R.id.cb_type, false);
         }
 
     }

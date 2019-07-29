@@ -24,6 +24,7 @@ import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
+import com.yaheen.cis.util.time.TimeTransferUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -190,16 +191,19 @@ public class PatrolSettingActivity extends BaseActivity {
         if (BDMapUtils.getLocation() == null) {
             showToast(R.string.map_init_ing);
             cancelLoadingDialog();
+            isOpen = false;
             return;
         } else if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
             showToast(R.string.map_init_fail);
             cancelLoadingDialog();
+            isOpen = false;
             return;
         }
 
         if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
             showToast(R.string.setting_start_select);
             cancelLoadingDialog();
+            isOpen = false;
             return;
         }
 
@@ -212,6 +216,7 @@ public class PatrolSettingActivity extends BaseActivity {
         RequestParams requestParams = new RequestParams(startUrl);
         requestParams.addQueryStringParameter("typeId", typeId);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("devFlag", "APP");
         requestParams.addQueryStringParameter("latitude", location.getLatitude() + "");
         requestParams.addQueryStringParameter("longitude", location.getLongitude() + "");
 
@@ -224,6 +229,7 @@ public class PatrolSettingActivity extends BaseActivity {
                 if (data != null && data.isResult()) {
                     recordId = data.getRecordId();
                     typeBean.setRecordId(data.getRecordId());
+                    typeBean.setRecordStartTime(TimeTransferUtils.getYMDHMSStrTime2(System.currentTimeMillis()+""));
                     String typeStr = gson.toJson(typeBean);
                     DefaultPrefsUtil.setPatrolType(typeStr);
                     DefaultPrefsUtil.setPatrolRecordId(recordId);
@@ -235,6 +241,9 @@ public class PatrolSettingActivity extends BaseActivity {
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(PatrolSettingActivity.this, LoginActivity.class));
                     finish();
+                } else if (data != null && data.getCode() == 1003) {
+                    showToast(data.getMsg());
+                    isOpen = false;
                 } else {
                     showToast(R.string.setting_start_fail);
                     cancelLoadingDialog();

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.yaheen.cis.R;
+import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.ProgersssDialog;
 import com.yaheen.cis.util.img.CompressImg;
 import com.yaheen.cis.util.toast.ToastUtils;
@@ -42,7 +43,7 @@ public class BaseActivity extends Activity implements CompressImg {
 //    protected String baseUrl = "http://47.106.72.58:10080";
 
     //岳阳版
-    protected String baseUrl = "http://npapp.yaheen.com:8080/crs_yueyang/";
+    protected String baseUrl = HttpUtils.baseUrl;
 
 //    //水唇镇系统
 //    protected String houseUrl = "http://whn.020szsq.com:8088";
@@ -54,7 +55,7 @@ public class BaseActivity extends Activity implements CompressImg {
 //    protected String houseUrl = "https://npapp.yaheen.com:8090/demonstration";
 
     //岳阳版
-    protected String houseUrl = "https://npapp.yaheen.com:8090/yueyang";
+    protected String houseUrl = HttpUtils.houseUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

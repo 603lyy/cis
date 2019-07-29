@@ -2,7 +2,9 @@ package com.yaheen.cis.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -16,6 +18,7 @@ import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.entity.GetVerBean;
 import com.yaheen.cis.entity.LoginBean;
+import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.common.CommonUtils;
@@ -56,7 +59,7 @@ public class LoginActivity extends PermissionActivity {
 
     private CountDownTimerUtils countDownTimerUtils;
 
-    private String url = baseUrl + "/eapi/login.do";
+    private String url = baseUrl + "/eapi/wlogin.do";
 
     private String getVerUrl = baseUrl + "/eapi/getVerifyCode.do";
 
@@ -67,6 +70,9 @@ public class LoginActivity extends PermissionActivity {
 
     //是否手机号登录
     private boolean isPhone = false, isCount = false;
+
+    //账号是否在巡查
+    private String loginNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,23 +122,8 @@ public class LoginActivity extends PermissionActivity {
         tvChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isPhone) {
-                    isPhone = false;
-                    llVer.setVisibility(View.GONE);
-                    etPhone.setVisibility(View.GONE);
-                    etPsd.setVisibility(View.VISIBLE);
-                    cbRPsd.setVisibility(View.VISIBLE);
-                    etName.setVisibility(View.VISIBLE);
-                    tvChange.setText(R.string.login_phone);
-                } else {
-                    isPhone = true;
-                    etPsd.setVisibility(View.GONE);
-                    cbRPsd.setVisibility(View.GONE);
-                    etName.setVisibility(View.GONE);
-                    llVer.setVisibility(View.VISIBLE);
-                    etPhone.setVisibility(View.VISIBLE);
-                    tvChange.setText(R.string.login_account);
-                }
+                etPhone.setEnabled(true);
+                changePhoneView();
             }
         });
 
@@ -144,7 +135,45 @@ public class LoginActivity extends PermissionActivity {
             }
         });
 
+        etPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                loginNumber = "";
+            }
+        });
+
     }
+
+    public void changePhoneView() {
+        if (isPhone) {
+            isPhone = false;
+            llVer.setVisibility(View.GONE);
+            etPhone.setVisibility(View.GONE);
+            etPsd.setVisibility(View.VISIBLE);
+            cbRPsd.setVisibility(View.VISIBLE);
+            etName.setVisibility(View.VISIBLE);
+            tvChange.setText(R.string.login_phone);
+        } else {
+            isPhone = true;
+            etPsd.setVisibility(View.GONE);
+            cbRPsd.setVisibility(View.GONE);
+            etName.setVisibility(View.GONE);
+            llVer.setVisibility(View.VISIBLE);
+            etPhone.setVisibility(View.VISIBLE);
+            tvChange.setText(R.string.login_account);
+        }
+    }
+
 
     /**
      * 判断上次巡查是否结束
@@ -221,6 +250,7 @@ public class LoginActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(getVerUrl);
         requestParams.addQueryStringParameter("mobile", phone);
+        requestParams.addQueryStringParameter("number", loginNumber);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -228,6 +258,14 @@ public class LoginActivity extends PermissionActivity {
                 GetVerBean data = gson.fromJson(result, GetVerBean.class);
                 if (data != null && data.isResult()) {
                     ver = data.getCode();
+                    if (TextUtils.isEmpty(loginNumber) && data.getNumber() != null) {
+                        DialogUtils.showDialog(LoginActivity.this, "此账号正在巡查，是否继续登录", new DialogCallback() {
+                            @Override
+                            public void callback() {
+                                loginNumber = "1001";
+                            }
+                        }, null);
+                    }
                 } else {
                     showToast(R.string.login_get_verification_fail);
                 }
@@ -277,7 +315,11 @@ public class LoginActivity extends PermissionActivity {
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("mobile", phone);
         requestParams.addQueryStringParameter("loginFlag", "M");
+        requestParams.addQueryStringParameter("devFlag", "APP");
         requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
+        if (loginNumber.equals("1001")) {
+            requestParams.addQueryStringParameter("number", loginNumber);
+        }
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -290,9 +332,20 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
                         DefaultPrefsUtil.setUserName(data.getUsername());
+
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
+                        //账号正在巡查，返回巡查信息
+                        if (data.getTypeArr() != null && data.getTypeArr().size() > 0 && !TextUtils.isEmpty(data.getRecordId())) {
+                            TypeBean typeBean = new TypeBean();
+                            typeBean.setTypeArr(data.getTypeArr());
+                            typeBean.setRecordId(data.getRecordId());
+                            typeBean.setRecordStartTime(data.getRecordStartTime());
+//                            intent.putExtra("type", gson.toJson(typeBean));
+                            DefaultPrefsUtil.setPatrolType(gson.toJson(typeBean));
+                        }
                         startActivity(intent);
                     } else {
+                        loginNumber = "";
                         showToast(data.getMsg());
                     }
                 } else {
@@ -338,6 +391,8 @@ public class LoginActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("username", name);
+        requestParams.addQueryStringParameter("number", "");
+        requestParams.addQueryStringParameter("devFlag", "APP");
         requestParams.addQueryStringParameter("loginFlag", "N");
         requestParams.addQueryStringParameter("password", Base64Utils.encode(AESUtils.encrypt(psd, key)));
         requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
@@ -346,7 +401,7 @@ public class LoginActivity extends PermissionActivity {
             @Override
             public void onSuccess(String result) {
 
-                LoginBean data = gson.fromJson(result, LoginBean.class);
+                final LoginBean data = gson.fromJson(result, LoginBean.class);
                 if (data != null) {
                     if (data.isResult()) {
                         //不记住密码则保存空字符串
@@ -361,7 +416,26 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setUserName(data.getUsername());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
+                        //账号正在巡查，返回巡查信息
+                        if (data.getTypeArr() != null && data.getTypeArr().size() > 0 && !TextUtils.isEmpty(data.getRecordId())) {
+                            TypeBean typeBean = new TypeBean();
+                            typeBean.setTypeArr(data.getTypeArr());
+                            typeBean.setRecordId(data.getRecordId());
+                            typeBean.setRecordStartTime(data.getRecordStartTime());
+//                            intent.putExtra("type", gson.toJson(typeBean));
+                            DefaultPrefsUtil.setPatrolType(gson.toJson(typeBean));
+                        }
                         startActivity(intent);
+                    } else if (data.getCode() == 1001) {
+                        DialogUtils.showDialog(LoginActivity.this, "此账号正在巡查，是否继续登录", new DialogCallback() {
+                            @Override
+                            public void callback() {
+                                etPhone.setText(data.getMobile());
+                                etPhone.setEnabled(false);
+                                loginNumber = "1001";
+                                changePhoneView();
+                            }
+                        }, null);
                     } else {
                         showToast(data.getMsg());
                     }
@@ -432,19 +506,20 @@ public class LoginActivity extends PermissionActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
-            @Override
-            public void callback() {
-                ScreenManager.getScreenManagerInstance(LoginActivity.this).finishActivities();
-                NotificationUtils.cancelNofication(getApplicationContext());
-                UploadLocationUtils.stopUpload();
-                BaseApp.exit();
-            }
-        }, new IDialogCancelCallback() {
-            @Override
-            public void cancelCallback() {
-            }
-        });
+        super.onBackPressed();
+//        DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
+//            @Override
+//            public void callback() {
+//                ScreenManager.getScreenManagerInstance(LoginActivity.this).finishActivities();
+//                NotificationUtils.cancelNofication(getApplicationContext());
+//                UploadLocationUtils.stopUpload();
+//                BaseApp.exit();
+//            }
+//        }, new IDialogCancelCallback() {
+//            @Override
+//            public void cancelCallback() {
+//            }
+//        });
     }
 
     @Override

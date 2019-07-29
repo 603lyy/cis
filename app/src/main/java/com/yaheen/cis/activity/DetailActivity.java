@@ -151,13 +151,16 @@ public class DetailActivity extends FetchActivity {
         tvFinish = findViewById(R.id.tv_finish);
         showLoadingDialog();
 
-//        isSign = getIntent().getBooleanExtra("sign", false);
         houseId = getIntent().getStringExtra("houseId");
         typeStr = getIntent().getStringExtra("type");
 
         typeData = gson.fromJson(typeStr, TypeBean.class);
-        recordId = DefaultPrefsUtil.getPatrolRecordId();
-        startTime = DefaultPrefsUtil.getPatrolStart();
+        if (TimeTransferUtils.getHMSTime(typeData.getRecordStartTime()) != null) {
+            startTime = Long.valueOf(TimeTransferUtils.getHMSTime(typeData.getRecordStartTime()));
+        } else {
+            startTime = System.currentTimeMillis();
+        }
+        recordId = typeData.getRecordId();
 
         //开始定位
         BDMapUtils.startLocation();
@@ -168,14 +171,11 @@ public class DetailActivity extends FetchActivity {
 
         if (!isSign) {
             //开始时间为零，即开始新的巡查
-            if (startTime == 0) {
-                startTime = System.currentTimeMillis();
-                DefaultPrefsUtil.setPatrolStart(startTime);
-            }
+//            if (startTime == 0) {
+//                startTime = System.currentTimeMillis();
+//                DefaultPrefsUtil.setPatrolStart(startTime);
+//            }
             UploadLocationUtils.startUpload(getApplicationContext());
-        } else {
-//            initHouseData();
-//            getHouseData(houseId);
         }
 
         initView();
