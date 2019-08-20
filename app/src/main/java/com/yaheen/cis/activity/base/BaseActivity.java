@@ -35,7 +35,7 @@ public class BaseActivity extends Activity implements CompressImg {
 
     //水唇镇系统
     protected String baseUrl = "https://shuichun.zl.yafrm.com";
-//    protected String baseUrl = "http://crs.t.yaheen.com:168/crs_sc/";
+//    protected String baseUrl = "http://crs.t.yaheen.com:168/crs_sc";
 
     //河口镇系统
 //    protected String baseUrl = "http://47.106.72.58:9280";
