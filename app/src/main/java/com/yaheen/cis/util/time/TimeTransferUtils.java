@@ -9,7 +9,7 @@ public class TimeTransferUtils {
     //字符串转时间戳
     public static String getHMSTime(String timeString) {
         String timeStamp = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("YY-MM-DD HH:mm:ss");
         Date d;
         try {
             d = sdf.parse(timeString);
@@ -38,5 +38,19 @@ public class TimeTransferUtils {
         timeString = sdf.format(new Date(l));//单位秒
         return timeString;
     }
+
+    //时间戳转字符串
+    public static String getYMDHMSStrTime2(String timeStamp) {
+        String timeString = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long l = Long.valueOf(timeStamp);
+        timeString = sdf.format(new Date(l));//单位秒
+        return timeString;
+    }
+
+//    public static String getDetailTime(String timeStamp){
+//        long time = Long.valueOf(timeStamp);
+//
+//    }
 
 }

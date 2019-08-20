@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -30,20 +31,19 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
+import com.yaheen.cis.adapter.CommonImgAdapter;
+import com.yaheen.cis.adapter.EventImgAdapter;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
 import com.yaheen.cis.adapter.ProblemAdapter;
 import com.yaheen.cis.adapter.UrgencyAdapter;
-import com.yaheen.cis.entity.HouseNumberBean;
+import com.yaheen.cis.entity.EventDetailBean;
+import com.yaheen.cis.entity.HouseBean;
 import com.yaheen.cis.entity.ImgUploadBean;
 import com.yaheen.cis.entity.QuestionBean;
 import com.yaheen.cis.entity.ReportBean;
 import com.yaheen.cis.entity.TypeBean;
-import com.yaheen.cis.entity.UploadLocationListBean;
-import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
-import com.yaheen.cis.util.dialog.DialogCallback;
-import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.img.UpLoadImgListener;
@@ -54,7 +54,6 @@ import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import com.yaheen.cis.util.time.CountDownTimerUtils;
 import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
-import com.yaheen.cis.util.time.TimeTransferUtils;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
 
 import org.xutils.common.Callback;
@@ -68,9 +67,13 @@ public class DetailPointActivity extends PermissionActivity {
 
     private TextView tvLocation, tvCommit;
 
-    private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
+    private TextView tvHOwner, tvHNumber, tvHAreaType, tvHInspectionPoint, tvHAdderss;
 
-    private LinearLayout llBack,llHouse;
+    private TextView tvPUser, tvPPosition, tvPCommitment, tvPPhone, tvPTime;
+
+    private TextView tvMUser, tvMType, tvMName, tvMTime, tvMOwner;
+
+    private LinearLayout llBack, llHouse, llParty, llMerchant;
 
     private EditText etDescribe;
 
@@ -80,7 +83,7 @@ public class DetailPointActivity extends PermissionActivity {
 
     private BaiduMap mBaiduMap;
 
-    private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol;
+    private RecyclerView rvProblem, rvUrgency, rvImg, rvPatrol, rvHouseImg;
 
     private RefreshLayout refreshLayout;
 
@@ -99,14 +102,16 @@ public class DetailPointActivity extends PermissionActivity {
     private String reportUrl = baseUrl + "/eapi/report.do";
 
     //水唇镇系统
-//    private String houseUrl = "http://whn.020szsq.com:8088/merchants/getAllMechats.do";
-
-    //广东系统
-//    private String houseUrl = "http://47.107.101.37:8080/merchants/getAllMechats.do";
-
+//    private String mHhouseUrl =  houseUrl + "/merchants/getAllMechats.do";
 
     //河口镇系统
-    private String houseUrl = "https://lhhk.020szsq.com/merchants/getAllMechats.do";
+//    private String mHhouseUrl =  houseUrl + "/merchants/getAllMechats.do";
+
+    //全国
+//    private String mHhouseUrl = houseUrl + "/merchants/getAllMechats.do";
+
+    //岳阳
+    private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
 
     private String typeStr, houseId;
 
@@ -131,6 +136,11 @@ public class DetailPointActivity extends PermissionActivity {
     //问题类型实体
     private TypeBean typeData;
 
+    private CommonImgAdapter imgAdapter;
+
+    //图片链接列表
+    private List<String> imgUrlList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +161,7 @@ public class DetailPointActivity extends PermissionActivity {
         initMapView();
         initImgUpload();
         initHouseData();
+        initHouseImgView();
 
         getHouseData(houseId);
         getQuestionMsg(typeData.getTypeArr().get(0).getId());
@@ -207,14 +218,27 @@ public class DetailPointActivity extends PermissionActivity {
     }
 
     private void initHouseData() {
-        tvPUsername = findViewById(R.id.tv_house_username);
-        tvPAddress = findViewById(R.id.tv_patrol_address);
-        tvPLeader = findViewById(R.id.tv_house_leader);
-        tvPPhone = findViewById(R.id.tv_house_phone);
-        tvOwner = findViewById(R.id.tv_house_owner);
-        tvPTime = findViewById(R.id.tv_patrol_time);
+        tvHNumber = findViewById(R.id.tv_house_number);
+        tvHAdderss = findViewById(R.id.tv_house_address);
+        tvHOwner = findViewById(R.id.tv_patrol_username);
+        tvHAreaType = findViewById(R.id.tv_house_area_type);
+        tvHInspectionPoint = findViewById(R.id.tv_house_inspection_point);
+
+        tvPTime = findViewById(R.id.tv_party_time);
+        tvPPhone = findViewById(R.id.tv_party_phone);
+        tvPUser = findViewById(R.id.tv_party_username);
+        tvPPosition = findViewById(R.id.tv_party_position);
+        tvPCommitment = findViewById(R.id.tv_party_commitment);
+
+        tvMName = findViewById(R.id.tv_merchant_name);
+        tvMType = findViewById(R.id.tv_merchant_type);
+        tvMUser = findViewById(R.id.tv_merchant_user);
+        tvMTime = findViewById(R.id.tv_merchant_time);
+        tvMOwner = findViewById(R.id.tv_merchant_owner);
+
         llHouse = findViewById(R.id.ll_house_data);
-        tvPArea = findViewById(R.id.tv_house_area);
+        llParty = findViewById(R.id.ll_party_data);
+        llMerchant = findViewById(R.id.ll_merchant_data);
     }
 
     private void initPatrol() {
@@ -318,6 +342,34 @@ public class DetailPointActivity extends PermissionActivity {
         BDMapUtils.setMapViewListener(new LocationListener());
     }
 
+    private void initHouseImgView() {
+        rvHouseImg = findViewById(R.id.rv_house_img);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvHouseImg.setLayoutManager(layoutManager);
+
+        imgAdapter = new CommonImgAdapter(this);
+        rvHouseImg.setAdapter(imgAdapter);
+
+        imgAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof ImageView) {
+                    if (((ImageView) view).getDrawable() == null)
+                        return;
+                    ArrayList<String> urls = new ArrayList<String>();
+                    urls.add(imgUrlList.get(position));
+                    new PhotoPagerUtils.Builder(DetailPointActivity.this)
+                            .setBigImageUrls(urls)
+                            .setBigBitmap(((ImageView) view).getDrawable())
+                            .setSavaImage(true)
+                            .build();
+                }
+            }
+        });
+    }
+
     private View getImgFooterView() {
         View view = getLayoutInflater().inflate(R.layout.footer_img_upload,
                 (ViewGroup) rvImg.getParent(), false);
@@ -356,25 +408,15 @@ public class DetailPointActivity extends PermissionActivity {
             return;
         }
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("houseNumberId", houseId);
-        RequestParams params = new RequestParams(houseUrl);
-//        RequestParams params = new RequestParams("http://lyl.tunnel.echomod.cn/whnsubhekou/merchants/getAllMechats.do");
-        params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
+        RequestParams params = new RequestParams(mHhouseUrl);
+        params.addQueryStringParameter("houseNumberId", houseId);
         HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                HouseNumberBean data = gson.fromJson(result, HouseNumberBean.class);
-                if (data != null && data.isResult() && data.getEntity().size() > 0) {
-                    tvPUsername.setText(data.getEntity().get(0).getHouseOwnerName());
-                    tvPArea.setText(data.getEntity().get(0).getBusinessScope());
-                    tvPLeader.setText(data.getEntity().get(0).getFireowner());
-                    tvPAddress.setText(data.getEntity().get(0).getAddress());
-                    tvOwner.setText(data.getEntity().get(0).getUserName());
-                    tvPPhone.setText(data.getEntity().get(0).getPhone());
-                    tvPTime.setText(data.getEntity().get(0).getTime());
-                    llHouse.setVisibility(View.VISIBLE);
-                }else {
+                HouseBean data = gson.fromJson(result, HouseBean.class);
+                if (data != null && data.isResult() && data.getJson().size() > 0) {
+                    showHouseData(data.getJson().get(0));
+                } else {
                     llHouse.setVisibility(View.GONE);
                 }
             }
@@ -394,6 +436,169 @@ public class DetailPointActivity extends PermissionActivity {
 
             }
         });
+    }
+
+    /**
+     * 显示门牌信息，没有数据的不显示
+     */
+    public void showHouseData(HouseBean.JsonBean jsonBean) {
+        if (jsonBean != null) {
+
+            if (jsonBean.getHouseNumber() != null || jsonBean.getUser() != null) {
+
+                if (jsonBean.getUser().size() > 0 && !TextUtils.isEmpty(jsonBean.getUser().get(0).getName())) {
+                    tvHOwner.setText(jsonBean.getUser().get(0).getName());
+                    tvHOwner.setVisibility(View.VISIBLE);
+                } else {
+                    tvHOwner.setVisibility(View.GONE);
+                }
+
+                if (jsonBean.getHouseNumber() != null) {
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getPeopleNumber())) {
+                        tvHNumber.setText(jsonBean.getHouseNumber().getPeopleNumber());
+                        tvHNumber.setVisibility(View.VISIBLE);
+                    } else {
+                        tvHNumber.setVisibility(View.GONE);
+                    }
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getCommunity())) {
+                        if (jsonBean.getHouseNumber().getCommunity().equals("A")) {
+                            tvHAreaType.setText(getString(R.string.detail_house_type_a));
+                            tvHAreaType.setVisibility(View.VISIBLE);
+                        } else if (jsonBean.getHouseNumber().getCommunity().equals("N")) {
+                            tvHAreaType.setText(getString(R.string.detail_house_type_n));
+                            tvHAreaType.setVisibility(View.VISIBLE);
+                        } else {
+                            tvHAreaType.setVisibility(View.GONE);
+                        }
+                    } else {
+                        tvHAreaType.setVisibility(View.GONE);
+                    }
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getGridInspectionPoint())) {
+                        if (jsonBean.getHouseNumber().getGridInspectionPoint().equals("Y")) {
+                            tvHInspectionPoint.setText(getString(R.string.text_yes));
+                        } else {
+                            tvHInspectionPoint.setText(getString(R.string.text_no));
+                        }
+                        tvHInspectionPoint.setVisibility(View.VISIBLE);
+                    } else {
+                        tvHInspectionPoint.setVisibility(View.GONE);
+                    }
+
+                    if (!TextUtils.isEmpty(jsonBean.getHouseNumber().getAddress())) {
+                        tvHAdderss.setText(jsonBean.getHouseNumber().getAddress());
+                        tvHAdderss.setVisibility(View.VISIBLE);
+                    } else {
+                        tvHAdderss.setVisibility(View.GONE);
+                    }
+                }
+                llHouse.setVisibility(View.VISIBLE);
+            } else {
+                llHouse.setVisibility(View.GONE);
+            }
+
+            if (jsonBean.getPartyMember() != null && jsonBean.getPartyMember().size() > 0) {
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getName())) {
+                    tvPUser.setText(jsonBean.getPartyMember().get(0).getName());
+                    tvPUser.setVisibility(View.VISIBLE);
+                } else {
+                    tvPUser.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getPosition())) {
+                    tvPPosition.setText(jsonBean.getPartyMember().get(0).getPosition());
+                    tvPPosition.setVisibility(View.VISIBLE);
+                } else {
+                    tvPPosition.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getPromise())) {
+                    tvPCommitment.setText(jsonBean.getPartyMember().get(0).getPromise());
+                    tvPCommitment.setVisibility(View.VISIBLE);
+                } else {
+                    tvPCommitment.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getPhone())) {
+                    tvPPhone.setText(jsonBean.getPartyMember().get(0).getPhone());
+                    tvPPhone.setVisibility(View.VISIBLE);
+                } else {
+                    tvPPhone.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getPartyMember().get(0).getTime())) {
+                    tvPTime.setText(jsonBean.getPartyMember().get(0).getTime());
+                    tvPTime.setVisibility(View.VISIBLE);
+                } else {
+                    tvPTime.setVisibility(View.GONE);
+                }
+                llParty.setVisibility(View.VISIBLE);
+            } else {
+                llParty.setVisibility(View.GONE);
+            }
+
+            if (jsonBean.getMerchants() != null) {
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getHouseOwnerName())) {
+                    tvMUser.setText(jsonBean.getMerchants().getHouseOwnerName());
+                    tvMUser.setVisibility(View.VISIBLE);
+                } else {
+                    tvMUser.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getType())) {
+                    tvMType.setText(jsonBean.getMerchants().getType());
+                    tvMType.setVisibility(View.VISIBLE);
+                } else {
+                    tvMType.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getName())) {
+                    tvMName.setText(jsonBean.getMerchants().getName());
+                    tvMName.setVisibility(View.VISIBLE);
+                } else {
+                    tvMName.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getTime())) {
+                    tvMTime.setText(jsonBean.getMerchants().getTime());
+                    tvMTime.setVisibility(View.VISIBLE);
+                } else {
+                    tvMTime.setVisibility(View.GONE);
+                }
+
+                if (!TextUtils.isEmpty(jsonBean.getMerchants().getUserName())) {
+                    tvMOwner.setText(jsonBean.getMerchants().getUserName());
+                    tvMOwner.setVisibility(View.VISIBLE);
+                } else {
+                    tvMOwner.setVisibility(View.GONE);
+                }
+
+                String url = jsonBean.getMerchants().getStorephotos();
+                String name = jsonBean.getMerchants().getNameList();
+                if (!TextUtils.isEmpty(url)) {
+                    while (url.indexOf(",") > 0) {
+//                        imgUrlList.add("http://lyl.t.yaheen.com:168/whnsubyueyang/webFile/visit.do?id=" + url.substring(0,url.indexOf(",") + 1) + "&showName=" + name.substring(1, name.indexOf(",") + 1));
+                        url = url.substring(url.indexOf(",") + 1);
+                        name = name.substring(name.indexOf(",") + 1);
+                    }
+//                    imgUrlList.add("http://lyl.t.yaheen.com:168/whnsubyueyang/webFile/visit.do?id=" + url + "&showName=" + name);
+//                    imgUrlList.add(houseUrl + "/webFile/visit.do?id=" + url);
+
+                    imgAdapter.setDatas(imgUrlList);
+                }
+                llMerchant.setVisibility(View.VISIBLE);
+            } else {
+                llMerchant.setVisibility(View.GONE);
+            }
+        } else {
+            llHouse.setVisibility(View.GONE);
+            llParty.setVisibility(View.GONE);
+            llMerchant.setVisibility(View.GONE);
+        }
     }
 
     private void getQuestionMsg(String typeId) {
@@ -573,20 +778,20 @@ public class DetailPointActivity extends PermissionActivity {
         jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
         jsonObject.addProperty("area", BDMapUtils.getLocation().getAddrStr());
         jsonObject.addProperty("webFileids", s);
+        jsonObject.addProperty("houseId", houseId);
 
-        if (!TextUtils.isEmpty(houseId)) {
-            jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
-            jsonObject.addProperty("householdName", tvPUsername.getText().toString());
-            jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
-            jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
-            jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
-            jsonObject.addProperty("businessHours", tvPTime.getText().toString());
-            jsonObject.addProperty("responsiblePerson", tvOwner.getText().toString());
-        }
-
-
+//        if (!TextUtils.isEmpty(houseId)) {
+//            jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
+//            jsonObject.addProperty("householdName", tvPUsername.getText().toString());
+//            jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
+//            jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
+//            jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
+//            jsonObject.addProperty("businessHours", tvPTime.getText().toString());
+//            jsonObject.addProperty("responsiblePerson", tvOwner.getText().toString());
+//        }
         RequestParams requestParams = new RequestParams(reportUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         if (!TextUtils.isEmpty(houseId)) {
             requestParams.addParameter("point", true);

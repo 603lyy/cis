@@ -9,12 +9,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yaheen.cis.R;
 import com.yaheen.cis.entity.Status;
+import com.yaheen.cis.entity.TypeArrBean;
 import com.yaheen.cis.entity.TypeBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatrolSettingAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, BaseViewHolder> {
+public class PatrolSettingAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHolder> {
 
     private CheckBox checkBox;
 
@@ -22,12 +23,12 @@ public class PatrolSettingAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean,
         super(R.layout.item_patrol_setting);
     }
 
-    public void setDatas(@Nullable List<TypeBean.TypeArrBean> data) {
+    public void setDatas(@Nullable List<TypeArrBean> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, final TypeBean.TypeArrBean item) {
+    protected void convert(BaseViewHolder helper, final TypeArrBean item) {
         if(item.isSelected()){
             helper.setChecked(R.id.cb_setting,true);
         }else {
@@ -41,7 +42,7 @@ public class PatrolSettingAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean,
     //已经选择的问题类型
     public TypeBean getTypeBean() {
         TypeBean typeBean = new TypeBean();
-        typeBean.setTypeArr(new ArrayList<TypeBean.TypeArrBean>());
+        typeBean.setTypeArr(new ArrayList<TypeArrBean>());
         for (int i = 0; i < mData.size(); i++) {
             if (mData.get(i).isSelected()) {
                 typeBean.getTypeArr().add(mData.get(i));

@@ -11,28 +11,27 @@ import com.bumptech.glide.request.target.Target;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yaheen.cis.R;
-import com.yaheen.cis.entity.EventDetailBean;
 
 import java.util.List;
 
-public class EventImgAdapter extends BaseQuickAdapter<EventDetailBean.TbEventBean.FileArrBean, BaseViewHolder> {
+public class CommonImgAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     private Context context;
 
-    public EventImgAdapter(Context context) {
-        super(R.layout.item_upload_img);
+    public CommonImgAdapter(Context context) {
+        super(R.layout.item_common_img);
         this.context = context;
     }
 
-    public void setDatas(@Nullable List<EventDetailBean.TbEventBean.FileArrBean> data) {
+    public void setDatas(@Nullable List<String> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, EventDetailBean.TbEventBean.FileArrBean data) {
+    protected void convert(final BaseViewHolder helper, final String url) {
 
         Glide.with(context)
-                .load(data.getImageUrl())
+                .load(url)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {

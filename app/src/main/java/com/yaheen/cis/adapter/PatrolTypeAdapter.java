@@ -9,11 +9,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yaheen.cis.R;
 import com.yaheen.cis.entity.Status;
+import com.yaheen.cis.entity.TypeArrBean;
 import com.yaheen.cis.entity.TypeBean;
 
 import java.util.List;
 
-public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, BaseViewHolder> {
+public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHolder> {
 
     private CheckBox checkBox;
 
@@ -23,12 +24,12 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeBean.TypeArrBean, Ba
         super(R.layout.item_patrol_type);
     }
 
-    public void setDatas(@Nullable List<TypeBean.TypeArrBean> data) {
+    public void setDatas(@Nullable List<TypeArrBean> data) {
         setNewData(data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TypeBean.TypeArrBean item) {
+    protected void convert(BaseViewHolder helper, TypeArrBean item) {
         checkBox = helper.getView(R.id.cb_type);
         helper.addOnClickListener(R.id.cb_type);
         helper.setText(R.id.cb_type, item.getName());

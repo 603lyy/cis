@@ -14,8 +14,8 @@ android {
         applicationId "com.yaheen.cis"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1013
-        versionName "0.9.0"
+        versionCode 1014
+        versionName "1.0.14"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

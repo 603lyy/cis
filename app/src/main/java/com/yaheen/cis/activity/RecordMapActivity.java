@@ -115,7 +115,6 @@ public class RecordMapActivity extends MapActivity {
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-//        mBaiduMap.hideSDKLayer();
 
         BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
                 .fromResource(R.drawable.ic_map_point);

@@ -4,10 +4,11 @@ import java.util.List;
 
 public class EventDetailBean {
 
+
     /**
      * result : true
      * code : 1004
-     * tbEvent : {"type":"消防","describe":"正餐","emergency":"4","longitude":113.40465,"latitude":23.131227,"fireOfficer":"lyy","businessHours":"08:00\u2014\u201418:00","scopeOfOperation":"农家乐特产","householdName":"大众农家乐","householdPhone":"13929327812","inspectionSite":"水唇镇螺洞村大众农家乐","questionnaireArr":[{"questionnaire":"在岗人员"}],"fileArr":[{"imageUrl":"http://lyy.tunnel.echomod.cn/crs/webFile/visit.do?id=402847ec648750150164875bd4cd0005&showName=6dbb8ce42fc34b7a8fb4e42bf3b2c11d.jpg"}]}
+     * tbEvent : {"type":"环境卫生","username":"1号巡查员","describe":"正常","emergency":"2","longitude":113.40693,"latitude":23.128172,"houseId":"2c9252926ad2ea6b016ad3d7c5040005","questionnaireArr":[{"questionnaire":"其他"}],"fileArr":[{"imageUrl":"http://47.106.72.58:10080/webFile/visit.do?id=2c9286176bd5e9eb016bd60655b90022&showName=afe7643850d44aa5a981eee4a27a5d4a.jpg"}]}
      * msg : 查询成功
      */
 
@@ -50,19 +51,15 @@ public class EventDetailBean {
 
     public static class TbEventBean {
         /**
-         * type : 消防
-         * describe : 正餐
-         * emergency : 4
-         * longitude : 113.40465
-         * latitude : 23.131227
-         * fireOfficer : lyy
-         * businessHours : 08:00——18:00
-         * scopeOfOperation : 农家乐特产
-         * householdName : 大众农家乐
-         * householdPhone : 13929327812
-         * inspectionSite : 水唇镇螺洞村大众农家乐
-         * questionnaireArr : [{"questionnaire":"在岗人员"}]
-         * fileArr : [{"imageUrl":"http://lyy.tunnel.echomod.cn/crs/webFile/visit.do?id=402847ec648750150164875bd4cd0005&showName=6dbb8ce42fc34b7a8fb4e42bf3b2c11d.jpg"}]
+         * type : 环境卫生
+         * username : 1号巡查员
+         * describe : 正常
+         * emergency : 2
+         * longitude : 113.40693
+         * latitude : 23.128172
+         * houseId : 2c9252926ad2ea6b016ad3d7c5040005
+         * questionnaireArr : [{"questionnaire":"其他"}]
+         * fileArr : [{"imageUrl":"http://47.106.72.58:10080/webFile/visit.do?id=2c9286176bd5e9eb016bd60655b90022&showName=afe7643850d44aa5a981eee4a27a5d4a.jpg"}]
          */
 
         private String type;
@@ -71,26 +68,16 @@ public class EventDetailBean {
         private String emergency;
         private double longitude;
         private double latitude;
-        private String fireOfficer;
-        private String businessHours;
-        private String scopeOfOperation;
-        private String householdName;
-        private String householdPhone;
-        private String inspectionSite;
-        private String responsiblePerson;
+        private String houseId;
         private List<QuestionnaireArrBean> questionnaireArr;
         private List<FileArrBean> fileArr;
 
-        public String getResponsiblePerson() {
-            return responsiblePerson;
-        }
-
-        public void setResponsiblePerson(String responsiblePerson) {
-            this.responsiblePerson = responsiblePerson;
-        }
-
         public String getType() {
             return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
 
         public String getUsername() {
@@ -99,10 +86,6 @@ public class EventDetailBean {
 
         public void setUsername(String username) {
             this.username = username;
-        }
-
-        public void setType(String type) {
-            this.type = type;
         }
 
         public String getDescribe() {
@@ -137,52 +120,12 @@ public class EventDetailBean {
             this.latitude = latitude;
         }
 
-        public String getFireOfficer() {
-            return fireOfficer;
+        public String getHouseId() {
+            return houseId;
         }
 
-        public void setFireOfficer(String fireOfficer) {
-            this.fireOfficer = fireOfficer;
-        }
-
-        public String getBusinessHours() {
-            return businessHours;
-        }
-
-        public void setBusinessHours(String businessHours) {
-            this.businessHours = businessHours;
-        }
-
-        public String getScopeOfOperation() {
-            return scopeOfOperation;
-        }
-
-        public void setScopeOfOperation(String scopeOfOperation) {
-            this.scopeOfOperation = scopeOfOperation;
-        }
-
-        public String getHouseholdName() {
-            return householdName;
-        }
-
-        public void setHouseholdName(String householdName) {
-            this.householdName = householdName;
-        }
-
-        public String getHouseholdPhone() {
-            return householdPhone;
-        }
-
-        public void setHouseholdPhone(String householdPhone) {
-            this.householdPhone = householdPhone;
-        }
-
-        public String getInspectionSite() {
-            return inspectionSite;
-        }
-
-        public void setInspectionSite(String inspectionSite) {
-            this.inspectionSite = inspectionSite;
+        public void setHouseId(String houseId) {
+            this.houseId = houseId;
         }
 
         public List<QuestionnaireArrBean> getQuestionnaireArr() {
@@ -203,7 +146,7 @@ public class EventDetailBean {
 
         public static class QuestionnaireArrBean {
             /**
-             * questionnaire : 在岗人员
+             * questionnaire : 其他
              */
 
             private String questionnaire;
@@ -219,7 +162,7 @@ public class EventDetailBean {
 
         public static class FileArrBean {
             /**
-             * imageUrl : http://lyy.tunnel.echomod.cn/crs/webFile/visit.do?id=402847ec648750150164875bd4cd0005&showName=6dbb8ce42fc34b7a8fb4e42bf3b2c11d.jpg
+             * imageUrl : http://47.106.72.58:10080/webFile/visit.do?id=2c9286176bd5e9eb016bd60655b90022&showName=afe7643850d44aa5a981eee4a27a5d4a.jpg
              */
 
             private String imageUrl;

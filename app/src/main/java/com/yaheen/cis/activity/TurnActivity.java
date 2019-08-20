@@ -50,15 +50,18 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
 
-    private TextView tvPatrol, tvRecord, tvUpload;
+    private TextView tvPatrol, tvRecord, tvUpload, tvField;
 
     private ImageView ivTurn;
 
     private TextView tvFetch;
 
-    private LinearLayout llBack;
+    private LinearLayout llBack, llExit;
 
     private String houseId;
+
+    //巡查问题类型
+//    private String typeStr = "";
 
     //成功扫码则为true，否则为false
     private boolean isFetch = false;
@@ -70,9 +73,13 @@ public class TurnActivity extends PermissionActivity {
 
         llBack = findViewById(R.id.back);
         ivTurn = findViewById(R.id.iv_turn);
+        llExit = findViewById(R.id.ll_exit);
+        tvField = findViewById(R.id.tv_field);
         tvPatrol = findViewById(R.id.tv_patrol);
         tvRecord = findViewById(R.id.tv_record);
         tvUpload = findViewById(R.id.tv_upload);
+
+//        typeStr = getIntent().getStringExtra("type");
 
         changeView();
 
@@ -100,26 +107,48 @@ public class TurnActivity extends PermissionActivity {
             }
         });
 
+        tvField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingDialog();
+                Intent intent = new Intent(TurnActivity.this, FieldMapActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     /**
      * 判断上次巡查是否结束
      */
     private void checkRecord() {
-//        DefaultPrefsUtil.setPatrolqQuestion("");
-//        DefaultPrefsUtil.setPatrolStart(0);
-//        DefaultPrefsUtil.setPatrolType("");
         String typeStr = DefaultPrefsUtil.getPatrolType();
-        String questionStr = DefaultPrefsUtil.getPatrolqQuestion();
         if (TextUtils.isEmpty(typeStr)) {
             Intent intent = new Intent(TurnActivity.this, PatrolSettingActivity.class);
             startActivity(intent);
         } else {
             Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
             intent.putExtra("type", typeStr);
-            intent.putExtra("question", questionStr);
             startActivity(intent);
         }
+//        String typeStr = DefaultPrefsUtil.getPatrolType();
+//        String questionStr = DefaultPrefsUtil.getPatrolqQuestion();
+//        if (TextUtils.isEmpty(typeStr)) {
+//            Intent intent = new Intent(TurnActivity.this, PatrolSettingActivity.class);
+//            startActivity(intent);
+//        } else {
+//            Intent intent = new Intent(TurnActivity.this, DetailActivity.class);
+//            intent.putExtra("type", typeStr);
+//            intent.putExtra("question", questionStr);
+//            startActivity(intent);
+//        }
     }
 
     private void getTypeList() {

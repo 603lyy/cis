@@ -112,6 +112,16 @@ final class DefaultPrefs extends AbstractSharePreference {
          * 用户类型
          */
         String ROLE = "user_role";
+
+        /**
+         * 接口域名
+         */
+        String BASE_URL = "base_url";
+
+        /**
+         * 门牌域名
+         */
+        String HOUSE_URL = "house_url";
     }
 
     /**
@@ -310,6 +320,28 @@ final class DefaultPrefs extends AbstractSharePreference {
 
     void setRole(String role) {
         putString(Keys.ROLE, role);
+    }
+
+    /**
+     * 接口域名
+     */
+    String getBaseUrl() {
+        return getString(Keys.BASE_URL, "");
+    }
+
+    void setBaseUrl(String baseUrl) {
+        putString(Keys.BASE_URL, baseUrl);
+    }
+
+    /**
+     * 门牌域名
+     */
+    String getHouseUrl() {
+        return getString(Keys.HOUSE_URL, "");
+    }
+
+    void setHouseUrl(String houseUrl) {
+        putString(Keys.HOUSE_URL, houseUrl);
     }
 
 }

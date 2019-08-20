@@ -38,11 +38,11 @@ public class DefaultPrefsUtil {
         return DefaultPrefs.getInstance().getToken();
     }
 
-    public static void setTeacherName(String teacherName) {
-        DefaultPrefs.getInstance().setTeacherName(teacherName);
+    public static void setUnitName(String unitName) {
+        DefaultPrefs.getInstance().setTeacherName(unitName);
     }
 
-    public static String getTeacherName() {
+    public static String getUnitName() {
         return DefaultPrefs.getInstance().getTeacherName();
     }
 
@@ -148,5 +148,21 @@ public class DefaultPrefsUtil {
 
     public static String getRole() {
         return DefaultPrefs.getInstance().getRole();
+    }
+
+    public static void setBaseUrl(String baseUrl) {
+        DefaultPrefs.getInstance().setBaseUrl(baseUrl);
+    }
+
+    public static String getBaseUrl() {
+        return DefaultPrefs.getInstance().getBaseUrl();
+    }
+
+    public static void setHouseUrl(String houseUrl) {
+        DefaultPrefs.getInstance().setHouseUrl(houseUrl);
+    }
+
+    public static String getHouseUrl() {
+        return DefaultPrefs.getInstance().getHouseUrl();
     }
 }
