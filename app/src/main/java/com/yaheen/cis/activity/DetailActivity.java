@@ -814,6 +814,7 @@ public class DetailActivity extends FetchActivity {
     public void getHouseId(String type, String houseId) {
         super.getHouseId(type, houseId);
         Intent intent = new Intent(DetailActivity.this, DetailPointActivity.class);
+        intent.putExtra("recordId", recordId);
         intent.putExtra("sign", true);
         intent.putExtra("houseId", houseId);
         intent.putExtra("type", type);

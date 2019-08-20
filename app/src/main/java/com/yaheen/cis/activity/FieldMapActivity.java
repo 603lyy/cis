@@ -216,6 +216,7 @@ public class FieldMapActivity extends MapActivity {
         showLoadingDialog();
         RequestParams requestParams = new RequestParams(houseDataUrl);
         requestParams.addQueryStringParameter("searchContent", Base64Utils.encode(etSearch.getText().toString().getBytes()));
+        requestParams.addQueryStringParameter("unitStr", Base64Utils.encode(DefaultPrefsUtil.getUnitName().getBytes()));
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override

@@ -113,7 +113,7 @@ public class DetailPointActivity extends PermissionActivity {
     //岳阳
     private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
 
-    private String typeStr, houseId;
+    private String typeStr, houseId, recordId;
 
     //已上传图片的ID的拼接
     private String imgIdStr = "";
@@ -147,6 +147,7 @@ public class DetailPointActivity extends PermissionActivity {
         setContentView(R.layout.activity_detail_point);
         showLoadingDialog();
 
+        recordId = getIntent().getStringExtra("recordId");
         houseId = getIntent().getStringExtra("houseId");
         typeStr = getIntent().getStringExtra("type");
         typeData = gson.fromJson(typeStr, TypeBean.class);
@@ -793,6 +794,7 @@ public class DetailPointActivity extends PermissionActivity {
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
+        requestParams.addQueryStringParameter("recordId", recordId);
         if (!TextUtils.isEmpty(houseId)) {
             requestParams.addParameter("point", true);
         }
