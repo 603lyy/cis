@@ -44,6 +44,8 @@ import org.xutils.http.RequestParams;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yaheen.cis.util.HttpUtils.houseUrl;
+
 public class HandleDetailActivity extends MapActivity {
 
     private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvUpload, tvCommit, tvCommit2, tvUsername;
