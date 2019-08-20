@@ -33,8 +33,9 @@ public class BaseActivity extends Activity implements CompressImg {
 
     protected Gson gson = new Gson();
 
-//    //水唇镇系统
-//    protected String baseUrl = "http://47.106.72.58:9180";
+    //水唇镇系统
+    protected String baseUrl = "https://shuichun.zl.yafrm.com";
+//    protected String baseUrl = "http://crs.t.yaheen.com:168/crs_sc/";
 
     //河口镇系统
 //    protected String baseUrl = "http://47.106.72.58:9280";
@@ -43,10 +44,10 @@ public class BaseActivity extends Activity implements CompressImg {
 //    protected String baseUrl = "http://47.106.72.58:10080";
 
     //岳阳版
-    protected String baseUrl = HttpUtils.baseUrl;
+//    protected String baseUrl = HttpUtils.baseUrl;
 
-//    //水唇镇系统
-//    protected String houseUrl = "http://whn.020szsq.com:8088";
+    //    //水唇镇系统
+    protected String houseUrl = "https://shuichun.whn.yafrm.com";
 
     //河口镇系统
 //    protected String houseUrl = "https://lhhk.020szsq.com";
@@ -55,7 +56,7 @@ public class BaseActivity extends Activity implements CompressImg {
 //    protected String houseUrl = "https://npapp.yaheen.com:8090/demonstration";
 
     //岳阳版
-    protected String houseUrl = HttpUtils.houseUrl;
+//    protected String houseUrl = HttpUtils.houseUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

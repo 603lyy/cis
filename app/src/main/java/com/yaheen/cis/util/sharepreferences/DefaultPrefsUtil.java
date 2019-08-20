@@ -38,11 +38,11 @@ public class DefaultPrefsUtil {
         return DefaultPrefs.getInstance().getToken();
     }
 
-    public static void setTeacherName(String teacherName) {
-        DefaultPrefs.getInstance().setTeacherName(teacherName);
+    public static void setUnitName(String unitName) {
+        DefaultPrefs.getInstance().setTeacherName(unitName);
     }
 
-    public static String getTeacherName() {
+    public static String getUnitName() {
         return DefaultPrefs.getInstance().getTeacherName();
     }
 

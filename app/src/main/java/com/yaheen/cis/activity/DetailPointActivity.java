@@ -791,6 +791,7 @@ public class DetailPointActivity extends PermissionActivity {
 //        }
         RequestParams requestParams = new RequestParams(reportUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         if (!TextUtils.isEmpty(houseId)) {
             requestParams.addParameter("point", true);

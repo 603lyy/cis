@@ -4,7 +4,6 @@ import java.util.List;
 
 public class LoginBean {
 
-
     /**
      * recordId : 402881ef6c03d4d2016c03d69ef5000a
      * recordStartTime:"2019-07-18 14:48:12",
@@ -26,6 +25,15 @@ public class LoginBean {
     private String expiresTime;
     private String role;
     private String msg;
+    private String unitName;
+
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
 
     public int getCode() {
         return code;

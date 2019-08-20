@@ -201,6 +201,7 @@ public class ReportRecordActivity extends PermissionActivity {
     private void getTypeList() {
         RequestParams requestParams = new RequestParams(typeUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override

@@ -26,7 +26,7 @@ public class FlashActivity extends PermissionActivity {
                 .setFinishDelegate(new CountDownTimerUtils.FinishDelegate() {
                     @Override
                     public void onFinish() {
-                        Intent intent = new Intent(FlashActivity.this,UrlSettingActivity.class);
+                        Intent intent = new Intent(FlashActivity.this,LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }

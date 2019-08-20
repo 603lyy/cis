@@ -48,4 +48,9 @@ public class TimeTransferUtils {
         return timeString;
     }
 
+//    public static String getDetailTime(String timeStamp){
+//        long time = Long.valueOf(timeStamp);
+//
+//    }
+
 }

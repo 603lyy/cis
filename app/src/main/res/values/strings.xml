@@ -30,6 +30,7 @@
 
     <string name="turn_patrol_text">巡查</string>
     <string name="turn_record_text">轨迹</string>
+    <string name="turn_field_text">范围</string>
     <string name="turn_fetch_text">定点巡查</string>
     <string name="turn_upload_text">事件</string>
     <string name="turn_id_empty">门牌不存在</string>
@@ -115,6 +116,10 @@
     <string name="handle_commit_fail">提交失败</string>
     <string name="handle_describe_empty">处理内容不可为空</string>
     <string name="handle_commit">处理</string>
+
+    <string name="field_search_button">搜索</string>
+    <string name="field_search_address">地址：</string>
+    <string name="field_search_name">用户名：</string>
 
     <!-- android 6.0权限-->
     <string name="permission_tip_camera">缺少(相机)权限，无法使用该功能，点击"设置"去开启此权限\n您可在“设置”>“应用”>“权限”中配置权限</string>

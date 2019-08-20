@@ -657,6 +657,7 @@ public class DetailActivity extends FetchActivity {
 
         RequestParams requestParams = new RequestParams(reportUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
         requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
         requestParams.addQueryStringParameter("recordId", recordId);
         if (isSign && !TextUtils.isEmpty(houseId)) {

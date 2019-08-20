@@ -181,17 +181,9 @@ public class LoginActivity extends PermissionActivity {
     private void checkRecord() {
         String typeStr = DefaultPrefsUtil.getPatrolType();
         if (isPhone) {
-            if (!TextUtils.isEmpty(typeStr) && !etPhone.getText().toString().equals(DefaultPrefsUtil.getPhone())) {
-                showToast(R.string.cancel_record);
-            } else {
-                loginPhone();
-            }
+            loginPhone();
         } else {
-            if (!TextUtils.isEmpty(typeStr) && !etName.getText().toString().equals(DefaultPrefsUtil.getUserName())) {
-                showToast(R.string.cancel_record);
-            } else {
-                loginUserName();
-            }
+            loginUserName();
         }
     }
 
@@ -331,7 +323,8 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setRole(data.getRole());
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
-                        DefaultPrefsUtil.setUserName(data.getUsername());
+//                        DefaultPrefsUtil.setUserName(data.getUsername());
+                        DefaultPrefsUtil.setUnitName(data.getUnitName());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         //账号正在巡查，返回巡查信息
@@ -414,6 +407,7 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
                         DefaultPrefsUtil.setUserName(data.getUsername());
+                        DefaultPrefsUtil.setUnitName(data.getUnitName());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         //账号正在巡查，返回巡查信息
@@ -506,20 +500,20 @@ public class LoginActivity extends PermissionActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
-//            @Override
-//            public void callback() {
-//                ScreenManager.getScreenManagerInstance(LoginActivity.this).finishActivities();
-//                NotificationUtils.cancelNofication(getApplicationContext());
-//                UploadLocationUtils.stopUpload();
-//                BaseApp.exit();
-//            }
-//        }, new IDialogCancelCallback() {
-//            @Override
-//            public void cancelCallback() {
-//            }
-//        });
+//        super.onBackPressed();
+        DialogUtils.showDialog(LoginActivity.this, "确定要退出该APP吗？", new DialogCallback() {
+            @Override
+            public void callback() {
+                ScreenManager.getScreenManagerInstance(LoginActivity.this).finishActivities();
+                NotificationUtils.cancelNofication(getApplicationContext());
+                UploadLocationUtils.stopUpload();
+                BaseApp.exit();
+            }
+        }, new IDialogCancelCallback() {
+            @Override
+            public void cancelCallback() {
+            }
+        });
     }
 
     @Override

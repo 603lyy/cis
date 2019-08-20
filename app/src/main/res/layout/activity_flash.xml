@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="@string/flash_text_2_china"
+            android:text="@string/flash_text_2"
             android:textColor="@color/white"
             android:textSize="18dp" />
 

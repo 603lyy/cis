@@ -23,6 +23,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.JsonObject;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.MapActivity;
 import com.yaheen.cis.activity.base.PermissionActivity;
@@ -31,6 +32,7 @@ import com.yaheen.cis.adapter.EventImgAdapter;
 import com.yaheen.cis.adapter.EventProblemAdapter;
 import com.yaheen.cis.entity.EventDetailBean;
 import com.yaheen.cis.entity.HouseBean;
+import com.yaheen.cis.entity.ReportBean;
 import com.yaheen.cis.util.HttpUtils;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
@@ -44,7 +46,7 @@ import java.util.List;
 
 public class HandleDetailActivity extends MapActivity {
 
-    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvCommit, tvUsername;
+    private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvUpload, tvCommit, tvCommit2, tvUsername;
 
     private TextView tvHOwner, tvHNumber, tvHAreaType, tvHInspectionPoint, tvHAdderss;
 
@@ -52,7 +54,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private TextView tvMUser, tvMType, tvMName, tvMTime, tvMOwner;
 
-    private LinearLayout llBack, llHouse, llParty, llMerchant;
+    private LinearLayout llBack, llHouse, llParty, llMerchant, llBtnOne, llBtnTwo;
 
     private ImageView ivUrgency;
 
@@ -79,6 +81,8 @@ public class HandleDetailActivity extends MapActivity {
 
     //岳阳
     private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
+
+    private String reportUrl = baseUrl + "/eapi/report.do";
 
     private String eventId;
 
@@ -114,6 +118,10 @@ public class HandleDetailActivity extends MapActivity {
         llBack = findViewById(R.id.back);
         tvType = findViewById(R.id.tv_type);
         tvCommit = findViewById(R.id.tv_commit);
+        tvUpload = findViewById(R.id.tv_upload);
+        llBtnOne = findViewById(R.id.ll_btn_one);
+        llBtnTwo = findViewById(R.id.ll_btn_two);
+        tvCommit2 = findViewById(R.id.tv_commit2);
         tvUrgency = findViewById(R.id.tv_urgency);
         ivUrgency = findViewById(R.id.iv_urgency);
         llHouse = findViewById(R.id.ll_house_data);
@@ -122,9 +130,14 @@ public class HandleDetailActivity extends MapActivity {
         tvLocation = findViewById(R.id.tv_location_describe);
 
         if (DefaultPrefsUtil.getRole().equals("LEADER") && !handle) {
-            tvCommit.setVisibility(View.VISIBLE);
+            llBtnOne.setVisibility(View.VISIBLE);
+            llBtnTwo.setVisibility(View.GONE);
+        } else if (DefaultPrefsUtil.getRole().equals("VILLAGELEADER") && !handle) {
+            llBtnOne.setVisibility(View.GONE);
+            llBtnTwo.setVisibility(View.VISIBLE);
         } else {
-            tvCommit.setVisibility(View.GONE);
+            llBtnOne.setVisibility(View.GONE);
+            llBtnTwo.setVisibility(View.GONE);
         }
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +146,22 @@ public class HandleDetailActivity extends MapActivity {
                 Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
                 intent.putExtra("eventId", eventId);
                 startActivity(intent);
+            }
+        });
+
+        tvCommit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
+            }
+        });
+
+        tvUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendReport();
             }
         });
 
@@ -529,6 +558,49 @@ public class HandleDetailActivity extends MapActivity {
             ivUrgency.setBackgroundResource(R.drawable.ic_urgent);
             tvUrgency.setText(R.string.detail_urgency_urgent);
         }
+    }
+
+    /**
+     * 上报事件
+     */
+    private void sendReport() {
+
+        RequestParams requestParams = new RequestParams(reportUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
+        requestParams.addQueryStringParameter("eventId", eventId);
+
+
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ReportBean data = gson.fromJson(result, ReportBean.class);
+                if (data != null && data.isResult()) {
+                    showToast(R.string.detail_commit_success);
+//                    finish();
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(HandleDetailActivity.this, LoginActivity.class));
+                    finish();
+                } else {
+                    showToast(R.string.detail_commit_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.detail_commit_fail);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                cancelLoadingDialog();
+            }
+        });
     }
 
     @Override

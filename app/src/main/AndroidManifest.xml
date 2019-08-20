@@ -127,7 +127,9 @@
         <activity android:name=".activity.HandleActivity" />
         <activity android:name=".activity.HandleDetailActivity" />
         <activity android:name=".activity.DetailPointActivity" />
-        <activity android:name=".activity.UrlSettingActivity"></activity>
+        <activity android:name=".activity.UrlSettingActivity" />
+        <activity android:name=".activity.FieldMapActivity" />
+        <activity android:name=".activity.FieldDetailActivity"></activity>
     </application>
 
 </manifest>
