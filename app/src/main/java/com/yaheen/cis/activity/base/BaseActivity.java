@@ -32,7 +32,9 @@ public class BaseActivity extends Activity implements CompressImg {
 
     protected Gson gson = new Gson();
 
-//    protected String baseUrl = "http://lyy.tunnel.echomod.cn/crs";
+    //水唇镇系统
+//    protected String baseUrl = "https://shuichun.zl.yafrm.com";
+//    protected String baseUrl = "http://crs.t.yaheen.com:168/crs_sc";
 
 //    protected String baseUrl = "http://192.168.199.113:8080/crs";
 

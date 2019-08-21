@@ -165,4 +165,21 @@ public class DefaultPrefsUtil {
     public static String getHouseUrl() {
         return DefaultPrefs.getInstance().getHouseUrl();
     }
+
+    public static void setHouseLongitude(float houseLongitude) {
+        DefaultPrefs.getInstance().setHouseLongitude(houseLongitude);
+    }
+
+    public static float getHouseLongitude() {
+        return DefaultPrefs.getInstance().getHouseLongitude();
+    }
+
+    public static void setHouseLatitude(float houselatitude) {
+        DefaultPrefs.getInstance().setHouseLatitude(houselatitude);
+    }
+
+    public static float getHouseLatitude() {
+        return DefaultPrefs.getInstance().getHouseLatitude();
+    }
+
 }
