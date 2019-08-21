@@ -122,6 +122,16 @@ final class DefaultPrefs extends AbstractSharePreference {
          * 门牌域名
          */
         String HOUSE_URL = "house_url";
+
+        /**
+         * 门牌经度
+         */
+        String HOUSE_LONGITUDE = "house_longitude";
+
+        /**
+         * 门牌纬度
+         */
+        String HOUSE_LATITUE = "house_latitude";
     }
 
     /**
@@ -342,6 +352,28 @@ final class DefaultPrefs extends AbstractSharePreference {
 
     void setHouseUrl(String houseUrl) {
         putString(Keys.HOUSE_URL, houseUrl);
+    }
+
+    /**
+     * 门牌经度
+     */
+    float getHouseLongitude() {
+        return getFloat(Keys.HOUSE_LONGITUDE, 0);
+    }
+
+    void setHouseLongitude(float houseLongitude) {
+        putFloat(Keys.HOUSE_LONGITUDE, houseLongitude);
+    }
+
+    /**
+     * 门牌纬度
+     */
+    float getHouseLatitude() {
+        return getFloat(Keys.HOUSE_LATITUE, 0);
+    }
+
+    void setHouseLatitude(float houselatitude) {
+        putFloat(Keys.HOUSE_LATITUE, houselatitude);
     }
 
 }

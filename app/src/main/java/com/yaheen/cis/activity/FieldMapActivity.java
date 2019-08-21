@@ -181,6 +181,8 @@ public class FieldMapActivity extends MapActivity {
                 flMapView.setLayoutParams(params);//将设置好的布局参数应用到控件中
             }
         });
+
+        setLocationData(new LatLng(DefaultPrefsUtil.getHouseLatitude(), DefaultPrefsUtil.getHouseLongitude()));
     }
 
     private void initRecordView() {
@@ -222,9 +224,9 @@ public class FieldMapActivity extends MapActivity {
             @Override
             public void onSuccess(String result) {
                 FieldHouseBean data = null;
-                try{
+                try {
                     data = gson.fromJson(result, FieldHouseBean.class);
-                }catch (Exception e){
+                } catch (Exception e) {
                     showToast("搜索失败");
                 }
                 if (data != null && data.isResult()) {

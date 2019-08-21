@@ -325,6 +325,8 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setPhone(data.getMobile());
 //                        DefaultPrefsUtil.setUserName(data.getUsername());
                         DefaultPrefsUtil.setUnitName(data.getUnitName());
+                        DefaultPrefsUtil.setHouseLatitude(data.getLatitude());
+                        DefaultPrefsUtil.setHouseLongitude(data.getLongitude());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         //账号正在巡查，返回巡查信息
@@ -408,6 +410,8 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setPhone(data.getMobile());
                         DefaultPrefsUtil.setUserName(data.getUsername());
                         DefaultPrefsUtil.setUnitName(data.getUnitName());
+                        DefaultPrefsUtil.setHouseLatitude(data.getLatitude());
+                        DefaultPrefsUtil.setHouseLongitude(data.getLongitude());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         //账号正在巡查，返回巡查信息
