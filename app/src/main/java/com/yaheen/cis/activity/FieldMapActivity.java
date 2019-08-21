@@ -51,8 +51,6 @@ import org.xutils.http.RequestParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yaheen.cis.util.HttpUtils.houseUrl;
-
 public class FieldMapActivity extends MapActivity {
 
     private LinearLayout llRecord, llBack;

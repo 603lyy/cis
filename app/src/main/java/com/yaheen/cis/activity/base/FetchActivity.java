@@ -22,8 +22,6 @@ import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 
-import static com.yaheen.cis.util.HttpUtils.houseUrl;
-
 public class FetchActivity extends PermissionActivity {
 
     /**

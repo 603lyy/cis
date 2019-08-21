@@ -63,8 +63,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yaheen.cis.util.HttpUtils.houseUrl;
-
 public class DetailPointActivity extends PermissionActivity {
 
     private TextView tvLocation, tvCommit;

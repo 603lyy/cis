@@ -16,8 +16,6 @@ import com.yaheen.cis.util.HttpUtils;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 
-import static com.yaheen.cis.util.HttpUtils.houseUrl;
-
 public class FieldDetailActivity extends PermissionActivity {
 
     private TextView tvHOwner, tvHNumber, tvHAreaType, tvHInspectionPoint, tvHAdderss;
