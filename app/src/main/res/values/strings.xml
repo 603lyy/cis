@@ -59,7 +59,7 @@
     <string name="detail_patrol_username">户主姓名：</string>
     <string name="detail_patrol_number">人数：</string>
     <string name="detail_patrol_area_type">社区：</string>
-    <string name="detail_patrol_inspection_point">网络巡查点：</string>
+    <string name="detail_patrol_inspection_point">网格巡查点：</string>
     <string name="detail_patrol_address">地址：</string>
     <string name="detail_patrol_party_data">党员信息：</string>
     <string name="detail_patrol_party_username">姓名：</string>
