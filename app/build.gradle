@@ -11,13 +11,15 @@ android {
     }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.yaheen.cis"
+//        applicationId "com.yaheen.cis"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1014
         versionName "1.0.14"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        flavorDimensions "default"
     }
+
     buildTypes {
         release {
             debuggable true
@@ -25,10 +27,57 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        debug {
-            signingConfig signingConfigs.release
-        }
     }
+
+    /**
+     * 多渠道打包
+     * 1、applicationId      = 软件-包名
+     * 2、app_name           = 资源文件string.xml下的，需要建立不同的res目录
+     * 3、BASE_SERVER_URL    = 基础服务器地址，在自动创建BuildConfig下
+     * 4、APP_File_Provider  = 文件provider，一般是包名+fileprovider命名
+     * 5、其他所需要配置的百度Key，极光推送key，友盟key等等...
+     * */
+    productFlavors {
+
+        //河口APP
+        Hekou{
+            applicationId "com.yaheen.cis_hekou"
+            resValue "string", "app_name", "河口巡查"
+            //manifest里面的值
+            manifestPlaceholders = [
+                    MTA_CHANNEL_VALUE   : "my_app_2",
+                    FILE_PROVIDER       : "com.flavor.myapp.fileprovider",
+                    BAIDU_MAP_AK       : "iyX7FCFfpuMnMjiRoFqKwIlkoNGRCPeA" ]
+        }
+
+        //水唇APP
+        Shuichun{
+            applicationId "com.yaheen.cis_shuichun"
+            resValue "string", "app_name", "水唇巡查"
+            //manifest里面的值
+            manifestPlaceholders = [
+                    MTA_CHANNEL_VALUE   : "your_app_1",
+                    FILE_PROVIDER       : "com.flavor.yourapp.fileprovider" ,
+                    BAIDU_MAP_AK       : "iyX7FCFfpuMnMjiRoFqKwIlkoNGRCPeA"]
+        }
+
+
+    }
+
+    /**
+     * 打包导出apk时候的名字，或者各种服务的key配置等等
+     * */
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def outputFile = output.outputFile
+//
+//            //如果打包release版本，则包名为  xx取到.apk
+//            if (variant.buildType.name.equals('release')) {
+//                def fileName = "Channel${defaultConfig.versionName}_${variant.productFlavors[0].name}"+".apk"
+//                output.outputFile = new File(outputFile.parent, fileName)
+//            }
+//        }
+//    }
 }
 
 dependencies {
