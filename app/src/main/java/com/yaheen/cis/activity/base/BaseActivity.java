@@ -33,12 +33,16 @@ public class BaseActivity extends Activity implements CompressImg {
     protected Gson gson = new Gson();
 
     //河口镇系统
-     protected String baseUrl = "https://hekou.zl.yafrm.com";
+//     protected String baseUrl = "https://hekou.zl.yafrm.com";
 
-    //protected String baseUrl = "http://lyl.t.yaheen.com:168/crs";
+    //水唇镇系统
+    protected String baseUrl = "https://shuichun.zl.yafrm.com";
 
     //河口镇系统
-    protected String houseUrl = "https://hekou.whn.yafrm.com";
+//    protected String houseUrl = "https://hekou.whn.yafrm.com";
+
+    //水唇镇系统
+    protected String houseUrl = "https://shuichun.whn.yafrm.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

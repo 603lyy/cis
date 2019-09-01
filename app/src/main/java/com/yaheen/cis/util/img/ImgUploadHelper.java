@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 
+import com.yaheen.cis.BuildConfig;
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.util.listener.OnRepeatClickListener;
@@ -128,7 +129,7 @@ public class ImgUploadHelper {
 
     public static Uri getUriForFileProvider(BaseActivity activity, String path) {
         File outputImage = new File(path);
-        return FileProvider.getUriForFile(activity.getBaseContext(), "com.yaheen.cis.provider", outputImage);
+        return FileProvider.getUriForFile(activity.getBaseContext(), BuildConfig.APPLICATION_ID+".provider", outputImage);
     }
 
     public static void compressImage(final BaseActivity activity, String imgPath, final boolean isTakePhoto) {
