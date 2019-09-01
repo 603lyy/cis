@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".activity.HandleActivity">
+
+    <include layout="@layout/item_title_bar"/>
+
+    <EditText
+        android:id="@+id/et_describe"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_margin="30dp"
+        android:background="@color/colorHint"
+        android:gravity="start"
+        android:maxEms="6"
+        android:maxLength="300"
+        android:hint="@string/report_handle_hint"
+        android:padding="5dp"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/tv_commit"
+        style="@style/Detail_Toolbar_TextView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_upload"
+        android:gravity="center"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:text="@string/report_commit" />
+
+</LinearLayout>

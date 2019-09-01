@@ -126,7 +126,8 @@
             android:launchMode="singleTask" />
         <activity android:name=".activity.HandleActivity" />
         <activity android:name=".activity.HandleDetailActivity" />
-        <activity android:name=".activity.DetailPointActivity"></activity>
+        <activity android:name=".activity.DetailPointActivity" />
+        <activity android:name=".activity.Handle2Activity"></activity>
     </application>
 
 </manifest>
