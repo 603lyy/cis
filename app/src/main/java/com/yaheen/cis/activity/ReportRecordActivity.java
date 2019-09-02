@@ -30,9 +30,9 @@ import org.xutils.http.RequestParams;
 
 public class ReportRecordActivity extends PermissionActivity {
 
-    private String recordUrl = baseUrl + "/eapi/findEventListByEmergency.do";
+    private String recordUrl = "";
 
-    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
+    private String typeUrl = "";
 
     private RecyclerView rvUrgency, rvRecord, rvType;
 
@@ -60,12 +60,18 @@ public class ReportRecordActivity extends PermissionActivity {
         rvType = findViewById(R.id.rv_type);
         llBack = findViewById(R.id.back);
 
+        initData();
         initView();
         initUrgency();
         initType();
         initRecordList();
 //        getRecordList();
         getTypeList();
+    }
+
+    private void initData() {
+        recordUrl = getBaseUrl() + "/eapi/findEventListByEmergency.do";
+        typeUrl = getBaseUrl() + "/eapi/findTypeByUserId.do";
     }
 
     private void initView() {

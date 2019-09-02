@@ -69,9 +69,9 @@ public class EventActivity extends MapActivity {
     //图片链接列表
     private List<EventDetailBean.TbEventBean.FileArrBean> imgUrlList = new ArrayList<>();
 
-    private String questionUrl = baseUrl + "/eapi/eventDetail.do";
+    private String questionUrl = "";
 
-    private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
+    private String mHhouseUrl = "";
 
     private String recordId, eventId;
 
@@ -92,12 +92,18 @@ public class EventActivity extends MapActivity {
             finish();
         }
 
+        initData();
         initView();
         initHouseData();
         initMapView();
         initQuestion();
         initImgUpload();
         getEventInfo();
+    }
+
+    private void initData() {
+        questionUrl = getBaseUrl() + "/eapi/eventDetail.do";
+        mHhouseUrl = getHouseUrl() + "/separationSub/getRangeHouseNumberFromApplets.do";
     }
 
     private void initView() {

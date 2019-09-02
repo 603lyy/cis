@@ -32,23 +32,36 @@ public class BaseActivity extends Activity implements CompressImg {
 
     protected Gson gson = new Gson();
 
+    //protected String baseUrl = "http://crs.t.yaheen.com:168/crs_sc";
+    protected String baseUrl = "";
+    protected String houseUrl = "";
+
     //河口镇系统
-//     protected String baseUrl = "https://hekou.zl.yafrm.com";
+//    protected String baseUrl = "https://hekou.zl.yafrm.com";
 
     //水唇镇系统
-    protected String baseUrl = "https://shuichun.zl.yafrm.com";
+//    protected String baseUrl = "https://shuichun.zl.yafrm.com";
 
     //河口镇系统
 //    protected String houseUrl = "https://hekou.whn.yafrm.com";
 
     //水唇镇系统
-    protected String houseUrl = "https://shuichun.whn.yafrm.com";
+//    protected String houseUrl = "https://shuichun.whn.yafrm.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        initToolBar();
+    }
+
+    protected String getBaseUrl() {
+        baseUrl = getResources().getString(R.string.app_base_url);
+        return baseUrl;
+    }
+
+    protected String getHouseUrl() {
+        houseUrl = getResources().getString(R.string.app_house_url);
+        return houseUrl;
     }
 
     private void initToolBar() {

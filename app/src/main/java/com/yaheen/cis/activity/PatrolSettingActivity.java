@@ -38,11 +38,11 @@ public class PatrolSettingActivity extends BaseActivity {
 
     private PatrolSettingAdapter settingAdapter;
 
-    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
+    private String typeUrl = "";
 
-    private String startUrl = baseUrl + "/eapi/startPatrol.do";
+    private String startUrl = "";
 
-    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "";
 
     private String recordId = "";
 
@@ -59,6 +59,7 @@ public class PatrolSettingActivity extends BaseActivity {
         //开始定位
         BDMapUtils.startLocation();
 
+        initData();
         showLoadingDialog();
         initSettingView();
         getTypeList();
@@ -69,6 +70,12 @@ public class PatrolSettingActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initData() {
+        typeUrl = getBaseUrl() + "/eapi/findTypeByUserId.do";
+        startUrl = getBaseUrl() + "/eapi/startPatrol.do";
+        questionUrl = getBaseUrl() + "/eapi/findQuestionaireByTypeId.do";
     }
 
     private void initSettingView() {
@@ -229,7 +236,7 @@ public class PatrolSettingActivity extends BaseActivity {
                 if (data != null && data.isResult()) {
                     recordId = data.getRecordId();
                     typeBean.setRecordId(data.getRecordId());
-                    typeBean.setRecordStartTime(TimeTransferUtils.getYMDHMSStrTime2(System.currentTimeMillis()+""));
+                    typeBean.setRecordStartTime(TimeTransferUtils.getYMDHMSStrTime2(System.currentTimeMillis() + ""));
                     String typeStr = gson.toJson(typeBean);
                     DefaultPrefsUtil.setPatrolType(typeStr);
                     DefaultPrefsUtil.setPatrolRecordId(recordId);

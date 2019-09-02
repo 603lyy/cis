@@ -74,7 +74,7 @@ public class RecordMapActivity extends MapActivity {
 
     private List<MyItem> items;
 
-    private String eventUrl = baseUrl + "/eapi/eventList.do";
+    private String eventUrl = "";
 
     private String recordId;
 
@@ -93,6 +93,7 @@ public class RecordMapActivity extends MapActivity {
         recordId = getIntent().getStringExtra("recordId");
         showLoadingDialog();
 
+        initData();
         initMapView();
         initRecordView();
         getRecordEventList();
@@ -103,6 +104,10 @@ public class RecordMapActivity extends MapActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initData() {
+         eventUrl = getBaseUrl() + "/eapi/eventList.do";
     }
 
     private void initMapView() {

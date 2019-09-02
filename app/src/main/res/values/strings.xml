@@ -40,6 +40,8 @@
     <string name="detail_patrol_type">巡查类型：</string>
     <string name="detail_search_problem">发现问题：</string>
     <string name="detail_describe_problem">描述问题：</string>
+    <string name="detail_describe_user">填写人：</string>
+    <string name="detail_describe_time">填写日期：</string>
     <string name="detail_urgency">紧急程度：</string>
     <string name="detail_img_upload">图片上传：</string>
     <string name="detail_location">定位信息：</string>
@@ -113,9 +115,17 @@
     <string name="record_emergency">紧急程度：%s</string>
     <string name="record_emergency_empty">请选择紧急程度</string>
 
+    <string name="handle_describe_problem">描述问题：</string>
+    <string name="handle_describe_user">填写人：</string>
+    <string name="handle_describe_time">填写日期：</string>
     <string name="handle_commit_fail">提交失败</string>
     <string name="handle_describe_empty">处理内容不可为空</string>
+    <string name="handle_user_empty">填写人不可为空</string>
+    <string name="handle_time_empty">填写日期不可为空</string>
+    <string name="handle_img_url_empty">图片不可为空</string>
     <string name="handle_commit">处理</string>
+    <string name="handle_send_report_hint">上报建议</string>
+    <string name="handle_img_limit">最多只能选择4张图片</string>
 
     <string name="field_search_button">搜索</string>
     <string name="field_search_address">地址：</string>

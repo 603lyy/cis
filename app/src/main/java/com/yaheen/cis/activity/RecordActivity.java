@@ -32,7 +32,7 @@ public class RecordActivity extends PermissionActivity {
 
     private RecordAdapter recordAdapter;
 
-    private String recordUrl = baseUrl + "/eapi/recordList.do";
+    private String recordUrl = "";
 
     private String recordId;
 
@@ -43,6 +43,7 @@ public class RecordActivity extends PermissionActivity {
 
         showLoadingDialog();
 
+        initData();
         llBack = findViewById(R.id.back);
         tvTime = findViewById(R.id.tv_time);
         tvType = findViewById(R.id.tv_type);
@@ -72,6 +73,10 @@ public class RecordActivity extends PermissionActivity {
         });
 
         getRecordList();
+    }
+
+    private void initData() {
+        recordUrl = getBaseUrl() + "/eapi/recordList.do";
     }
 
     private void getRecordList() {

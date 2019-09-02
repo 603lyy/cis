@@ -95,13 +95,13 @@ public class DetailActivity extends FetchActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "";
 
-    private String uploadImgUrl = baseUrl + "/eapi/uploadPhoto.do";
+    private String uploadImgUrl = "";
 
-    private String reportUrl = baseUrl + "/eapi/report.do";
+    private String reportUrl = "";
 
-    private String endUrl = baseUrl + "/eapi/endPatrol.do";
+    private String endUrl = "";
 
     private String typeStr, recordId, houseId;
 
@@ -178,6 +178,7 @@ public class DetailActivity extends FetchActivity {
             UploadLocationUtils.startUpload(getApplicationContext());
         }
 
+        initData();
         initView();
         initPatrol();
         initQuestion();
@@ -219,6 +220,13 @@ public class DetailActivity extends FetchActivity {
                 getQuestionMsg(typeAdapter.getTypeId());
             }
         });
+    }
+
+    private void initData() {
+        questionUrl = getBaseUrl() + "/eapi/findQuestionaireByTypeId.do";
+        uploadImgUrl = getBaseUrl() + "/eapi/uploadPhoto.do";
+        reportUrl = getBaseUrl() + "/eapi/report.do";
+        endUrl = getBaseUrl() + "/eapi/endPatrol.do";
     }
 
     @Override

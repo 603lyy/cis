@@ -95,23 +95,13 @@ public class DetailPointActivity extends PermissionActivity {
 
     private ImgUploadAdapter uploadAdapter;
 
-    private String questionUrl = baseUrl + "/eapi/findQuestionaireByTypeId.do";
+    private String questionUrl = "";
 
-    private String uploadImgUrl = baseUrl + "/eapi/uploadPhoto.do";
+    private String uploadImgUrl = "";
 
-    private String reportUrl = baseUrl + "/eapi/report.do";
+    private String reportUrl = "";
 
-    //水唇镇系统
-//    private String mHhouseUrl =  houseUrl + "/merchants/getAllMechats.do";
-
-    //河口镇系统
-//    private String mHhouseUrl =  houseUrl + "/merchants/getAllMechats.do";
-
-    //全国
-//    private String mHhouseUrl = houseUrl + "/merchants/getAllMechats.do";
-
-    //岳阳
-    private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
+    private String mHhouseUrl = "";
 
     private String typeStr, houseId, recordId;
 
@@ -155,6 +145,7 @@ public class DetailPointActivity extends PermissionActivity {
         //开始定位
         BDMapUtils.startLocation();
 
+        initData();
         initView();
         initPatrol();
         initQuestion();
@@ -183,6 +174,13 @@ public class DetailPointActivity extends PermissionActivity {
                 getQuestionMsg(typeAdapter.getTypeId());
             }
         });
+    }
+
+    private void initData() {
+        reportUrl = getBaseUrl() + "/eapi/report.do";
+        uploadImgUrl = getBaseUrl() + "/eapi/uploadPhoto.do";
+        questionUrl = getBaseUrl() + "/eapi/findQuestionaireByTypeId.do";
+        mHhouseUrl = getHouseUrl() + "/separationSub/getRangeHouseNumberFromApplets.do";
     }
 
     @Override
@@ -587,7 +585,7 @@ public class DetailPointActivity extends PermissionActivity {
                         name = name.substring(name.indexOf(",") + 1);
                     }
 //                    imgUrlList.add("http://lyl.t.yaheen.com:168/whnsubyueyang/webFile/visit.do?id=" + url + "&showName=" + name);
-//                    imgUrlList.add(houseUrl + "/webFile/visit.do?id=" + url);
+//                    imgUrlList.add(getHouseUrl() + "/webFile/visit.do?id=" + url);
 
                     imgAdapter.setDatas(imgUrlList);
                 }

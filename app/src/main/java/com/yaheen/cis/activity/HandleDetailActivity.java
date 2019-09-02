@@ -75,14 +75,13 @@ public class HandleDetailActivity extends MapActivity {
 
     private List<String> imgUrlList2 = new ArrayList<>();
 
-    private String eventUrl = baseUrl + "/eapi/eventDetail.do";
+    private String eventUrl = "";
 
-    private String copyUrl = baseUrl + "/guidanceCenter/detailed.do?eventId=";
+    private String copyUrl = "";
 
-    //岳阳
-    private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
+    private String mHhouseUrl = "";
 
-    private String reportUrl = baseUrl + "/eapi/report.do";
+    private String reportUrl = "";
 
     private String eventId;
 
@@ -106,12 +105,20 @@ public class HandleDetailActivity extends MapActivity {
             finish();
         }
 
+        initData();
         initView();
         initHouseData();
         initHouseImgView();
         initMapView();
         initQuestion();
         initImgUpload();
+    }
+
+    private void initData() {
+        reportUrl = getBaseUrl() + "/eapi/report.do";
+        eventUrl = getBaseUrl() + "/eapi/eventDetail.do";
+        copyUrl = getBaseUrl() + "/guidanceCenter/detailed.do?eventId=";
+        mHhouseUrl = getHouseUrl() + "/separationSub/getRangeHouseNumberFromApplets.do";
     }
 
     private void initView() {
@@ -161,7 +168,9 @@ public class HandleDetailActivity extends MapActivity {
         tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendReport();
+                Intent intent = new Intent(HandleDetailActivity.this, Handle2Activity.class);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
             }
         });
 
@@ -507,10 +516,10 @@ public class HandleDetailActivity extends MapActivity {
                 String url = jsonBean.getMerchants().getStorephotos();
                 if (!TextUtils.isEmpty(url)) {
                     while (url.indexOf(",") > 0) {
-                        imgUrlList2.add(houseUrl + "/webFile/visit.do?id=" + url.substring(0, url.indexOf(",")));
+                        imgUrlList2.add(getHouseUrl() + "/webFile/visit.do?id=" + url.substring(0, url.indexOf(",")));
                         url = url.substring(url.indexOf(",") + 1);
                     }
-                    imgUrlList2.add(houseUrl + "/webFile/visit.do?id=" + url);
+                    imgUrlList2.add(getHouseUrl() + "/webFile/visit.do?id=" + url);
 
                     commonImgAdapter.setDatas(imgUrlList2);
                 }

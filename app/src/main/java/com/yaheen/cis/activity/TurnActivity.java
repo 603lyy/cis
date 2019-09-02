@@ -44,11 +44,11 @@ public class TurnActivity extends PermissionActivity {
      */
     public static final int REQUEST_CODE = 111;
 
-    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
+    private String typeUrl = "";
 
-    private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
+    private String checkUrl = "";
 
-    private String checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
+    private String checkIdUrl = "";
 
     private TextView tvPatrol, tvRecord, tvUpload, tvField;
 
@@ -81,6 +81,7 @@ public class TurnActivity extends PermissionActivity {
 
 //        typeStr = getIntent().getStringExtra("type");
 
+        initData();
         changeView();
 
         tvRecord.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +124,12 @@ public class TurnActivity extends PermissionActivity {
             }
         });
 
+    }
+
+    private void initData() {
+        typeUrl = getBaseUrl() + "/eapi/findTypeByUserId.do";
+        checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
+        checkIdUrl = "http://whn.020szsq.com:8088/houseNumbers/getGridInspectionPoint.do";
     }
 
     /**

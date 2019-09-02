@@ -20,7 +20,7 @@ public class LoginBean {
     private boolean result;
     private int code;
     private String token;
-    private String username;
+    private String userName;
     private String mobile;
     private String expiresTime;
     private String role;
@@ -105,11 +105,11 @@ public class LoginBean {
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     public String getMobile() {

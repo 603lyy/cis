@@ -40,31 +40,49 @@ android {
     productFlavors {
 
         //河口APP
-        Hekou{
+        Hekou {
             applicationId "com.yaheen.cis_hekou"
             resValue "string", "app_name", "河口巡查"
             resValue "string", "flash_text_2", "建设平安、和谐河口"
             resValue "string", "flash_text_bottom", "河口人民政府"
+            resValue "string", "app_base_url", "https://hekou.zl.yafrm.com"
+            resValue "string", "app_house_url", "https://hekou.whn.yafrm.com"
             //manifest里面的值
             manifestPlaceholders = [
-                    MTA_CHANNEL_VALUE   : "my_app_2",
-                    FILE_PROVIDER       : "com.flavor.myapp.fileprovider",
-                    BAIDU_MAP_AK       : "iyX7FCFfpuMnMjiRoFqKwIlkoNGRCPeA" ]
+                    MTA_CHANNEL_VALUE: "my_app_2",
+                    FILE_PROVIDER    : "com.flavor.myapp.fileprovider",
+                    BAIDU_MAP_AK     : "iyX7FCFfpuMnMjiRoFqKwIlkoNGRCPeA"]
         }
 
         //水唇APP
-        Shuichun{
+        Shuichun {
             applicationId "com.yaheen.cis_shuichun"
             resValue "string", "app_name", "水唇巡查"
             resValue "string", "flash_text_2", "建设平安、和谐水唇"
             resValue "string", "flash_text_bottom", "陆河县水唇镇人民政府"
+            resValue "string", "app_base_url", "https://shuichun.zl.yafrm.com"
+            resValue "string", "app_house_url", "https://shuichun.whn.yafrm.com"
             //manifest里面的值
             manifestPlaceholders = [
-                    MTA_CHANNEL_VALUE   : "your_app_1",
-                    FILE_PROVIDER       : "com.flavor.yourapp.fileprovider" ,
-                    BAIDU_MAP_AK       : "UnqQxxCy89voCKivLupOPwVqUDqiusnE"]
+                    MTA_CHANNEL_VALUE: "your_app_1",
+                    FILE_PROVIDER    : "com.flavor.yourapp.fileprovider",
+                    BAIDU_MAP_AK     : "UnqQxxCy89voCKivLupOPwVqUDqiusnE"]
         }
 
+        //本地穿透APP
+        ChuanTou {
+            applicationId "com.chuantou.cis"
+            resValue "string", "app_name", "本地穿透巡查"
+            resValue "string", "flash_text_2", "建设平安、和谐本地"
+            resValue "string", "flash_text_bottom", "本地人民政府"
+            resValue "string", "app_base_url", "http://crs.t.yaheen.com:168/crs_sc"
+            resValue "string", "app_house_url", "https://shuichun.whn.yafrm.com"
+            //manifest里面的值
+            manifestPlaceholders = [
+                    MTA_CHANNEL_VALUE: "your_app_1",
+                    FILE_PROVIDER    : "com.flavor.yourapp.fileprovider",
+                    BAIDU_MAP_AK     : "ADkTlpBGYqp9Xy9LbPUcVVzcWmAglKkI"]
+        }
 
     }
 

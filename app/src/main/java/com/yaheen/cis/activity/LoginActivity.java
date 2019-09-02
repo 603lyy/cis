@@ -59,9 +59,9 @@ public class LoginActivity extends PermissionActivity {
 
     private CountDownTimerUtils countDownTimerUtils;
 
-    private String url = baseUrl + "/eapi/wlogin.do";
+    private String url = "";
 
-    private String getVerUrl = baseUrl + "/eapi/getVerifyCode.do";
+    private String getVerUrl = "";
 
     private String key = "TkxwSEowNVBUT2hoN3lYTQ==";
 
@@ -81,6 +81,7 @@ public class LoginActivity extends PermissionActivity {
 
         setTitleContent(R.string.login_title);
         initView();
+        initData();
 
         VersionUtils.checkVersion(LoginActivity.this);
 
@@ -97,6 +98,11 @@ public class LoginActivity extends PermissionActivity {
                 checkRecord();
             }
         });
+    }
+
+    private void initData() {
+        url = getBaseUrl() + "/eapi/wlogin.do";
+        getVerUrl = getBaseUrl() + "/eapi/getVerifyCode.do";
     }
 
     private void initView() {
@@ -173,7 +179,6 @@ public class LoginActivity extends PermissionActivity {
             tvChange.setText(R.string.login_account);
         }
     }
-
 
     /**
      * 判断上次巡查是否结束
@@ -323,10 +328,10 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setRole(data.getRole());
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
-//                        DefaultPrefsUtil.setUserName(data.getUsername());
                         DefaultPrefsUtil.setUnitName(data.getUnitName());
                         DefaultPrefsUtil.setHouseLatitude(data.getLatitude());
                         DefaultPrefsUtil.setHouseLongitude(data.getLongitude());
+                        DefaultPrefsUtil.setCurrentUserName(data.getUsername());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         //账号正在巡查，返回巡查信息
@@ -412,6 +417,7 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setUnitName(data.getUnitName());
                         DefaultPrefsUtil.setHouseLatitude(data.getLatitude());
                         DefaultPrefsUtil.setHouseLongitude(data.getLongitude());
+                        DefaultPrefsUtil.setCurrentUserName(data.getUsername());
 
                         Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
                         //账号正在巡查，返回巡查信息

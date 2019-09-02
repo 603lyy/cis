@@ -129,9 +129,12 @@ public class ImgUploadHelper {
 
     public static Uri getUriForFileProvider(BaseActivity activity, String path) {
         File outputImage = new File(path);
-        return FileProvider.getUriForFile(activity.getBaseContext(), BuildConfig.APPLICATION_ID+".provider", outputImage);
+        return FileProvider.getUriForFile(activity.getBaseContext(), BuildConfig.APPLICATION_ID + ".provider", outputImage);
     }
 
+    /**
+     * 压缩图片
+     */
     public static void compressImage(final BaseActivity activity, String imgPath, final boolean isTakePhoto) {
         Luban.with(activity)
                 .load(imgPath)

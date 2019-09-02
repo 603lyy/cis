@@ -14,11 +14,11 @@ public class DefaultPrefsUtil {
         return DefaultPrefs.getInstance().getIsStop();
     }
 
-    public static void setCourseCode(String courseCode) {
-        DefaultPrefs.getInstance().setCourseCode(courseCode);
+    public static void setCurrentUserName(String currentUserName) {
+        DefaultPrefs.getInstance().setCourseCode(currentUserName);
     }
 
-    public static String getCourseCode() {
+    public static String getCurrentUserName() {
         return DefaultPrefs.getInstance().getCourseCode();
     }
 

@@ -157,7 +157,7 @@ final class DefaultPrefs extends AbstractSharePreference {
     }
 
     /**
-     * 课程编号
+     * 当前登录的用户名
      */
     String getCourseCode() {
         return getString(Keys.COURSE_CODE, "");

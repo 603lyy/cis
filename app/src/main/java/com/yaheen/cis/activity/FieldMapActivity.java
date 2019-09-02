@@ -81,9 +81,9 @@ public class FieldMapActivity extends MapActivity {
 
     private List<FieldMapActivity.MyItem> items;
 
-    private String eventUrl = houseUrl + "/separationSub/getRetrievalHouseNumberFromGudie.do";
+    private String eventUrl = "";
 
-    private String houseDataUrl = houseUrl + "/separationSub/getRetrievalHouseNumberFromGudie.do";
+    private String houseDataUrl = "";
 
     private String recordId;
 
@@ -105,6 +105,7 @@ public class FieldMapActivity extends MapActivity {
         recordId = getIntent().getStringExtra("recordId");
         showLoadingDialog();
 
+        initData();
         initMapView();
         initRecordView();
 //        getRecordEventList();
@@ -116,6 +117,11 @@ public class FieldMapActivity extends MapActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initData() {
+        eventUrl = getHouseUrl() + "/separationSub/getRetrievalHouseNumberFromGudie.do";
+        houseDataUrl = getHouseUrl() + "/separationSub/getRetrievalHouseNumberFromGudie.do";
     }
 
     private void initMapView() {

@@ -29,7 +29,7 @@ public class FieldDetailActivity extends PermissionActivity {
     private String houseId;
 
     //岳阳
-    private String mHhouseUrl = houseUrl + "/separationSub/getRangeHouseNumberFromApplets.do";
+    private String mHhouseUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class FieldDetailActivity extends PermissionActivity {
 
         llBack = findViewById(R.id.back);
 
+        initData();
         initHouseData();
         getHouseData(houseId);
 
@@ -49,6 +50,10 @@ public class FieldDetailActivity extends PermissionActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initData() {
+        mHhouseUrl = getHouseUrl() + "/separationSub/getRangeHouseNumberFromApplets.do";
     }
 
     private void initHouseData() {

@@ -29,22 +29,28 @@ public class FetchActivity extends PermissionActivity {
      */
     public static final int REQUEST_CODE = 111;
 
-    private String typeUrl = baseUrl + "/eapi/findTypeByUserId.do";
+    private String typeUrl = "";
 
-    private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
+    private String checkUrl = "";
 
-    //水唇镇
-//    private String checkIdUrl =  houseUrl + "/houseNumbers/getGridInspectionPoint.do";
-
-    //河口镇
-//    private String checkIdUrl =  houseUrl + "/houseNumbers/getGridInspectionPoint.do";
-
-    //全国
-    private String checkIdUrl =  houseUrl + "/houseNumbers/getGridInspectionPoint.do";
+    private String checkIdUrl = "";
 
     private String houseId;
 
     protected boolean isFetch = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initData();
+    }
+
+    private void initData() {
+        typeUrl = getBaseUrl() + "/eapi/findTypeByUserId.do";
+        checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
+        checkIdUrl = getHouseUrl() + "/houseNumbers/getGridInspectionPoint.do";
+    }
 
     public void openFetch() {
         showLoadingDialog();
