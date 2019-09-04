@@ -28,7 +28,7 @@ public class VersionUtils {
 
         version = getVersionCode(context);
 
-        RequestParams pa = new RequestParams("https://www.yaheen.com/app/version.json");
+        RequestParams pa = new RequestParams("https://hekou.zl.yafrm.com/static/version.json");
         x.http().get(pa, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

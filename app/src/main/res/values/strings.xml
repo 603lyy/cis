@@ -108,6 +108,7 @@
 
     <string name="report_handle_text">是否处理：</string>
     <string name="report_is_handle">已处理</string>
+    <string name="report_is_report">已上报</string>
     <string name="report_not_handle">未处理</string>
     <string name="report_handle_hint">处理内容描述</string>
     <string name="report_commit">提交</string>
@@ -116,12 +117,12 @@
     <string name="record_emergency_empty">请选择紧急程度</string>
 
     <string name="handle_describe_problem">描述问题：</string>
-    <string name="handle_describe_user">填写人：</string>
-    <string name="handle_describe_time">填写日期：</string>
+    <string name="handle_describe_user">处理人：</string>
+    <string name="handle_describe_time">处理时间：</string>
     <string name="handle_commit_fail">提交失败</string>
     <string name="handle_describe_empty">处理内容不可为空</string>
-    <string name="handle_user_empty">填写人不可为空</string>
-    <string name="handle_time_empty">填写日期不可为空</string>
+    <string name="handle_user_empty">处理人不可为空</string>
+    <string name="handle_time_empty">处理时间不可为空</string>
     <string name="handle_img_url_empty">图片不可为空</string>
     <string name="handle_commit">处理</string>
     <string name="handle_send_report_hint">上报建议</string>

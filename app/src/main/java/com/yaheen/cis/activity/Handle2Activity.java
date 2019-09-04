@@ -91,6 +91,7 @@ public class Handle2Activity extends PermissionActivity {
             public void onSuccess(String result) {
                 ReportBean data = gson.fromJson(result, ReportBean.class);
                 if (data != null && data.isResult()) {
+                    startActivity(new Intent(Handle2Activity.this, ReportRecordActivity.class));
                     showToast(R.string.detail_commit_success);
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
