@@ -187,20 +187,30 @@ public class ReportRecordActivity extends PermissionActivity {
                     showLoadingDialog();
                     Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
                     intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
-                    if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER")) {
-                        //领导角色，网格长上报还没处理
-                        if (DefaultPrefsUtil.getRole().equals("LEADER")) {
-                            intent.putExtra("handle", false);
-                        }
-                    } else if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("PATROLLER")) {
-                        //网格长角色，巡查员上报还没处理或再上报
-                        if (DefaultPrefsUtil.getRole().equals("VILLAGELEADER")) {
-                            intent.putExtra("handle", false);
-                        }
+//                    if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER")) {
+//                        //领导角色，网格长上报还没处理
+//                        if (DefaultPrefsUtil.getRole().equals("LEADER")) {
+//                            intent.putExtra("handle", false);
+//                        }
+//                    } else if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("PATROLLER")) {
+//                        //网格长角色，巡查员上报还没处理或再上报
+//                        if (DefaultPrefsUtil.getRole().equals("VILLAGELEADER")) {
+//                            intent.putExtra("handle", false);
+//                        }
+//                    }
+                    if (recordAdapter.getData().get(position).getFlag().equals("N")) {
+                        intent.putExtra("handle", false);
                     }
                     startActivity(intent);
                 } else if (view.getId() == R.id.tv_state && DefaultPrefsUtil.getRole().equals("LEADER")) {
-                    if ((recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER"))) {
+//                    if ((recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER"))) {
+//                        showLoadingDialog();
+//                        Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
+//                        intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+//                        startActivity(intent);
+//                    }
+                    if (DefaultPrefsUtil.getRole().equals("LEADER")
+                            && recordAdapter.getData().get(position).getFlag().equals("N")) {
                         showLoadingDialog();
                         Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
                         intent.putExtra("eventId", recordAdapter.getData().get(position).getId());

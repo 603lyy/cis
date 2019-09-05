@@ -35,10 +35,12 @@ public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.Event
         if (item.getFlag().equals("Y")) {
             helper.setText(R.id.tv_state, R.string.report_is_handle);
             helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_gray_round);
-        }else if (item.getStatus().equals("VILLAGELEADER") && DefaultPrefsUtil.getRole().equals("VILLAGELEADER")) {
-            helper.setText(R.id.tv_state, R.string.report_is_report);
-            helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_gray_round);
-        } else {
+        }
+//        else if (item.getStatus().equals("VILLAGELEADER") && DefaultPrefsUtil.getRole().equals("VILLAGELEADER")) {
+//            helper.setText(R.id.tv_state, R.string.report_is_report);
+//            helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_gray_round);
+//        }
+        else {
             helper.setText(R.id.tv_state, R.string.report_not_handle);
             helper.setBackgroundRes(R.id.tv_state, R.drawable.btn_yellow_round);
         }
