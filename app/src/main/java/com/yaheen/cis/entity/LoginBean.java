@@ -26,8 +26,25 @@ public class LoginBean {
     private String role;
     private String msg;
     private String unitName;
+    private String userId;
     private float longitude;
     private float latitude;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public float getLongitude() {
         return longitude;

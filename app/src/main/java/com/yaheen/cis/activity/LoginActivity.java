@@ -328,6 +328,7 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setRole(data.getRole());
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
+                        DefaultPrefsUtil.setUserId(data.getUserId());
                         DefaultPrefsUtil.setUnitName(data.getUnitName());
                         DefaultPrefsUtil.setHouseLatitude(data.getLatitude());
                         DefaultPrefsUtil.setHouseLongitude(data.getLongitude());
@@ -413,6 +414,7 @@ public class LoginActivity extends PermissionActivity {
                         DefaultPrefsUtil.setRole(data.getRole());
                         DefaultPrefsUtil.setToken(data.getToken());
                         DefaultPrefsUtil.setPhone(data.getMobile());
+                        DefaultPrefsUtil.setUserId(data.getUserId());
                         DefaultPrefsUtil.setUserName(data.getUsername());
                         DefaultPrefsUtil.setUnitName(data.getUnitName());
                         DefaultPrefsUtil.setHouseLatitude(data.getLatitude());

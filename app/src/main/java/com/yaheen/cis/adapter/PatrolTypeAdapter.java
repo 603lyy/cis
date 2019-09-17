@@ -25,6 +25,12 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHol
     }
 
     public void setDatas(@Nullable List<TypeArrBean> data) {
+        if (data != null) {
+            TypeArrBean lastItem = new TypeArrBean();
+            lastItem.setName("外链");
+            lastItem.setId("-1");
+            data.add(lastItem);
+        }
         setNewData(data);
     }
 
@@ -52,9 +58,9 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHol
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
         } else if (item.getName().equals("禁毒")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
-        }  else if (item.getName().equals("环保")) {
+        } else if (item.getName().equals("环保")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_protection);
-        }   else if (item.getName().equals("环境卫生")) {
+        } else if (item.getName().equals("环境卫生")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_weisheng);
         }
 //        else if (item.getName().equals("其他")) {

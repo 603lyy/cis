@@ -22,11 +22,11 @@ public class DefaultPrefsUtil {
         return DefaultPrefs.getInstance().getCourseCode();
     }
 
-    public static void setUUID(String uuid) {
-        DefaultPrefs.getInstance().setUUID(uuid);
+    public static void setUserId(String userId) {
+        DefaultPrefs.getInstance().setUUID(userId);
     }
 
-    public static String getUUID() {
+    public static String getUserId() {
         return DefaultPrefs.getInstance().getUUID();
     }
 

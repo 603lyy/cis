@@ -22,7 +22,7 @@
 
             <include
                 android:id="@+id/ll_house_data_1"
-                layout="@layout/item_house_data"/>
+                layout="@layout/item_house_data" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,10 +30,10 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="13dp"
                 android:paddingLeft="20dp"
+                android:paddingTop="15dp"
                 android:paddingRight="20dp"
-                android:paddingTop="15dp">
+                android:paddingBottom="13dp">
 
                 <TextView
                     style="@style/Detail_Title_TextView"
@@ -45,21 +45,22 @@
                     android:id="@+id/rv_patrol"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_problem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="13dp"
                 android:paddingLeft="20dp"
+                android:paddingTop="15dp"
                 android:paddingRight="20dp"
-                android:paddingTop="15dp">
+                android:paddingBottom="13dp">
 
                 <TextView
                     style="@style/Detail_Title_TextView"
@@ -76,15 +77,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
+                android:paddingTop="15dp"
                 android:paddingRight="20dp"
-                android:paddingTop="15dp">
+                android:paddingBottom="15dp">
 
                 <TextView
                     style="@style/Detail_Title_TextView"
@@ -106,6 +108,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_urgency"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
@@ -130,14 +133,15 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_img"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="20dp">
+                android:paddingTop="20dp"
+                android:paddingRight="20dp">
 
                 <TextView
                     style="@style/Detail_Title_TextView"
@@ -161,6 +165,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_map"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -195,13 +200,29 @@
                 style="@style/Detail_Toolbar_TextView"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
                 android:layout_gravity="center"
+                android:layout_margin="30dp"
                 android:background="@drawable/btn_upload"
                 android:gravity="center"
-                android:paddingBottom="5dp"
                 android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="@string/detail_commit" />
+
+            <LinearLayout
+                android:id="@+id/ll_web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:visibility="gone">
+
+                <WebView
+                    android:id="@+id/web_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

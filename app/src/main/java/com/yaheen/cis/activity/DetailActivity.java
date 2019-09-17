@@ -1,6 +1,9 @@
 package com.yaheen.cis.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,8 +11,19 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieSyncManager;
+import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +43,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yaheen.cis.R;
+import com.yaheen.cis.activity.base.BaseActivity;
 import com.yaheen.cis.activity.base.FetchActivity;
 import com.yaheen.cis.adapter.ImgUploadAdapter;
 import com.yaheen.cis.adapter.PatrolTypeAdapter;
@@ -42,12 +57,14 @@ import com.yaheen.cis.entity.TypeBean;
 import com.yaheen.cis.entity.UploadLocationListBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.HttpUtils;
+import com.yaheen.cis.util.common.FreeHandScreenUtil;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
 import com.yaheen.cis.util.img.ImgUploadHelper;
 import com.yaheen.cis.util.img.PhotoPagerUtils;
 import com.yaheen.cis.util.img.UpLoadImgListener;
 import com.yaheen.cis.util.img.UriUtil;
+import com.yaheen.cis.util.img.WebViewImgUploadHelper;
 import com.yaheen.cis.util.nfc.Base64Utils;
 import com.yaheen.cis.util.notification.NotificationUtils;
 import com.yaheen.cis.util.sharepreferences.DefaultPrefsUtil;
@@ -56,6 +73,7 @@ import com.yaheen.cis.util.map.BDMapUtils;
 import com.yaheen.cis.util.map.MapViewLocationListener;
 import com.yaheen.cis.util.time.TimeTransferUtils;
 import com.yaheen.cis.util.upload.UploadLocationUtils;
+import com.yaheen.cis.widget.webview.WebJavaScriptProvider;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -83,9 +101,13 @@ public class DetailActivity extends FetchActivity {
 
     private LinearLayout llDetailTitle;
 
+    private LinearLayout llProblem, llDescribe, llUrgency, llImg, llMap, llWebView;
+
     private RefreshLayout refreshLayout;
 
     private View llTitle, llHouse;
+
+    private WebView mWebView;
 
     private ProblemAdapter problemAdapter;
 
@@ -138,6 +160,10 @@ public class DetailActivity extends FetchActivity {
     //问题实体
     private QuestionBean qData;
 
+    private ValueCallback<Uri[]> mUploadMsgs;
+
+    private ValueCallback<Uri> mUploadMsg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +211,7 @@ public class DetailActivity extends FetchActivity {
         initUrgency();
         initMapView();
         initImgUpload();
+        initWebViewSetting();
 
         getQuestionMsg(typeData.getTypeArr().get(0).getId());
 
@@ -238,10 +265,18 @@ public class DetailActivity extends FetchActivity {
     }
 
     private void initView() {
+        llImg = findViewById(R.id.ll_img);
+        llMap = findViewById(R.id.ll_map);
         tvTime = findViewById(R.id.tv_time);
         tvFetch = findViewById(R.id.tv_fetch);
+        llProblem = findViewById(R.id.ll_problem);
+        llUrgency = findViewById(R.id.ll_urgency);
+        llWebView = findViewById(R.id.ll_web_view);
         etDescribe = findViewById(R.id.et_describe);
+        llDescribe = findViewById(R.id.ll_describe);
         tvLocation = findViewById(R.id.tv_location_describe);
+
+        mWebView = findViewById(R.id.web_view);
 
         tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,11 +291,6 @@ public class DetailActivity extends FetchActivity {
             @Override
             public void onClick(View view) {
                 openFetch();
-//                Intent intent = new Intent(DetailActivity.this, DetailPointActivity.class);
-//                intent.putExtra("sign", true);
-//                intent.putExtra("houseId", houseId);
-//                intent.putExtra("type", typeStr);
-//                startActivity(intent);
             }
         });
 
@@ -319,10 +349,105 @@ public class DetailActivity extends FetchActivity {
                     }
                     showLoadingDialog();
                     getQuestionMsg(typeAdapter.getData().get(position).getId());
+                    checkShowWebView(typeAdapter.getData().get(position).getId());
                 }
                 typeAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    /**
+     * 判断显示网页控件
+     *
+     * @param id
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private void checkShowWebView(String id) {
+        if (id.equals("-1")) {
+            cancelLoadingDialog();
+            llImg.setVisibility(View.GONE);
+            llMap.setVisibility(View.GONE);
+            tvCommit.setVisibility(View.GONE);
+            llProblem.setVisibility(View.GONE);
+            llUrgency.setVisibility(View.GONE);
+            llDescribe.setVisibility(View.GONE);
+            llWebView.setVisibility(View.VISIBLE);
+            refreshLayout.setEnableRefresh(false);
+
+            int[] viewLoc = new int[2];
+            llProblem.getLocationOnScreen(viewLoc);
+
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llWebView.getLayoutParams();
+            int[] screenSize = FreeHandScreenUtil.getScreenSize(getApplicationContext());
+            params.height = (int) (screenSize[1] - viewLoc[1]);
+
+            initWebViewSetting();
+            mWebView.loadUrl("http://temporary.zl.yafrm.com/contact/user/contact.html?" + "whnUrl=" + getHouseUrl()
+                    + "&userName=" + DefaultPrefsUtil.getCurrentUserName() + "&userId=" + DefaultPrefsUtil.getUserId()
+                    + "&houseNumberId=" + "&role=" + DefaultPrefsUtil.getRole());
+        } else {
+            llImg.setVisibility(View.VISIBLE);
+            llMap.setVisibility(View.VISIBLE);
+            llWebView.setVisibility(View.GONE);
+            tvCommit.setVisibility(View.VISIBLE);
+            llUrgency.setVisibility(View.VISIBLE);
+            llProblem.setVisibility(View.VISIBLE);
+            llDescribe.setVisibility(View.VISIBLE);
+            refreshLayout.setEnableRefresh(true);
+        }
+    }
+
+    /**
+     * init WebView
+     */
+    private void initWebViewSetting() {
+        WebSettings webSetting = mWebView.getSettings();
+        webSetting.setAppCachePath(this.getDir("appcache", 0).getPath());
+        webSetting.setDatabasePath(this.getDir("databases", 0).getPath());
+        webSetting.setGeolocationDatabasePath(this.getDir("geolocation", 0)
+                .getPath());
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+
+        //手机屏幕适配
+        webSetting.setLoadWithOverviewMode(true);
+        webSetting.setUseWideViewPort(true);
+
+        //禁止放大
+        webSetting.setBuiltInZoomControls(false);
+        webSetting.setSupportZoom(false);
+        webSetting.setDisplayZoomControls(false);
+
+        //启用数据库
+        webSetting.setDatabaseEnabled(true);
+        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);//支持JavaScriptEnabled
+        String dir = this.getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
+        //启用地理定位
+        webSetting.setGeolocationEnabled(true);
+        //设置定位的数据库路径
+        webSetting.setGeolocationDatabasePath(dir);
+        //最重要的方法，一定要设置，这就是出不来的主要原因
+        webSetting.setDomStorageEnabled(true);
+        //设置可以访问文件
+        webSetting.setAllowFileAccess(true);
+        webSetting.setJavaScriptEnabled(true);
+
+        mWebView.setWebChromeClient(webChromeClient);
+        mWebView.setWebViewClient(webViewClient);
+
+        mWebView.addJavascriptInterface(new FetchProvider(this, this), "android");
+    }
+
+    class FetchProvider extends WebJavaScriptProvider {
+
+        public FetchProvider(Context ctx, BaseActivity activity) {
+            super(ctx, activity);
+        }
+
+        @JavascriptInterface
+        public void back() {
+            finish();
+        }
+
     }
 
     private void initQuestion() {
@@ -476,6 +601,11 @@ public class DetailActivity extends FetchActivity {
     }
 
     private void getQuestionMsg(String typeId) {
+
+        if (typeId.equals("-1")) {
+            return;
+        }
+
         RequestParams requestParams = new RequestParams(questionUrl);
         requestParams.addQueryStringParameter("typeId", typeId);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
@@ -766,6 +896,78 @@ public class DetailActivity extends FetchActivity {
         });
     }
 
+    private WebChromeClient webChromeClient = new WebChromeClient() {
+
+        @Override
+        public void onReceivedIcon(WebView view, Bitmap icon) {
+            super.onReceivedIcon(view, icon);
+        }
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            if (newProgress == 100) {
+                cancelLoadingDialog();
+            }
+        }
+
+        @Override
+        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+            callback.invoke(origin, true, true);
+            super.onGeolocationPermissionsShowPrompt(origin, callback);
+        }
+
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+            mUploadMsg = null;
+            mUploadMsgs = null;
+            mUploadMsgs = filePathCallback;
+
+            WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
+                    9 - uploadIdList.size(), false);
+            return true;
+        }
+
+        // For Android 3.0
+        public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+            mUploadMsg = null;
+            mUploadMsgs = null;
+            mUploadMsg = uploadMsg;
+
+            WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
+                    9 - uploadIdList.size(), true);
+        }
+
+        // For Android > 4.1
+        public void openFileChooser(ValueCallback<Uri> uploadMsg,
+                                    String acceptType, String capture) {
+            mUploadMsg = null;
+            mUploadMsgs = null;
+            mUploadMsg = uploadMsg;
+
+            WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
+                    9 - uploadIdList.size(), true);
+        }
+
+        // Andorid 3.0 +
+        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+            mUploadMsg = null;
+            mUploadMsgs = null;
+            mUploadMsg = uploadMsg;
+
+            WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
+                    9 - uploadIdList.size(), true);
+        }
+    };
+
+    private WebViewClient webViewClient = new WebViewClient() {
+
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//            return super.shouldOverrideUrlLoading(view, request);
+//        }
+
+    };
+
     private class LocationListener implements MapViewLocationListener {
 
         @Override
@@ -862,7 +1064,11 @@ public class DetailActivity extends FetchActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ImgUploadHelper.onActivityResult(this, requestCode, resultCode, data);
+        if (llWebView.getVisibility() == View.GONE) {
+            ImgUploadHelper.onActivityResult(this, requestCode, resultCode, data);
+        } else {
+            WebViewImgUploadHelper.onWebViewActivityResult(this, mUploadMsgs, mUploadMsg, requestCode, resultCode, data);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

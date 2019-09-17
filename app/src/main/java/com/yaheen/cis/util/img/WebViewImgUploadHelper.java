@@ -1,4 +1,3 @@
-
 package com.yaheen.cis.util.img;
 
 import android.app.Activity;
@@ -12,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 
 import com.yaheen.cis.BuildConfig;
 import com.yaheen.cis.R;
@@ -30,9 +28,8 @@ import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.CONTEXT_IGNORE_SECURITY;
 
-public class ImgUploadHelper {
+public class WebViewImgUploadHelper {
 
     private static final String Tag = "ImgUploadHelper";
 
@@ -49,9 +46,6 @@ public class ImgUploadHelper {
 
     private static String patrolTempImgPath = "";
 
-    //相册多选URI列表
-    private static List<Uri> mSelected = new ArrayList<>();
-
     private static UpLoadImgListener imgListener;
 
     public static String getPhotoPath() {
@@ -59,10 +53,10 @@ public class ImgUploadHelper {
     }
 
     /**
-     * 显示用户头像上传对话框
+     * 显示图片上传对话框
      */
-    public static void showUserAvatarUploadDialog(final BaseActivity activity,
-                                                  UpLoadImgListener upLoadImgListener, final int length) {
+    public static void showImgUploadDialog(final BaseActivity activity, UpLoadImgListener upLoadImgListener,
+                                           final int length, boolean lowVersion) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_img_upload, null);
         final Dialog dialog = new AlertDialog.Builder(activity).setView(view).show();
         View tv_photo = dialog.findViewById(R.id.tv_photo);
@@ -101,28 +95,25 @@ public class ImgUploadHelper {
     }
 
     /**
-     * 供外部调用onActivityResult方法
+     * 供外部调用webview的onActivityResult方法
      */
-    public static void onActivityResult(BaseActivity activity, int requestCode, int resultCode,
-                                        Intent data) {
+    public static void onWebViewActivityResult(BaseActivity activity, ValueCallback<Uri[]> mUploadMsgs, ValueCallback<Uri> mUploadMsg, int requestCode, int resultCode,
+                                               Intent data) {
 
         if (Activity.RESULT_CANCELED == resultCode)
             return;
         switch (requestCode) {
             case IMAGE_REQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    mSelected.clear();
-                    mSelected = Matisse.obtainResult(data);
-                    imgListener.upLoad(mSelected, false);
+                if (mUploadMsgs != null) {
+                    mUploadMsgs.onReceiveValue(new Uri[]{Matisse.obtainResult(data).get(0)});
                 }
 
+                if (mUploadMsg != null) {
+                    mUploadMsg.onReceiveValue(Matisse.obtainResult(data).get(0));
+                }
                 break;
             case CAMERA_REQUEST_CODE:
-                compressImage(activity, patrolTempImgPath, true);
-                break;
-            case RESULT_REQUEST_CODE:
-                if (data != null)
-                    doAfterImageSelected(activity, data);
+                compressWebViewImage(activity, patrolTempImgPath, mUploadMsgs, mUploadMsg);
                 break;
         }
 
@@ -134,9 +125,9 @@ public class ImgUploadHelper {
     }
 
     /**
-     * 压缩图片
+     * webview调用压缩图片
      */
-    public static void compressImage(final BaseActivity activity, String imgPath, final boolean isTakePhoto) {
+    public static void compressWebViewImage(final BaseActivity activity, String imgPath, final ValueCallback<Uri[]> mUploadMsgs, final ValueCallback<Uri> mUploadMsg) {
         Luban.with(activity)
                 .load(imgPath)
                 .ignoreBy(100)
@@ -149,8 +140,13 @@ public class ImgUploadHelper {
 
                     @Override
                     public void onSuccess(File file) {
-                        activity.compress(getUriForFileProvider(activity, file.getAbsolutePath()),
-                                file.getAbsolutePath(), isTakePhoto);
+                        if (mUploadMsgs != null) {
+                            mUploadMsgs.onReceiveValue(new Uri[]{getUriForFileProvider(activity, file.getAbsolutePath())});
+                        }
+
+                        if (mUploadMsg != null) {
+                            mUploadMsg.onReceiveValue(getUriForFileProvider(activity, file.getAbsolutePath()));
+                        }
                     }
 
                     @Override
@@ -158,61 +154,5 @@ public class ImgUploadHelper {
 
                     }
                 }).launch();
-    }
-
-    /**
-     * 裁剪图片方法实现
-     *
-     * @param uri
-     */
-    public static void cropImage(BaseActivity activity, Uri uri) {
-//        String filePath = uri.getPath();
-        String filePath = Environment.getExternalStorageDirectory().toString() +
-                "/Yiniu/.UserInfo/avatar_temp.jpg";
-        if (filePath == null) {
-            return;
-        }
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(FileProvider.getUriForFile(activity, "com.yaheen.cis.fileprovider",
-                new File(filePath)), "image/*");
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-        // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        // outputX outputY 是裁剪图片宽高\
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 400);
-        intent.putExtra("output",
-//                Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString() + "/Yiniu/avatar_temp.jpg"))
-                FileProvider.getUriForFile(activity, "com.yaheen.cis.fileprovider",
-                        new File(Environment.getExternalStorageDirectory().toString() +
-                                "/Yiniu/.UserInfo/avatar_temp.jpg"))
-        );
-        intent.putExtra("return-data", false);
-        activity.startActivityForResult(intent, RESULT_REQUEST_CODE);
-    }
-
-    /**
-     * 保存裁剪之后的图片数据
-     */
-    private static void doAfterImageSelected(final BaseActivity activity, Intent data) {
-//        Bundle extras = data.getExtras();
-//        UserInfoObserver.getInstance().updateUserAvatar();
-//        UserAvatarUploadProtocol protocol = new UserAvatarUploadProtocol();
-//        HashMap<String, String> requestParams = new HashMap<String, String>();
-//        requestParams.put("token", UserInfoUtil.getUserToken());
-//        requestParams.put("userId", UserInfoUtil.getUserId());
-//        protocol.execute(BaseApp.getInstance(), requestParams,
-//                new OnSuccessListener<UserIntegralChangeResponse>() {
-//
-//                    @Override
-//                    public void onSuccessResponse(UserIntegralChangeResponse response) {
-//                        if (response != null && response.isSuccess() && response.data != null) {
-//                            ToastUtil.toast(fragment.getString(R.string.user_personal_success_text));
-//                            fragment.sendBroadcast(YiniuAction.Action_Update_MyInfo_Data);
-//                        }
-//                    }
-//                }, null);
     }
 }
