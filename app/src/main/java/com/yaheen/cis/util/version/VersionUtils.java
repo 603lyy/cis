@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import com.google.gson.Gson;
+import com.yaheen.cis.R;
 import com.yaheen.cis.entity.VersionBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
@@ -28,7 +29,7 @@ public class VersionUtils {
 
         version = getVersionCode(context);
 
-        RequestParams pa = new RequestParams("https://hekou.zl.yafrm.com/static/version.json");
+        RequestParams pa = new RequestParams(context.getResources().getString(R.string.app_version_url));
         x.http().get(pa, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
