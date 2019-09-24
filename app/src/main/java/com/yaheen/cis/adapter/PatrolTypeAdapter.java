@@ -25,12 +25,12 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHol
     }
 
     public void setDatas(@Nullable List<TypeArrBean> data) {
-        if (data != null) {
-            TypeArrBean lastItem = new TypeArrBean();
-            lastItem.setName("外链");
-            lastItem.setId("-1");
-            data.add(lastItem);
-        }
+//        if (data != null) {
+//            TypeArrBean lastItem = new TypeArrBean();
+//            lastItem.setName("外链");
+//            lastItem.setId("-1");
+//            data.add(lastItem);
+//        }
         setNewData(data);
     }
 

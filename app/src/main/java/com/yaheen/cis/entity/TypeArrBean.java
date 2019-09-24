@@ -11,6 +11,7 @@ public class TypeArrBean implements Serializable {
 
     private String id;
     private String name;
+    private String link;
     private boolean selected = true;
 
     public boolean isSelected() {
@@ -35,5 +36,13 @@ public class TypeArrBean implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

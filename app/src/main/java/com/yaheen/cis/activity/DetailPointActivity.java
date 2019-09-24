@@ -227,6 +227,8 @@ public class DetailPointActivity extends PermissionActivity {
         refreshLayout = findViewById(R.id.refresh_layout);
         tvLocation = findViewById(R.id.tv_location_describe);
 
+        mWebView = findViewById(R.id.web_view);
+
         tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -292,8 +294,10 @@ public class DetailPointActivity extends PermissionActivity {
                         }
                     }
                     showLoadingDialog();
-                    getQuestionMsg(typeAdapter.getData().get(position).getId());
-                    checkShowWebView(typeAdapter.getData().get(position).getId());
+                    if (TextUtils.isEmpty(typeAdapter.getData().get(position).getLink())) {
+                        getQuestionMsg(typeAdapter.getData().get(position).getId());
+                    }
+                    checkShowWebView(typeAdapter.getData().get(position).getLink());
                 }
                 typeAdapter.notifyDataSetChanged();
             }
@@ -302,12 +306,10 @@ public class DetailPointActivity extends PermissionActivity {
 
     /**
      * 判断显示网页控件
-     *
-     * @param id
      */
     @SuppressLint("ClickableViewAccessibility")
-    private void checkShowWebView(String id) {
-        if (id.equals("-1")) {
+    private void checkShowWebView(String link) {
+        if (!TextUtils.isEmpty(link)) {
             cancelLoadingDialog();
             llImg.setVisibility(View.GONE);
             llMap.setVisibility(View.GONE);
@@ -371,6 +373,9 @@ public class DetailPointActivity extends PermissionActivity {
         webSetting.setGeolocationDatabasePath(dir);
         //最重要的方法，一定要设置，这就是出不来的主要原因
         webSetting.setDomStorageEnabled(true);
+        //设置可以访问文件
+        webSetting.setAllowFileAccess(true);
+        webSetting.setJavaScriptEnabled(true);
 
         mWebView.setWebChromeClient(webChromeClient);
         mWebView.setWebViewClient(webViewClient);
@@ -978,7 +983,7 @@ public class DetailPointActivity extends PermissionActivity {
             mUploadMsgs = filePathCallback;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailPointActivity.this, imgListener,
-                    9 - uploadIdList.size(), false);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
             return true;
         }
 
@@ -989,7 +994,7 @@ public class DetailPointActivity extends PermissionActivity {
             mUploadMsg = uploadMsg;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailPointActivity.this, imgListener,
-                    9 - uploadIdList.size(), true);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
         }
 
         // For Android > 4.1
@@ -1000,7 +1005,7 @@ public class DetailPointActivity extends PermissionActivity {
             mUploadMsg = uploadMsg;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailPointActivity.this, imgListener,
-                    9 - uploadIdList.size(), true);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
         }
 
         // Andorid 3.0 +
@@ -1010,7 +1015,7 @@ public class DetailPointActivity extends PermissionActivity {
             mUploadMsg = uploadMsg;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailPointActivity.this, imgListener,
-                    9 - uploadIdList.size(), true);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
         }
     };
 

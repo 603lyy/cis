@@ -348,8 +348,10 @@ public class DetailActivity extends FetchActivity {
                         }
                     }
                     showLoadingDialog();
-                    getQuestionMsg(typeAdapter.getData().get(position).getId());
-                    checkShowWebView(typeAdapter.getData().get(position).getId());
+                    if (TextUtils.isEmpty(typeAdapter.getData().get(position).getLink())) {
+                        getQuestionMsg(typeAdapter.getData().get(position).getId());
+                    }
+                    checkShowWebView(typeAdapter.getData().get(position).getLink());
                 }
                 typeAdapter.notifyDataSetChanged();
             }
@@ -358,12 +360,10 @@ public class DetailActivity extends FetchActivity {
 
     /**
      * 判断显示网页控件
-     *
-     * @param id
      */
     @SuppressLint("ClickableViewAccessibility")
-    private void checkShowWebView(String id) {
-        if (id.equals("-1")) {
+    private void checkShowWebView(String link) {
+        if (!TextUtils.isEmpty(link)) {
             cancelLoadingDialog();
             llImg.setVisibility(View.GONE);
             llMap.setVisibility(View.GONE);
@@ -923,7 +923,8 @@ public class DetailActivity extends FetchActivity {
             mUploadMsgs = filePathCallback;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
-                    9 - uploadIdList.size(), false);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
+
             return true;
         }
 
@@ -934,7 +935,7 @@ public class DetailActivity extends FetchActivity {
             mUploadMsg = uploadMsg;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
-                    9 - uploadIdList.size(), true);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
         }
 
         // For Android > 4.1
@@ -945,7 +946,7 @@ public class DetailActivity extends FetchActivity {
             mUploadMsg = uploadMsg;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
-                    9 - uploadIdList.size(), true);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
         }
 
         // Andorid 3.0 +
@@ -955,7 +956,7 @@ public class DetailActivity extends FetchActivity {
             mUploadMsg = uploadMsg;
 
             WebViewImgUploadHelper.showImgUploadDialog(DetailActivity.this, imgListener,
-                    9 - uploadIdList.size(), true);
+                    9 - uploadIdList.size(), mUploadMsgs, mUploadMsg);
         }
     };
 

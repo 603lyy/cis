@@ -3,12 +3,14 @@ package com.yaheen.cis.util.img;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.View;
 import android.webkit.ValueCallback;
 
@@ -56,7 +58,7 @@ public class WebViewImgUploadHelper {
      * 显示图片上传对话框
      */
     public static void showImgUploadDialog(final BaseActivity activity, UpLoadImgListener upLoadImgListener,
-                                           final int length, boolean lowVersion) {
+                                           final int length, final ValueCallback<Uri[]> mUploadMsgs, final ValueCallback<Uri> mUploadMsg) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_img_upload, null);
         final Dialog dialog = new AlertDialog.Builder(activity).setView(view).show();
         View tv_photo = dialog.findViewById(R.id.tv_photo);
@@ -92,6 +94,20 @@ public class WebViewImgUploadHelper {
                 dialog.dismiss();
             }
         });
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                if (mUploadMsgs != null) {
+                    mUploadMsgs.onReceiveValue(null);
+                }
+
+                if (mUploadMsg != null) {
+                    mUploadMsg.onReceiveValue(null);
+                }
+
+            }
+        });
     }
 
     /**
@@ -100,8 +116,16 @@ public class WebViewImgUploadHelper {
     public static void onWebViewActivityResult(BaseActivity activity, ValueCallback<Uri[]> mUploadMsgs, ValueCallback<Uri> mUploadMsg, int requestCode, int resultCode,
                                                Intent data) {
 
-        if (Activity.RESULT_CANCELED == resultCode)
+        if (Activity.RESULT_CANCELED == resultCode) {
+            if (mUploadMsgs != null) {
+                mUploadMsgs.onReceiveValue(null);
+            }
+
+            if (mUploadMsg != null) {
+                mUploadMsg.onReceiveValue(null);
+            }
             return;
+        }
         switch (requestCode) {
             case IMAGE_REQUEST_CODE:
                 if (mUploadMsgs != null) {
