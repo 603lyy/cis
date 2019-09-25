@@ -174,10 +174,12 @@ public class FieldMapActivity extends MapActivity {
                 if (isFull) {
                     isFull = false;
                     llRecord.setVisibility(View.VISIBLE);
+                    ivFull.setBackgroundResource(R.drawable.ic_full_screen);
                     params.height = (int) FreeHandScreenUtil.dpToPx(FieldMapActivity.this, 300);
                 } else {
                     isFull = true;
                     llRecord.setVisibility(View.GONE);
+                    ivFull.setBackgroundResource(R.drawable.ic_full_screen_2);
                     int[] size = FreeHandScreenUtil.getScreenSize(FieldMapActivity.this);
                     //全屏设置，屏幕的高度减去状态栏的高度
                     params.height = (int) (size[1]

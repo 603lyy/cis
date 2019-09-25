@@ -119,11 +119,11 @@ public class BaseActivity extends Activity implements CompressImg {
     }
 
     public void showToast(int string) {
-        toastUtils.showToast(string, this);
+        toastUtils.showToast(string, getApplicationContext());
     }
 
     public void showToast(String string) {
-        toastUtils.showToast(string, this);
+        toastUtils.showToast(string, getApplicationContext());
     }
 
     public void setIp(String ip) {

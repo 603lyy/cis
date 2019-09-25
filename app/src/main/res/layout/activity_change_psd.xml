@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.LoginActivity">
+
+    <include layout="@layout/item_title_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp">
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/edit_text_primary_round"
+            android:hint="@string/login_phone_hint"
+            android:inputType="phone"
+            android:maxEms="20"
+            android:paddingLeft="10dp"
+            android:textSize="16dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_verification"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp">
+
+            <EditText
+                android:id="@+id/et_verification"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_primary_left_round"
+                android:hint="@string/login_verification_hint"
+                android:inputType="textPassword"
+                android:maxEms="16"
+                android:paddingLeft="10dp"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_get_ver"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_primary_right_round"
+                android:gravity="center"
+                android:text="@string/login_get_verification"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/edit_text_primary_round"
+            android:hint="@string/login_password_hint"
+            android:inputType="textPassword"
+            android:maxEms="16"
+            android:paddingLeft="10dp"
+            android:textSize="14dp" />
+
+        <EditText
+            android:id="@+id/et_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/edit_text_primary_round"
+            android:hint="@string/login_password_confirm_hint"
+            android:inputType="textPassword"
+            android:maxEms="16"
+            android:paddingLeft="10dp"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/btn_blue_round"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/confirm_text"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

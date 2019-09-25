@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,7 +54,7 @@ public class LoginActivity extends PermissionActivity {
 
     private LinearLayout llRPsd, llVer;
 
-    private TextView tvLogin, tvChange, tvGetVer;
+    private TextView tvLogin, tvChange, tvGetVer,tvSetting;
 
     private EditText etName, etPsd, etIp, etPhone, etVerification;
 
@@ -83,7 +84,7 @@ public class LoginActivity extends PermissionActivity {
         initView();
         initData();
 
-        VersionUtils.checkVersion(LoginActivity.this);
+        VersionUtils.checkVersion(LoginActivity.this,false);
 
         llRPsd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +112,7 @@ public class LoginActivity extends PermissionActivity {
         cbRPsd = findViewById(R.id.cb_remember_password);
         llRPsd = findViewById(R.id.ll_remember_password);
         llVer = findViewById(R.id.ll_verification);
+        tvSetting = findViewById(R.id.tv_setting);
         tvGetVer = findViewById(R.id.tv_get_ver);
         etName = findViewById(R.id.et_username);
         tvChange = findViewById(R.id.tv_change);
@@ -138,6 +140,15 @@ public class LoginActivity extends PermissionActivity {
             public void onClick(View v) {
                 //开始计时
                 setCountTime();
+            }
+        });
+
+        tvSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingDialog();
+                Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -505,7 +516,7 @@ public class LoginActivity extends PermissionActivity {
     }
 
     private void changeView() {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ivLogin.getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ivLogin.getLayoutParams();
         params.height = (int) (FreeHandScreenUtil.getScreenWidthAveragePart(getApplicationContext(), 1) / 8 * 5);
         ivLogin.setLayoutParams(params);
     }
@@ -526,6 +537,12 @@ public class LoginActivity extends PermissionActivity {
             public void cancelCallback() {
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cancelLoadingDialog();
     }
 
     @Override

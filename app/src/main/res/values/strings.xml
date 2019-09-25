@@ -9,9 +9,11 @@
     <string name="login_username_hint">用户名</string>
     <string name="login_phone_hint">手机号</string>
     <string name="login_password_hint">密码</string>
+    <string name="login_password_confirm_hint">确认密码</string>
     <string name="login_verification_hint">验证码</string>
     <string name="login_remember_password">记住密码</string>
     <string name="login_text">登 录</string>
+    <string name="confirm_text">确 认</string>
     <string name="login_username_empty">用户名不能为空</string>
     <string name="login_phone_empty">手机号不能为空</string>
     <string name="login_phone_not_right">手机号格式不正确</string>
@@ -19,6 +21,8 @@
     <string name="login_verification_empty">验证码不能为空</string>
     <string name="login_verification_not_right">验证码错误</string>
     <string name="login_password_empty">密码不能为空</string>
+    <string name="confirm_password_empty">确认密码不能为空</string>
+    <string name="password_not_Inconsistent">填写的密码不一致</string>
     <string name="login_fail">登录失败</string>
     <string name="login_phone">手机号登录</string>
     <string name="login_account">账号密码登录</string>
@@ -33,6 +37,7 @@
     <string name="turn_field_text">范围</string>
     <string name="turn_fetch_text">定点巡查</string>
     <string name="turn_upload_text">事件</string>
+    <string name="turn_setting_text">设置</string>
     <string name="turn_id_empty">门牌不存在</string>
 
     <string name="detail_finish">结束</string>
@@ -163,5 +168,8 @@
     <!--<string name="flash_text_bottom">陆河县水唇镇人民政府</string>-->
     <string name="flash_text_bottom_hekou">河口人民政府</string>
     <string name="flash_text_bottom_guangdong">广东省人民政府</string>
+
+    <string name="setting_change_password">重置密码</string>
+    <string name="setting_version">检查更新</string>
 
 </resources>

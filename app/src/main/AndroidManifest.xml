@@ -133,7 +133,9 @@
         <activity android:name=".activity.UrlSettingActivity" />
         <activity android:name=".activity.FieldMapActivity" />
         <activity android:name=".activity.FieldDetailActivity" />
-        <activity android:name=".activity.Handle2Activity"></activity>
+        <activity android:name=".activity.Handle2Activity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.ChangePsdActivity"></activity>
     </application>
 
 </manifest>
