@@ -83,7 +83,7 @@ android {
             resValue "string", "flash_text_2", "建设平安、和谐岳阳"
             resValue "string", "flash_text_bottom", "岳阳市经开区西塘镇人民政府"
             resValue "string", "app_base_url", "https://xitang.zl.yafrm.com"
-            resValue "string", "app_house_url", "https://xitang.whn.yafrm.com"
+            resValue "string", "app_house_url", " https://npapp.yaheen.com:8090/yueyang"
             resValue "string", "app_version_url", "https://xitang.zl.yafrm.com/static/version.json"
             //manifest里面的值
             manifestPlaceholders = [
