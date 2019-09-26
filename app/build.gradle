@@ -100,8 +100,8 @@ android {
             resValue "string", "app_name", "本地穿透巡查"
             resValue "string", "flash_text_2", "建设平安、和谐本地"
             resValue "string", "flash_text_bottom", "本地人民政府"
-//            resValue "string", "app_base_url", "http://crs.t.yaheen.com:168/crs_sc"
-            resValue "string", "app_base_url", "http://crs.t.yaheen.com:168/crs_hekou"
+            resValue "string", "app_base_url", "http://xitang.t.yaheen.com:168/crs_xitang"
+//            resValue "string", "app_base_url", "http://crs.t.yaheen.com:168/crs_hekou"
             resValue "string", "app_house_url", "https://hekou.whn.yafrm.com"
             resValue "string", "app_version_url", "http://crs.t.yaheen.com:168/crs_sc/static/version.json"
             //manifest里面的值

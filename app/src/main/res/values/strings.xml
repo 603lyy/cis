@@ -23,6 +23,7 @@
     <string name="login_password_empty">密码不能为空</string>
     <string name="confirm_password_empty">确认密码不能为空</string>
     <string name="password_not_Inconsistent">填写的密码不一致</string>
+    <string name="change_password_fail">修改密码失败</string>
     <string name="login_fail">登录失败</string>
     <string name="login_phone">手机号登录</string>
     <string name="login_account">账号密码登录</string>

@@ -235,7 +235,7 @@ public class FieldMapActivity extends MapActivity {
                 try {
                     data = gson.fromJson(result, FieldHouseBean.class);
                 } catch (Exception e) {
-                    showToast("搜索失败");
+                    showToast("搜索成功但结果为空");
                 }
                 if (data != null && data.isResult()) {
                     mAdapter.setDatas(data.getJson());

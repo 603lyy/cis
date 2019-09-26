@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.yaheen.cis.R;
 import com.yaheen.cis.activity.base.PermissionActivity;
+import com.yaheen.cis.entity.CommonBean;
 import com.yaheen.cis.entity.GetVerBean;
 import com.yaheen.cis.entity.LoginBean;
 import com.yaheen.cis.entity.TypeBean;
@@ -34,7 +36,7 @@ public class ChangePsdActivity extends PermissionActivity {
 
     private boolean isPhone = false, isCount = false;
 
-    private String getVerUrl = "";
+    private String getVerUrl = "", changePsdUrl = "";
 
     //用户获取的验证码
     private String ver = "";
@@ -49,7 +51,7 @@ public class ChangePsdActivity extends PermissionActivity {
     }
 
     private void initData() {
-//        url = getBaseUrl() + "/eapi/wlogin.do";
+        changePsdUrl = getBaseUrl() + "/eapi/resetPassword.do";
         getVerUrl = getBaseUrl() + "/eapi/getVerifyCode.do";
     }
 
@@ -75,6 +77,13 @@ public class ChangePsdActivity extends PermissionActivity {
             public void onClick(View v) {
                 //开始计时
                 setCountTime();
+            }
+        });
+
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePassword();
             }
         });
 
@@ -135,6 +144,7 @@ public class ChangePsdActivity extends PermissionActivity {
 
         RequestParams requestParams = new RequestParams(getVerUrl);
         requestParams.addQueryStringParameter("mobile", phone);
+        requestParams.addQueryStringParameter("flag", "reset");
 //        requestParams.addQueryStringParameter("number", loginNumber);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
@@ -142,15 +152,7 @@ public class ChangePsdActivity extends PermissionActivity {
             public void onSuccess(String result) {
                 GetVerBean data = gson.fromJson(result, GetVerBean.class);
                 if (data != null && data.isResult()) {
-//                    ver = data.getCode();
-//                    if (TextUtils.isEmpty(loginNumber) && data.getNumber() != null) {
-//                        DialogUtils.showDialog(LoginActivity.this, "此账号正在巡查，是否继续登录", new DialogCallback() {
-//                            @Override
-//                            public void callback() {
-//                                loginNumber = "1001";
-//                            }
-//                        }, null);
-//                    }
+                    ver = data.getCode();
                 } else {
                     showToast(R.string.login_get_verification_fail);
                 }
@@ -174,7 +176,7 @@ public class ChangePsdActivity extends PermissionActivity {
 
     }
 
-    private void loginPhone() {
+    private void changePassword() {
 
         final String phone = etPhone.getText().toString();
         final String ver = etVerification.getText().toString();
@@ -201,61 +203,35 @@ public class ChangePsdActivity extends PermissionActivity {
         } else if (TextUtils.isEmpty(etPsdConfirm.getText())) {
             showToast(R.string.confirm_password_empty);
             return;
-        } else if (!etPsd.getText().equals(etPsdConfirm.getText())) {
+        } else if (!etPsd.getText().toString().equals(etPsdConfirm.getText().toString())) {
             showToast(R.string.password_not_Inconsistent);
             return;
         }
 
         showLoadingDialog();
 
-        RequestParams requestParams = new RequestParams("");
+        RequestParams requestParams = new RequestParams(changePsdUrl);
         requestParams.addQueryStringParameter("mobile", phone);
-        requestParams.addQueryStringParameter("loginFlag", "M");
-        requestParams.addQueryStringParameter("devFlag", "APP");
-        requestParams.addQueryStringParameter("hardwareId", FreeHandSystemUtil.getSafeUUID(getApplicationContext()));
-//        if (loginNumber.equals("1001")) {
-//            requestParams.addQueryStringParameter("number", loginNumber);
-//        }
+        requestParams.addQueryStringParameter("password", etPsd.getText().toString());
+        requestParams.addQueryStringParameter("ensurePwd", etPsdConfirm.getText().toString());
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-
-//                LoginBean data = gson.fromJson(result, LoginBean.class);
-//                if (data != null) {
-//                    if (data.isResult()) {
-//                        DefaultPrefsUtil.setRole(data.getRole());
-//                        DefaultPrefsUtil.setToken(data.getToken());
-//                        DefaultPrefsUtil.setPhone(data.getMobile());
-//                        DefaultPrefsUtil.setUserId(data.getUserId());
-//                        DefaultPrefsUtil.setUnitName(data.getUnitName());
-//                        DefaultPrefsUtil.setHouseLatitude(data.getLatitude());
-//                        DefaultPrefsUtil.setHouseLongitude(data.getLongitude());
-//                        DefaultPrefsUtil.setCurrentUserName(data.getUsername());
-//
-//                        Intent intent = new Intent(LoginActivity.this, TurnActivity.class);
-//                        //账号正在巡查，返回巡查信息
-//                        if (data.getTypeArr() != null && data.getTypeArr().size() > 0 && !TextUtils.isEmpty(data.getRecordId())) {
-//                            TypeBean typeBean = new TypeBean();
-//                            typeBean.setTypeArr(data.getTypeArr());
-//                            typeBean.setRecordId(data.getRecordId());
-//                            typeBean.setRecordStartTime(data.getRecordStartTime());
-////                            intent.putExtra("type", gson.toJson(typeBean));
-//                            DefaultPrefsUtil.setPatrolType(gson.toJson(typeBean));
-//                        }
-//                        startActivity(intent);
-//                    } else {
-//                        loginNumber = "";
-//                        showToast(data.getMsg());
-//                    }
-//                } else {
-//                    showToast(R.string.login_fail);
-//                }
+                CommonBean data = gson.fromJson(result, CommonBean.class);
+                if (data != null) {
+                    if (data.isResult()) {
+                        finish();
+                    }
+                    showToast(data.getMsg());
+                } else {
+                    showToast(R.string.change_password_fail);
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                showToast(R.string.login_fail);
+                showToast(R.string.change_password_fail);
             }
 
             @Override
