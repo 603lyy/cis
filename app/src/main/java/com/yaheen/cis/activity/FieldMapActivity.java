@@ -242,6 +242,8 @@ public class FieldMapActivity extends MapActivity {
                     mAdapter.notifyDataSetChanged();
                     addMarkers(data.getJson());
                     mBaiduMap.hideInfoWindow();
+                }else {
+                    showToast(data.getMsg());
                 }
             }
 
