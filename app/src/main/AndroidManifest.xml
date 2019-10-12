@@ -135,7 +135,8 @@
         <activity android:name=".activity.FieldDetailActivity" />
         <activity android:name=".activity.Handle2Activity" />
         <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.ChangePsdActivity"></activity>
+        <activity android:name=".activity.ChangePsdActivity" />
+        <activity android:name=".activity.WebViewActivity"></activity>
     </application>
 
 </manifest>

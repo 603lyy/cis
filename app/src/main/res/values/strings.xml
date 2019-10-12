@@ -39,6 +39,8 @@
     <string name="turn_fetch_text">定点巡查</string>
     <string name="turn_upload_text">事件</string>
     <string name="turn_setting_text">设置</string>
+    <string name="turn_setting_web">三进三同</string>
+    <string name="turn_setting_more">敬请期待</string>
     <string name="turn_id_empty">门牌不存在</string>
 
     <string name="detail_finish">结束</string>
@@ -131,6 +133,7 @@
     <string name="handle_time_empty">处理时间不可为空</string>
     <string name="handle_img_url_empty">图片不可为空</string>
     <string name="handle_commit">处理</string>
+    <string name="handle_commit3">追踪处理</string>
     <string name="handle_send_report_hint">上报建议</string>
     <string name="handle_img_limit">最多只能选择4张图片</string>
 

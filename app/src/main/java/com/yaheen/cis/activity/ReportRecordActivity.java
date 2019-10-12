@@ -193,6 +193,7 @@ public class ReportRecordActivity extends PermissionActivity {
                     showLoadingDialog();
                     Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
                     intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+
                     if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER")) {
                         //领导角色，网格长上报还没处理
                         if (DefaultPrefsUtil.getRole().equals("LEADER")) {
@@ -203,6 +204,10 @@ public class ReportRecordActivity extends PermissionActivity {
                         if (DefaultPrefsUtil.getRole().equals("VILLAGELEADER")) {
                             intent.putExtra("handle", false);
                         }
+                    }
+
+                    if(recordAdapter.getData().get(position).getFlag().equals("N")){
+                        intent.putExtra("showTrack", true);
                     }
                     startActivity(intent);
                 } else if (view.getId() == R.id.tv_state && DefaultPrefsUtil.getRole().equals("LEADER")) {

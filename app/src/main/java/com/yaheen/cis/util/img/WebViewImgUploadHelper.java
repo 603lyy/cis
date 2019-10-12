@@ -48,8 +48,6 @@ public class WebViewImgUploadHelper {
 
     private static String patrolTempImgPath = "";
 
-    private static UpLoadImgListener imgListener;
-
     public static String getPhotoPath() {
         return patrolTempImgPath;
     }
@@ -63,8 +61,6 @@ public class WebViewImgUploadHelper {
         final Dialog dialog = new AlertDialog.Builder(activity).setView(view).show();
         View tv_photo = dialog.findViewById(R.id.tv_photo);
         View tv_camera = dialog.findViewById(R.id.tv_camera);
-
-        imgListener = upLoadImgListener;
 
         tv_photo.setOnClickListener(new OnRepeatClickListener() {
             @Override

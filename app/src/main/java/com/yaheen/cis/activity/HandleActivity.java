@@ -41,6 +41,8 @@ public class HandleActivity extends FetchActivity {
 
     private String commitUrl = "";
 
+    private String commit2Url = "";
+
     private String uploadImgUrl = "";
 
     private EditText etDes, etUser, etTime;
@@ -67,7 +69,11 @@ public class HandleActivity extends FetchActivity {
     //已上传图片的ID列表
     private List<String> uploadIdList = new ArrayList<>();
 
+    //事件的ID
     private String eventId;
+
+    //判断是否是追踪处理
+    private boolean isTracking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,7 @@ public class HandleActivity extends FetchActivity {
         setContentView(R.layout.activity_handle);
 
         eventId = getIntent().getStringExtra("eventId");
+        isTracking = getIntent().getBooleanExtra("isTracking", false);
 
         initData();
         initImgUpload();
@@ -97,6 +104,7 @@ public class HandleActivity extends FetchActivity {
     private void initData() {
         commitUrl = getBaseUrl() + "/eapi/handleEvent.do";
         uploadImgUrl = getBaseUrl() + "/eapi/uploadDealFile.do";
+        commit2Url = getBaseUrl() + "/eapi/trackingProcessEvent.do";
 
         llBack = findViewById(R.id.back);
         etTime = findViewById(R.id.et_time);
@@ -105,7 +113,7 @@ public class HandleActivity extends FetchActivity {
         tvCommit = findViewById(R.id.tv_commit);
 
         etUser.setText(DefaultPrefsUtil.getCurrentUserName());
-        etTime.setText(TimeTransferUtils.getYMDHMSStrTime2(System.currentTimeMillis()+""));
+        etTime.setText(TimeTransferUtils.getYMDHMSStrTime2(System.currentTimeMillis() + ""));
     }
 
     private void initImgUpload() {
@@ -295,13 +303,28 @@ public class HandleActivity extends FetchActivity {
 
         showLoadingDialog();
 
-        RequestParams requestParams = new RequestParams(commitUrl);
+        RequestParams requestParams = new RequestParams("");
+
+        if (isTracking) {
+            requestParams.setUri(commit2Url);
+        } else {
+            requestParams.setUri(commitUrl);
+        }
+
         requestParams.addQueryStringParameter("eventId", eventId);
-        requestParams.addQueryStringParameter("fileIds", imgIdStr);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+
+        //处理参数
+        requestParams.addQueryStringParameter("fileIds", imgIdStr);
         requestParams.addQueryStringParameter("content", etDes.getText().toString());
         requestParams.addQueryStringParameter("dealUser", etUser.getText().toString());
         requestParams.addQueryStringParameter("dealDate", etTime.getText().toString());
+
+        //追踪处理参数
+        requestParams.addQueryStringParameter("file", imgIdStr);
+        requestParams.addQueryStringParameter("user", etUser.getText().toString());
+        requestParams.addQueryStringParameter("date", etTime.getText().toString());
+        requestParams.addQueryStringParameter("describe", etDes.getText().toString());
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override

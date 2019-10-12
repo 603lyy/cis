@@ -61,13 +61,13 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHol
         } else if (item.getName().equals("环保")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_protection);
         } else if (item.getName().equals("环境卫生")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_weisheng);
-        }
-//        else if (item.getName().equals("其他")) {
-//            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_other);
-//        }
-        else {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
+        } else if (item.getName().equals("消防")) {
             helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
+        } else if (item.getName().equals("三进三同")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
+        } else {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_san);
         }
     }
 

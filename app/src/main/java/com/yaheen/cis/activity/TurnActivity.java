@@ -50,7 +50,7 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkIdUrl = "";
 
-    private TextView tvPatrol, tvRecord, tvUpload, tvField,tvSetting;
+    private TextView tvPatrol, tvRecord, tvUpload, tvField,tvSetting,tvWeb,tvMore;
 
     private ImageView ivTurn;
 
@@ -70,6 +70,8 @@ public class TurnActivity extends PermissionActivity {
         setContentView(R.layout.activity_turn_2);
 
         llBack = findViewById(R.id.back);
+        tvWeb = findViewById(R.id.tv_web);
+        tvMore = findViewById(R.id.tv_more);
         ivTurn = findViewById(R.id.iv_turn);
         llExit = findViewById(R.id.ll_exit);
         tvField = findViewById(R.id.tv_field);
@@ -77,8 +79,6 @@ public class TurnActivity extends PermissionActivity {
         tvRecord = findViewById(R.id.tv_record);
         tvUpload = findViewById(R.id.tv_upload);
         tvSetting = findViewById(R.id.tv_setting);
-
-//        typeStr = getIntent().getStringExtra("type");
 
         initData();
         changeView();
@@ -112,6 +112,15 @@ public class TurnActivity extends PermissionActivity {
             public void onClick(View v) {
                 showLoadingDialog();
                 Intent intent = new Intent(TurnActivity.this, FieldMapActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        tvWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingDialog();
+                Intent intent = new Intent(TurnActivity.this, WebViewActivity.class);
                 startActivity(intent);
             }
         });
