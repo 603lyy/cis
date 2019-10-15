@@ -57,9 +57,7 @@ public class WebViewActivity extends FetchActivity {
             isFirstIn = false;
             showLoadingDialog();
 
-            mWebView.loadUrl("http://temporary.zl.yafrm.com/contact/user/contact.html?" + "whnUrl=" + getHouseUrl()
-                    + "&userName=" + DefaultPrefsUtil.getCurrentUserName() + "&userId=" + DefaultPrefsUtil.getUserId()
-                    + "&houseNumberId=" + "&role=" + DefaultPrefsUtil.getRole());
+            mWebView.loadUrl("https://temporary.zl.yafrm.com/contact/user/contactlist.html?" + "userId=" + DefaultPrefsUtil.getUserId());
         }
     }
 

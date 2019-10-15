@@ -382,7 +382,7 @@ public class DetailActivity extends FetchActivity {
             params.height = (int) (screenSize[1] - viewLoc[1]);
 
             initWebViewSetting();
-            mWebView.loadUrl("http://temporary.zl.yafrm.com/contact/user/contact.html?" + "whnUrl=" + getHouseUrl()
+            mWebView.loadUrl(link + "?whnUrl=" + getHouseUrl()
                     + "&userName=" + DefaultPrefsUtil.getCurrentUserName() + "&userId=" + DefaultPrefsUtil.getUserId()
                     + "&houseNumberId=" + "&role=" + DefaultPrefsUtil.getRole());
         } else {
@@ -555,49 +555,6 @@ public class DetailActivity extends FetchActivity {
             }
         });
         return view;
-    }
-
-    private void getHouseData(String houseId) {
-
-        if (TextUtils.isEmpty(houseId)) {
-            return;
-        }
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("houseNumberId", houseId);
-
-        RequestParams params = new RequestParams("http://whn.020szsq.com:8088/merchants/getAllMechats.do");
-        params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
-        HttpUtils.getPostHttp(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                HouseBean data = gson.fromJson(result, HouseBean.class);
-//                if (data != null && data.isResult() && data.getEntity().size() > 0) {
-//                    tvPUsername.setText(data.getEntity().get(0).getHouseOwnerName());
-//                    tvPArea.setText(data.getEntity().get(0).getBusinessScope());
-//                    tvPLeader.setText(data.getEntity().get(0).getFireowner());
-//                    tvPAddress.setText(data.getEntity().get(0).getAddress());
-//                    tvOwner.setText(data.getEntity().get(0).getUserName());
-//                    tvPPhone.setText(data.getEntity().get(0).getPhone());
-//                    tvPTime.setText(data.getEntity().get(0).getTime());
-//                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
     }
 
     private void getQuestionMsg(String typeId) {

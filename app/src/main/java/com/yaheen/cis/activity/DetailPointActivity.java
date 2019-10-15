@@ -328,7 +328,7 @@ public class DetailPointActivity extends PermissionActivity {
             params.height = (int) (screenSize[1] - viewLoc[1]);
 
             initWebViewSetting();
-            mWebView.loadUrl("http://temporary.zl.yafrm.com/contact/user/contact.html?" + "whnUrl=" + getHouseUrl()
+            mWebView.loadUrl(link + "?whnUrl=" + getHouseUrl()
                     + "&userName=" + DefaultPrefsUtil.getCurrentUserName() + "&userId=" + DefaultPrefsUtil.getUserId()
                     + "&houseNumberId=" + houseId + "&role=" + DefaultPrefsUtil.getRole());
         } else {

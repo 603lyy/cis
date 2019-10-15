@@ -40,8 +40,8 @@ android {
 
         //河口APP
         Hekou {
-            versionCode 2003
-            versionName "2.0.3"
+            versionCode 2005
+            versionName "2.0.5"
             applicationId "com.yaheen.cis_hekou"
             resValue "string", "app_name", "河口巡查"
             resValue "string", "flash_text_2", "建设平安、和谐河口"
