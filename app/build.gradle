@@ -92,6 +92,24 @@ android {
                     BAIDU_MAP_AK     : "uMwDKGGv00cpAGuyty2A6mD2eQKODH1l"]
         }
 
+        //白水APP
+        Baishui {
+            versionCode 2001
+            versionName "2.0.1"
+            applicationId "com.yaheen.cis_xitang"
+            resValue "string", "app_name", "白水巡查"
+            resValue "string", "flash_text_2", "建设平安、和谐白水"
+            resValue "string", "flash_text_bottom", "岳阳市汨罗市白水镇人民政府"
+            resValue "string", "app_base_url", "https://demo.zl.yafrm.com"
+            resValue "string", "app_house_url", "https://xichang.whn.yafrm.com"
+            resValue "string", "app_version_url", "https://demo.zl.yafrm.com/static/version.json"
+            //manifest里面的值
+            manifestPlaceholders = [
+                    MTA_CHANNEL_VALUE: "your_app_1",
+                    FILE_PROVIDER    : "com.flavor.yourapp.fileprovider",
+                    BAIDU_MAP_AK     : "uMwDKGGv00cpAGuyty2A6mD2eQKODH1l"]
+        }
+
         //本地穿透APP
         ChuanTou {
             versionCode 2001
