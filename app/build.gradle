@@ -103,7 +103,7 @@ android {
             resValue "string", "app_base_url", "https://demo.zl.yafrm.com"
             resValue "string", "app_house_url", "https://xichang.whn.yafrm.com"
             resValue "string", "app_version_url", "https://demo.zl.yafrm.com/static/version.json"
-            //manifest里面的值
+            //manifest里面的值 
             manifestPlaceholders = [
                     MTA_CHANNEL_VALUE: "your_app_1",
                     FILE_PROVIDER    : "com.flavor.yourapp.fileprovider",
