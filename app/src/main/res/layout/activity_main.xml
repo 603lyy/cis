@@ -7,12 +7,29 @@
     android:orientation="vertical"
     tools:context=".activity.LoginActivity">
 
-    <ImageView
-        android:id="@+id/iv_login"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@drawable/bg_login"
-        android:scaleType="center" />
+        android:layout_height="250dp">
+
+        <ImageView
+            android:id="@+id/iv_login"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/bg_login"
+            android:scaleType="center" />
+
+        <TextView
+            android:id="@+id/tv_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/turn_setting_text"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -118,8 +135,8 @@
                 android:id="@+id/tv_change"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
                 android:gravity="right|center_vertical"
                 android:text="@string/login_phone"
                 android:textColor="@color/colorPrimary"
@@ -134,8 +151,8 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/btn_blue_round"
             android:gravity="center"
-            android:paddingBottom="10dp"
             android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/login_text"
             android:textColor="@color/white"
             android:textSize="18dp" />

@@ -32,7 +32,8 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHol
     protected void convert(BaseViewHolder helper, TypeArrBean item) {
         checkBox = helper.getView(R.id.cb_type);
         helper.addOnClickListener(R.id.cb_type);
-        helper.setText(R.id.cb_type, item.getName());
+//        helper.setText(R.id.cb_type, item.getName());
+        helper.setText(R.id.tv_type, item.getName());
 
         if (changeTime == 0) {
             item.setSelected(true);
@@ -48,20 +49,25 @@ public class PatrolTypeAdapter extends BaseQuickAdapter<TypeArrBean, BaseViewHol
             checkBox.setChecked(false);
         }
 
-        if (item.getName().equals("“两违”行为")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_land);
-        } else if (item.getName().equals("禁毒")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_drug);
-        }  else if (item.getName().equals("环保")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_protection);
-        }   else if (item.getName().equals("环境卫生")) {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_weisheng);
+        if (item.getName().equals("厕所")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_cesuo);
+        } else if (item.getName().equals("房前屋后水沟")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_shuigou);
+        }  else if (item.getName().equals("环境卫生")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_huanjing);
+        }   else if (item.getName().equals("环境卫生保洁费1元，1元以上/人/月")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_baojie);
+        }else if (item.getName().equals("乱堆乱放")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_luandui);
+        }  else if (item.getName().equals("禽畜养殖污染")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_qinchu);
+        }   else if (item.getName().equals("“四房”拆除")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_sifang);
+        }else if (item.getName().equals("围栏")) {
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_weilan);
         }
-//        else if (item.getName().equals("其他")) {
-//            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_other);
-//        }
         else {
-            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_fire);
+            helper.setBackgroundRes(R.id.iv_type, R.drawable.ic_huanjing);
         }
     }
 

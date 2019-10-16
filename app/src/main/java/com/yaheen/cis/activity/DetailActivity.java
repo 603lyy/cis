@@ -299,7 +299,7 @@ public class DetailActivity extends FetchActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvPatrol = findViewById(R.id.rv_patrol);
-        rvPatrol.setLayoutManager(new GridLayoutManager(this, 3));
+        rvPatrol.setLayoutManager(new GridLayoutManager(this, 2));
 
         typeAdapter = new PatrolTypeAdapter();
         typeAdapter.setDatas(typeData.getTypeArr());

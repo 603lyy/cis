@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.yaheen.cis.R;
@@ -12,6 +14,7 @@ import com.yaheen.cis.entity.VersionBean;
 import com.yaheen.cis.util.DialogUtils;
 import com.yaheen.cis.util.dialog.DialogCallback;
 import com.yaheen.cis.util.dialog.IDialogCancelCallback;
+import com.yaheen.cis.util.toast.ToastUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -25,7 +28,7 @@ public class VersionUtils {
 
     private static int version;
 
-    public static void checkVersion(final Context context) {
+    public static void checkVersion(final Context context, final boolean showToast) {
 
         version = getVersionCode(context);
 
@@ -50,6 +53,10 @@ public class VersionUtils {
                         public void cancelCallback() {
                         }
                     });
+                } else if (showToast) {
+                    Toast toast = Toast.makeText(context, "已经是最新版本", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
 

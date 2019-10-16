@@ -28,9 +28,9 @@ public class RecordAdapter extends BaseQuickAdapter<RecordBean.RecordArrBean, Ba
 
         for (int i = 0; i < item.getTypeArr().size(); i++) {
             if (i == 0) {
-                typeStr = item.getTypeArr().get(i);
+                typeStr = item.getTypeArr().get(i).getName();
             } else {
-                typeStr = typeStr + "、" + item.getTypeArr().get(i);
+                typeStr = typeStr + "、" + item.getTypeArr().get(i).getName();
             }
         }
 

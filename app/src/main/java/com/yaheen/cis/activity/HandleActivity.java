@@ -308,6 +308,7 @@ public class HandleActivity extends FetchActivity {
             public void onSuccess(String result) {
                 CommonBean data = gson.fromJson(result, CommonBean.class);
                 if (data != null && data.isResult()) {
+                    showToast(data.getMsg());
                     startActivity(new Intent(HandleActivity.this, ReportRecordActivity.class));
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
