@@ -353,6 +353,8 @@ public class LoginActivity extends PermissionActivity {
                             typeBean.setRecordStartTime(data.getRecordStartTime());
 //                            intent.putExtra("type", gson.toJson(typeBean));
                             DefaultPrefsUtil.setPatrolType(gson.toJson(typeBean));
+                        }else {
+                            DefaultPrefsUtil.setPatrolType("");
                         }
                         startActivity(intent);
                     } else {
@@ -439,6 +441,8 @@ public class LoginActivity extends PermissionActivity {
                             typeBean.setRecordStartTime(data.getRecordStartTime());
 //                            intent.putExtra("type", gson.toJson(typeBean));
                             DefaultPrefsUtil.setPatrolType(gson.toJson(typeBean));
+                        }else {
+                            DefaultPrefsUtil.setPatrolType("");
                         }
                         startActivity(intent);
                     } else if (data.getCode() == 1001) {
