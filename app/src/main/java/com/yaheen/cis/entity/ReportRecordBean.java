@@ -4,9 +4,10 @@ import java.util.List;
 
 public class ReportRecordBean {
 
+
     /**
      * result : true
-     * eventList : [{"id":"4028fde6648c39c801648c687bcf0032","time":"2018-07-12 10:53:35","longitude":113.40469,"latitude":23.131157,"emergency":"2","describe":"正常","flag":"N","username":"林雅烨"},{"id":"402847ec648825c8016488423e1e0007","time":"2018-07-11 15:33:20","longitude":113.40465,"latitude":23.131239,"emergency":"3","describe":"正常","flag":"Y","username":"林雅烨"},{"id":"402847ec648825c80164883ff1ba0003","time":"2018-07-11 15:30:49","longitude":113.40463,"latitude":23.1312,"emergency":"2","describe":"正常","flag":"Y","username":"林雅烨"},{"id":"402847ec6486ff9e0164872db089000c","time":"2018-07-11 10:31:15","longitude":113.404655,"latitude":23.13115,"emergency":"4","describe":"有问题","flag":"Y","username":"林雅烨"},{"id":"402847ec6486ff9e0164872d8703000a","time":"2018-07-11 10:31:05","longitude":113.404655,"latitude":23.13115,"emergency":"2","describe":"正常","flag":"Y","username":"林雅烨"}]
+     * eventList : [{"id":"2c91808c750afa0b01751060ec1c0a7b","time":"2020-10-10 10:39:48","longitude":113.2113,"latitude":29.378439,"emergency":"2","describe":"节后安全生产巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"张建光","detailFlag":"report"},{"id":"2c91808c750afa0b0175104f4ef70a70","time":"2020-10-10 10:20:34","longitude":113.19868,"latitude":29.395935,"emergency":"2","describe":"节后安全生产巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"张建光","detailFlag":"report"},{"id":"2c91808c750afa0b01751046feed0a5c","time":"2020-10-10 10:11:29","longitude":113.17909,"latitude":29.387669,"emergency":"1","describe":"节后安全生产企业巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"易立","detailFlag":"report"},{"id":"2c91808c750afa0b0175103f12d70a46","time":"2020-10-10 10:02:50","longitude":113.18104,"latitude":29.386002,"emergency":"1","describe":"节后安全生产企业巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"易立","detailFlag":"report"},{"id":"2c91808c750afa0b0175103efcbe0a39","time":"2020-10-10 10:02:44","longitude":113.19321,"latitude":29.38581,"emergency":"2","describe":"无隐患","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"张建光","detailFlag":"report"},{"id":"2c91808c750afa0b017510254b5a0986","time":"2020-10-10 09:34:40","longitude":113.182594,"latitude":29.396433,"emergency":"1","describe":"节后安全生产企业巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"易立","detailFlag":"report"},{"id":"2c91808c750afa0b01751022116d0977","time":"2020-10-10 09:31:09","longitude":113.181435,"latitude":29.398863,"emergency":"1","describe":"节后安全生产企业巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"易立","detailFlag":"report"},{"id":"2c91808c750afa0b0175101fdd110966","time":"2020-10-10 09:28:45","longitude":113.18062,"latitude":29.399044,"emergency":"1","describe":"节后安全生产企业巡查","flag":"N","status":"PATROLLER","signFlag":"Y","designateFlag":"N","username":"易立","detailFlag":"report"}]
      * code : 1004
      * msg : 成功
      */
@@ -50,14 +51,18 @@ public class ReportRecordBean {
 
     public static class EventListBean {
         /**
-         * id : 4028fde6648c39c801648c687bcf0032
-         * time : 2018-07-12 10:53:35
-         * longitude : 113.40469
-         * latitude : 23.131157
+         * id : 2c91808c750afa0b01751060ec1c0a7b
+         * time : 2020-10-10 10:39:48
+         * longitude : 113.2113
+         * latitude : 29.378439
          * emergency : 2
-         * describe : 正常
+         * describe : 节后安全生产巡查
          * flag : N
-         * username : 林雅烨
+         * status : PATROLLER
+         * signFlag : Y
+         * designateFlag : N
+         * username : 张建光
+         * detailFlag : report
          */
 
         private String id;
@@ -67,16 +72,11 @@ public class ReportRecordBean {
         private String emergency;
         private String describe;
         private String flag;
-        private String username;
         private String status;
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
+        private String signFlag;
+        private String designateFlag;
+        private String username;
+        private String detailFlag;
 
         public String getId() {
             return id;
@@ -134,12 +134,44 @@ public class ReportRecordBean {
             this.flag = flag;
         }
 
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getSignFlag() {
+            return signFlag;
+        }
+
+        public void setSignFlag(String signFlag) {
+            this.signFlag = signFlag;
+        }
+
+        public String getDesignateFlag() {
+            return designateFlag;
+        }
+
+        public void setDesignateFlag(String designateFlag) {
+            this.designateFlag = designateFlag;
+        }
+
         public String getUsername() {
             return username;
         }
 
         public void setUsername(String username) {
             this.username = username;
+        }
+
+        public String getDetailFlag() {
+            return detailFlag;
+        }
+
+        public void setDetailFlag(String detailFlag) {
+            this.detailFlag = detailFlag;
         }
     }
 }

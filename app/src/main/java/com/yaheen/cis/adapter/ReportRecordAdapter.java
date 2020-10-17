@@ -52,6 +52,12 @@ public class ReportRecordAdapter extends BaseQuickAdapter<ReportRecordBean.Event
         } else {
             helper.setText(R.id.tv_duration, transferStr(R.string.record_emergency, R.string.detail_urgency_record));
         }
+
+        if(item.getSignFlag().equals("N")){
+            helper.setVisible(R.id.iv_read,true);
+        }else {
+            helper.setVisible(R.id.iv_read,false);
+        }
     }
 
     @SuppressLint("StringFormatInvalid")
