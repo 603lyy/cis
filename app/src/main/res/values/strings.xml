@@ -44,7 +44,7 @@
     <string name="turn_setting_more">敬请期待</string>
     <string name="turn_id_empty">门牌不存在</string>
 
-    <string name="detail_finish">结束</string>
+    <string name="detail_finish">结束巡查(打卡)</string>
     <string name="detail_sign">签到</string>
     <string name="detail_patrol_type">巡查类型：</string>
     <string name="detail_search_problem">发现问题：</string>
