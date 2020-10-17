@@ -43,7 +43,7 @@ android {
             versionCode 2005
             versionName "2.0.5"
             applicationId "com.yaheen.cis_jinfengqiao"
-            resValue "string", "app_name", "河口巡查"
+            resValue "string", "app_name", "金凤桥巡查"
             resValue "string", "flash_text_2", "数字金凤桥治理体系"
             resValue "string", "flash_text_bottom", ""
             resValue "string", "app_base_url", "https://jfq.zl.yafrm.com"
