@@ -49,7 +49,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private TextView tvLocation, tvType, tvDescribe, tvUrgency, tvUpload, tvUsername;
 
-    private TextView tvCommit, tvCommit2, tvCommit3, tvTrackCommit, tvTrackCommit2, tvTrackCommit3;
+    private TextView tvCommit, tvTrust;
 
     private TextView tvHOwner, tvHNumber, tvHAreaType, tvHInspectionPoint, tvHAdderss;
 
@@ -57,7 +57,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private TextView tvMUser, tvMType, tvMName, tvMTime, tvMOwner;
 
-    private LinearLayout llBack, llHouse, llParty, llMerchant, llBtnOne, llBtnTwo, llBtnThree, llBtnFour;
+    private LinearLayout llBack, llHouse, llParty, llMerchant, llBtnOne, llUpload, llCommit, llTrust;
 
     private ImageView ivUrgency;
 
@@ -137,46 +137,24 @@ public class HandleDetailActivity extends MapActivity {
         tvCommit = findViewById(R.id.tv_commit);
         tvUpload = findViewById(R.id.tv_upload);
         llBtnOne = findViewById(R.id.ll_btn_one);
-        llBtnTwo = findViewById(R.id.ll_btn_two);
-        tvCommit2 = findViewById(R.id.tv_commit2);
-        tvCommit3 = findViewById(R.id.tv_commit3);
+        llUpload = findViewById(R.id.ll_upload);
+        llTrust = findViewById(R.id.ll_trust);
+        llCommit = findViewById(R.id.ll_commit);
+        tvTrust = findViewById(R.id.tv_trust);
         tvUrgency = findViewById(R.id.tv_urgency);
         ivUrgency = findViewById(R.id.iv_urgency);
-        llBtnFour = findViewById(R.id.ll_btn_four);
         tvUsername = findViewById(R.id.tv_username);
         tvDescribe = findViewById(R.id.tv_describe);
-        llBtnThree = findViewById(R.id.ll_btn_three);
-        tvTrackCommit = findViewById(R.id.tv_track_commit);
-        tvTrackCommit2 = findViewById(R.id.tv_track_commit2);
-        tvTrackCommit3 = findViewById(R.id.tv_track_commit3);
         tvLocation = findViewById(R.id.tv_location_describe);
 
-        if (DefaultPrefsUtil.getRole().equals("LEADER") && !handle) {
-            llBtnOne.setVisibility(View.VISIBLE);
-            llBtnThree.setVisibility(View.GONE);
-            llBtnFour.setVisibility(View.GONE);
-            llBtnTwo.setVisibility(View.GONE);
-        } else if (DefaultPrefsUtil.getRole().equals("VILLAGELEADER") && showTrack) {
-            if (!handle) {
-                llBtnTwo.setVisibility(View.VISIBLE);
-                llBtnFour.setVisibility(View.GONE);
-            } else {
-                llBtnFour.setVisibility(View.VISIBLE);
-                llBtnTwo.setVisibility(View.GONE);
+        tvUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HandleDetailActivity.this, Handle2Activity.class);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
             }
-            llBtnThree.setVisibility(View.GONE);
-            llBtnOne.setVisibility(View.GONE);
-        } else if (DefaultPrefsUtil.getRole().equals("PATROLLER") && showTrack) {
-            llBtnThree.setVisibility(View.VISIBLE);
-            llBtnFour.setVisibility(View.GONE);
-            llBtnOne.setVisibility(View.GONE);
-            llBtnTwo.setVisibility(View.GONE);
-        } else {
-            llBtnOne.setVisibility(View.GONE);
-            llBtnTwo.setVisibility(View.GONE);
-            llBtnFour.setVisibility(View.GONE);
-            llBtnThree.setVisibility(View.GONE);
-        }
+        });
 
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,60 +165,11 @@ public class HandleDetailActivity extends MapActivity {
             }
         });
 
-        tvCommit2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
-                intent.putExtra("isTracking", false);
-                intent.putExtra("eventId", eventId);
-                startActivity(intent);
-            }
-        });
-
-        tvCommit3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
-                intent.putExtra("isTracking", false);
-                intent.putExtra("eventId", eventId);
-                startActivity(intent);
-            }
-        });
-
-        tvTrackCommit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
-                intent.putExtra("isTracking", true);
-                intent.putExtra("eventId", eventId);
-                startActivity(intent);
-            }
-        });
-
-        tvTrackCommit2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
-                intent.putExtra("isTracking", true);
-                intent.putExtra("eventId", eventId);
-                startActivity(intent);
-            }
-        });
-
-        tvTrackCommit3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HandleDetailActivity.this, HandleActivity.class);
-                intent.putExtra("isTracking", true);
-                intent.putExtra("eventId", eventId);
-                startActivity(intent);
-            }
-        });
-
-        tvUpload.setOnClickListener(new View.OnClickListener() {
+        tvTrust.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HandleDetailActivity.this, Handle2Activity.class);
+                intent.putExtra("isTracking", true);
                 intent.putExtra("eventId", eventId);
                 startActivity(intent);
             }
@@ -403,6 +332,7 @@ public class HandleDetailActivity extends MapActivity {
                 EventDetailBean data = gson.fromJson(result, EventDetailBean.class);
                 if (data != null && data.isResult()) {
                     setEventData(data.getTbEvent());
+                    checkBottomButton(data);
                     setRvFlowRecord(data);
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(HandleDetailActivity.this, LoginActivity.class));
@@ -427,8 +357,22 @@ public class HandleDetailActivity extends MapActivity {
         });
     }
 
-    private void setEventData(EventDetailBean.TbEventBean data) {
+    private void checkBottomButton(EventDetailBean data) {
 
+        if(data.getStamp().equals("YES")){
+            llUpload.setVisibility(View.VISIBLE);
+        }else {
+            llUpload.setVisibility(View.GONE);
+        }
+
+        if(data.getReporting().equals("YES")){
+            llTrust.setVisibility(View.VISIBLE);
+        }else {
+            llTrust.setVisibility(View.GONE);
+        }
+    }
+
+    private void setEventData(EventDetailBean.TbEventBean data) {
 //        getHouseData(data.getHouseId());
         tvType.setText(data.getType());
         imgUrlList = (data.getFileArr());
@@ -439,7 +383,6 @@ public class HandleDetailActivity extends MapActivity {
         problemAdapter.setDatas(data.getQuestionnaireArr());
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());
-
     }
 
     private void setRvFlowRecord(EventDetailBean data) {

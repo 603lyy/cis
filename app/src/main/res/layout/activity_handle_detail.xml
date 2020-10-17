@@ -14,6 +14,10 @@
 
         <include layout="@layout/item_title_bar" />
 
+        <include
+            android:id="@+id/ll_house_data_1"
+            layout="@layout/item_house_data" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -40,34 +44,15 @@
 
         </LinearLayout>
 
-        <include
-            android:id="@+id/ll_house_data_1"
-            layout="@layout/item_house_data" />
-
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <TextView
-                style="@style/Detail_Title_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/detail_patrol_type" />
-
-            <TextView
-                android:id="@+id/tv_type"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:textSize="16dp" />
+            android:paddingRight="20dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_type"
@@ -77,10 +62,24 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginBottom="1dp" />
 
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textSize="16dp" />
+
+            <TextView
+                style="@style/Detail_Title_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/detail_patrol_type" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -89,7 +88,8 @@
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingRight="20dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:visibility="gone">
 
             <TextView
                 style="@style/Detail_Title_TextView"
@@ -106,7 +106,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -115,7 +114,8 @@
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingRight="20dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:visibility="gone">
 
             <TextView
                 style="@style/Detail_Title_TextView"
@@ -142,18 +142,18 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
+            <ImageView
+                android:id="@+id/iv_urgency"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center" />
+
             <TextView
                 style="@style/Detail_Title_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/detail_urgency" />
-
-            <ImageView
-                android:id="@+id/iv_urgency"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/tv_urgency"
@@ -223,9 +223,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingRight="20dp"
@@ -241,134 +241,79 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_btn_two"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_commit"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/handle_commit" />
-
-            <TextView
-                android:id="@+id/tv_track_commit"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:layout_marginRight="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/handle_commit3" />
-
-            <TextView
-                android:id="@+id/tv_upload"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/detail_commit" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/ll_btn_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_commit2"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/handle_commit" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_btn_three"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_track_commit2"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/handle_commit3" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_btn_four"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
             android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tv_commit3"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <LinearLayout
+                android:id="@+id/ll_upload"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:layout_marginRight="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/handle_commit" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_track_commit3"
-                style="@style/Detail_Toolbar_TextView"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                <TextView
+                    android:id="@+id/tv_upload"
+                    style="@style/Detail_Toolbar_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_upload"
+                    android:gravity="center"
+                    android:minWidth="100dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/handle_commit2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_commit"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/btn_upload"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/handle_commit3" />
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_commit"
+                    style="@style/Detail_Toolbar_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_upload"
+                    android:gravity="center"
+                    android:minWidth="100dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/handle_commit" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_trust"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_trust"
+                    style="@style/Detail_Toolbar_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_upload"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/handle_commit3" />
+            </LinearLayout>
 
         </LinearLayout>
 
