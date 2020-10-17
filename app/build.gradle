@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'cis'
             keyPassword 'yaheen'
-            storeFile file('E:/project/cis/cis.jks')
+            storeFile file('F:/project/cis/cis.jks')
             storePassword 'yaheen'
         }
     }
@@ -37,6 +37,24 @@ android {
      * 5、其他所需要配置的百度Key，极光推送key，友盟key等等...
      * */
     productFlavors {
+
+        //金凤桥APP
+        jinfengqiao {
+            versionCode 2005
+            versionName "2.0.5"
+            applicationId "com.yaheen.cis_jinfengqiao"
+            resValue "string", "app_name", "河口巡查"
+            resValue "string", "flash_text_2", "数字金凤桥治理体系"
+            resValue "string", "flash_text_bottom", ""
+            resValue "string", "app_base_url", "https://jfq.zl.yafrm.com"
+            resValue "string", "app_house_url", "https://hekou.whn.yafrm.com"
+            resValue "string", "app_version_url", "https://jfq.zl.yafrm.com/static/version.json"
+            //manifest里面的值
+            manifestPlaceholders = [
+                    MTA_CHANNEL_VALUE: "my_app_2",
+                    FILE_PROVIDER    : "com.flavor.myapp.fileprovider",
+                    BAIDU_MAP_AK     : "iyX7FCFfpuMnMjiRoFqKwIlkoNGRCPeA"]
+        }
 
         //河口APP
         Hekou {
