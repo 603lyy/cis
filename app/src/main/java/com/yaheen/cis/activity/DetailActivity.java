@@ -85,7 +85,7 @@ import java.util.List;
 
 public class DetailActivity extends FetchActivity {
 
-    private TextView tvLocation, tvTime, tvCommit, tvFinish, tvFetch;
+    private TextView tvLocation, tvTime, tvCommit, tvFinish, tvFetch,tvSave;
 
     private TextView tvPTime, tvPAddress, tvPUsername, tvPPhone, tvPArea, tvPLeader, tvOwner;
 
@@ -101,7 +101,9 @@ public class DetailActivity extends FetchActivity {
 
     private LinearLayout llDetailTitle;
 
-    private LinearLayout llProblem, llDescribe, llUrgency, llImg, llMap, llWebView;
+    private LinearLayout llBack;
+
+    private LinearLayout llProblem, llDescribe, llUrgency, llImg, llMap, llWebView, llBottomBtn;
 
     private RefreshLayout refreshLayout;
 
@@ -122,6 +124,8 @@ public class DetailActivity extends FetchActivity {
     private String uploadImgUrl = "";
 
     private String reportUrl = "";
+
+    private String saveUrl = "";
 
     private String endUrl = "";
 
@@ -175,6 +179,7 @@ public class DetailActivity extends FetchActivity {
         llTitle = findViewById(R.id.ll_title_bar);
         tvCommit = findViewById(R.id.tv_commit);
         tvFinish = findViewById(R.id.tv_finish);
+        tvSave = findViewById(R.id.tv_save);
         showLoadingDialog();
 
         houseId = getIntent().getStringExtra("houseId");
@@ -221,6 +226,12 @@ public class DetailActivity extends FetchActivity {
                 sendReport();
             }
         });
+        tvSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveReport();
+            }
+        });
 
         tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,6 +263,7 @@ public class DetailActivity extends FetchActivity {
     private void initData() {
         questionUrl = getBaseUrl() + "/eapi/findQuestionaireByTypeId.do";
         uploadImgUrl = getBaseUrl() + "/eapi/uploadPhoto.do";
+        saveUrl = getBaseUrl() + "/eapi/eapiEventSave.do";
         reportUrl = getBaseUrl() + "/eapi/report.do";
         endUrl = getBaseUrl() + "/eapi/endPatrol.do";
     }
@@ -265,6 +277,7 @@ public class DetailActivity extends FetchActivity {
     }
 
     private void initView() {
+        llBack = findViewById(R.id.back);
         llImg = findViewById(R.id.ll_img);
         llMap = findViewById(R.id.ll_map);
         tvTime = findViewById(R.id.tv_time);
@@ -274,6 +287,7 @@ public class DetailActivity extends FetchActivity {
         llWebView = findViewById(R.id.ll_web_view);
         etDescribe = findViewById(R.id.et_describe);
         llDescribe = findViewById(R.id.ll_describe);
+        llBottomBtn = findViewById(R.id.ll_bottom_btn);
         tvLocation = findViewById(R.id.tv_location_describe);
 
         mWebView = findViewById(R.id.web_view);
@@ -294,6 +308,13 @@ public class DetailActivity extends FetchActivity {
             }
         });
 
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         if (!isSign) {
             CountDownTimerUtils.getCountDownTimer()
                     .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
@@ -306,7 +327,7 @@ public class DetailActivity extends FetchActivity {
                         }
                     }).start();
             llHouse.setVisibility(View.GONE);
-            llTitle.setVisibility(View.GONE);
+            llTitle.setVisibility(View.VISIBLE);
             llDetailTitle.setVisibility(View.VISIBLE);
         } else {
             llHouse.setVisibility(View.VISIBLE);
@@ -367,7 +388,7 @@ public class DetailActivity extends FetchActivity {
             cancelLoadingDialog();
             llImg.setVisibility(View.GONE);
             llMap.setVisibility(View.GONE);
-            tvCommit.setVisibility(View.GONE);
+            llBottomBtn.setVisibility(View.GONE);
             llProblem.setVisibility(View.GONE);
             llUrgency.setVisibility(View.GONE);
             llDescribe.setVisibility(View.GONE);
@@ -389,7 +410,7 @@ public class DetailActivity extends FetchActivity {
             llImg.setVisibility(View.VISIBLE);
             llMap.setVisibility(View.VISIBLE);
             llWebView.setVisibility(View.GONE);
-            tvCommit.setVisibility(View.VISIBLE);
+            llBottomBtn.setVisibility(View.VISIBLE);
             llUrgency.setVisibility(View.VISIBLE);
             llProblem.setVisibility(View.VISIBLE);
             llDescribe.setVisibility(View.VISIBLE);
@@ -703,10 +724,10 @@ public class DetailActivity extends FetchActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
-            showToast(R.string.detail_question_empty);
-            return;
-        }
+//        if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
+//            showToast(R.string.detail_question_empty);
+//            return;
+//        }
 
 //        if (TextUtils.isEmpty(etDescribe.getText())) {
 //            showToast(R.string.detail_describe_empty);
@@ -782,6 +803,113 @@ public class DetailActivity extends FetchActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 showToast(R.string.detail_commit_fail);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                cancelLoadingDialog();
+            }
+        });
+    }
+
+
+    private void saveReport() {
+
+        if (BDMapUtils.getLocation() == null) {
+            showToast(R.string.map_init_ing);
+            return;
+        }
+
+        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
+            showToast(R.string.map_init_fail);
+            cancelLoadingDialog();
+            return;
+        }
+
+//        if (TextUtils.isEmpty(problemAdapter.getQuestionStr())) {
+//            showToast(R.string.detail_question_empty);
+//            return;
+//        }
+
+//        if (TextUtils.isEmpty(etDescribe.getText())) {
+//            showToast(R.string.detail_describe_empty);
+//            return;
+//        }
+
+        if (TextUtils.isEmpty(urgencyAdapter.geUrgencyId())) {
+            showToast(R.string.detail_urgency_empty);
+            return;
+        }
+
+        showLoadingDialog();
+
+        String s = "";
+
+        for (int i = 0; i < uploadIdList.size(); i++) {
+            if (i == 0) {
+                s = uploadIdList.get(i);
+            } else {
+                s = s + "," + uploadIdList.get(i);
+            }
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("typeId", typeAdapter.getTypeId());
+        jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
+        jsonObject.addProperty("emergency", urgencyAdapter.geUrgencyId());
+        jsonObject.addProperty("describe", etDescribe.getText().toString());
+        jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
+        jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
+        jsonObject.addProperty("area", BDMapUtils.getLocation().getAddrStr());
+        jsonObject.addProperty("webFileids", s);
+        jsonObject.addProperty("houseId", houseId);
+
+//        if (isSign && !TextUtils.isEmpty(houseId)) {
+//            jsonObject.addProperty("scopeOfOperation", tvPArea.getText().toString());
+//            jsonObject.addProperty("householdName", tvPUsername.getText().toString());
+//            jsonObject.addProperty("inspectionSite", tvPAddress.getText().toString());
+//            jsonObject.addProperty("householdPhone", tvPPhone.getText().toString());
+//            jsonObject.addProperty("fireOfficer", tvPLeader.getText().toString());
+//            jsonObject.addProperty("businessHours", tvPTime.getText().toString());
+//        }
+
+        RequestParams requestParams = new RequestParams(saveUrl);
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
+        requestParams.addQueryStringParameter("data", gson.toJson(jsonObject));
+        requestParams.addQueryStringParameter("recordId", recordId);
+        if (isSign && !TextUtils.isEmpty(houseId)) {
+            requestParams.addParameter("point", true);
+        }
+
+
+        HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ReportBean data = gson.fromJson(result, ReportBean.class);
+                if (data != null && data.isResult()) {
+                    showToast(R.string.detail_save_success);
+                    if (isSign) {
+                        finish();
+                    } else {
+                        clearData();
+                    }
+                } else if (data != null && data.getCode() == 1002) {
+                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    finish();
+                } else {
+                    showToast(R.string.detail_save_fail);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.detail_save_fail);
             }
 
             @Override

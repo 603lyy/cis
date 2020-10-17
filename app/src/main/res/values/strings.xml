@@ -55,8 +55,11 @@
     <string name="detail_img_upload">图片上传：</string>
     <string name="detail_location">定位信息：</string>
     <string name="detail_commit">上报</string>
+    <string name="detail_save">保存</string>
     <string name="detail_commit_success">上报成功</string>
     <string name="detail_commit_fail">上报失败</string>
+    <string name="detail_save_success">保存成功</string>
+    <string name="detail_save_fail">保存失败</string>
     <string name="detail_urgency_record">记录</string>
     <string name="detail_urgency_normal">正常</string>
     <string name="detail_urgency_suspicious">可疑</string>
