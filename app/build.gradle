@@ -182,5 +182,6 @@ dependencies {
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
     //下拉刷新库
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-7'
-
+    //选择器UI库
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
 }
