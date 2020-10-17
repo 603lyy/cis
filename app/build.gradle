@@ -53,7 +53,7 @@ android {
             manifestPlaceholders = [
                     MTA_CHANNEL_VALUE: "my_app_2",
                     FILE_PROVIDER    : "com.flavor.myapp.fileprovider",
-                    BAIDU_MAP_AK     : "iyX7FCFfpuMnMjiRoFqKwIlkoNGRCPeA"]
+                    BAIDU_MAP_AK     : "e5lO71fXGsFUBMSwfhSgMHLhLSFDTMPR"]
         }
 
         //河口APP
