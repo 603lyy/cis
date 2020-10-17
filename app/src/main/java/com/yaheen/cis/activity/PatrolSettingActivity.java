@@ -207,12 +207,12 @@ public class PatrolSettingActivity extends BaseActivity {
             return;
         }
 
-        if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
-            showToast(R.string.setting_start_select);
-            cancelLoadingDialog();
-            isOpen = false;
-            return;
-        }
+//        if (settingAdapter.getTypeBean().getTypeArr().size() == 0) {
+//            showToast(R.string.setting_start_select);
+//            cancelLoadingDialog();
+//            isOpen = false;
+//            return;
+//        }
 
         String typeId = "";
         for (int i = 0; i < settingAdapter.getTypeBean().getTypeArr().size(); i++) {
