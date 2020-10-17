@@ -50,11 +50,11 @@ public class TurnActivity extends PermissionActivity {
 
     private String checkIdUrl = "";
 
-    private TextView tvPatrol, tvRecord, tvUpload, tvField,tvSetting,tvWeb,tvMore;
+    private TextView tvPatrol, tvRecord, tvUpload, tvField, tvSetting, tvWeb, tvMore;
 
     private ImageView ivTurn;
 
-    private LinearLayout  llExit;
+    private LinearLayout llExit;
 
     private String houseId;
 

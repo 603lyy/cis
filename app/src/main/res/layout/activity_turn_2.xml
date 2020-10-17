@@ -139,6 +139,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -218,17 +219,17 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_more"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/ic_turn_more"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_more"-->
+<!--                    android:layout_width="60dp"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:layout_marginRight="10dp"-->
+<!--                    android:background="@drawable/ic_turn_more"-->
+<!--                    android:gravity="center"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="18dp" />-->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -257,8 +258,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -299,35 +299,69 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:visibility="invisible">
+                android:orientation="vertical">
 
-                <!--<TextView-->
-                <!--android:id="@+id/tv_field_1"-->
-                <!--android:layout_width="60dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:background="@drawable/ic_turn_field"-->
-                <!--android:gravity="center"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:textSize="18dp" />-->
+                <TextView
+                    android:id="@+id/tv_more"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_turn_more"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
 
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:layout_marginTop="15dp"-->
-                <!--android:text="@string/turn_field_text"-->
-                <!--android:textSize="16dp" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/turn_setting_more"
+                    android:textSize="16dp" />
 
-                <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="2dp"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:background="@color/red_3"-->
-                <!--android:visibility="gone" />-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/red_3"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_turn_web"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/turn_setting_web"
+                    android:textSize="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/red_3"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
