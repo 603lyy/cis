@@ -6,16 +6,38 @@ public class EventDetailBean {
 
 
     /**
+     * detailsList : [{"eventId":"2c91808c750afa0b01751060ec1c0a7b","operationDate":"2020-10-10 10:39:48","flag":"N","operationUserId":"2c91808274dcc9050174dd3abd570043","designateSubUserId":"","imageUrls":[],"stauts":"","describe":"节后安全生产巡查","represent":"上报:张建光"}]
+     * stamp : YES
+     * reporting : YES
      * result : true
      * code : 1004
-     * tbEvent : {"type":"环境卫生","username":"1号巡查员","describe":"正常","emergency":"2","longitude":113.40693,"latitude":23.128172,"houseId":"2c9252926ad2ea6b016ad3d7c5040005","questionnaireArr":[{"questionnaire":"其他"}],"fileArr":[{"imageUrl":"http://47.106.72.58:10080/webFile/visit.do?id=2c9286176bd5e9eb016bd60655b90022&showName=afe7643850d44aa5a981eee4a27a5d4a.jpg"}]}
+     * tbEvent : {"type":"应急管理","username":"张建光","describe":"节后安全生产巡查","emergency":"2","longitude":113.2113,"latitude":29.378439,"questionnaireArr":[{"questionnaire":"自行描述"}],"fileArr":[{"imageUrl":"http://jfq.zl.yafrm.com/webFile/visit.do?id=2c91808c750afa0b01751060ea800a78&showName=f640d0de7eea48a182f2715cbf0892cf.jpg"},{"imageUrl":"http://jfq.zl.yafrm.com/webFile/visit.do?id=2c91808c750afa0b01751060eb910a79&showName=cc884453d22942cb877beee59265ccc9.jpg"}]}
      * msg : 查询成功
      */
 
+    private String stamp;
+    private String reporting;
     private boolean result;
     private int code;
     private TbEventBean tbEvent;
     private String msg;
+    private List<DetailsListBean> detailsList;
+
+    public String getStamp() {
+        return stamp;
+    }
+
+    public void setStamp(String stamp) {
+        this.stamp = stamp;
+    }
+
+    public String getReporting() {
+        return reporting;
+    }
+
+    public void setReporting(String reporting) {
+        this.reporting = reporting;
+    }
 
     public boolean isResult() {
         return result;
@@ -49,17 +71,24 @@ public class EventDetailBean {
         this.msg = msg;
     }
 
+    public List<DetailsListBean> getDetailsList() {
+        return detailsList;
+    }
+
+    public void setDetailsList(List<DetailsListBean> detailsList) {
+        this.detailsList = detailsList;
+    }
+
     public static class TbEventBean {
         /**
-         * type : 环境卫生
-         * username : 1号巡查员
-         * describe : 正常
+         * type : 应急管理
+         * username : 张建光
+         * describe : 节后安全生产巡查
          * emergency : 2
-         * longitude : 113.40693
-         * latitude : 23.128172
-         * houseId : 2c9252926ad2ea6b016ad3d7c5040005
-         * questionnaireArr : [{"questionnaire":"其他"}]
-         * fileArr : [{"imageUrl":"http://47.106.72.58:10080/webFile/visit.do?id=2c9286176bd5e9eb016bd60655b90022&showName=afe7643850d44aa5a981eee4a27a5d4a.jpg"}]
+         * longitude : 113.2113
+         * latitude : 29.378439
+         * questionnaireArr : [{"questionnaire":"自行描述"}]
+         * fileArr : [{"imageUrl":"http://jfq.zl.yafrm.com/webFile/visit.do?id=2c91808c750afa0b01751060ea800a78&showName=f640d0de7eea48a182f2715cbf0892cf.jpg"},{"imageUrl":"http://jfq.zl.yafrm.com/webFile/visit.do?id=2c91808c750afa0b01751060eb910a79&showName=cc884453d22942cb877beee59265ccc9.jpg"}]
          */
 
         private String type;
@@ -68,9 +97,81 @@ public class EventDetailBean {
         private String emergency;
         private double longitude;
         private double latitude;
-        private String houseId;
         private List<QuestionnaireArrBean> questionnaireArr;
         private List<FileArrBean> fileArr;
+
+        private String fireOfficer;
+        private String businessHours;
+        private String scopeOfOperation;
+        private String householdName;
+        private String householdPhone;
+        private String inspectionSite;
+        private String responsiblePerson;
+        private String houseId;
+
+        public String getFireOfficer() {
+            return fireOfficer;
+        }
+
+        public void setFireOfficer(String fireOfficer) {
+            this.fireOfficer = fireOfficer;
+        }
+
+        public String getBusinessHours() {
+            return businessHours;
+        }
+
+        public void setBusinessHours(String businessHours) {
+            this.businessHours = businessHours;
+        }
+
+        public String getScopeOfOperation() {
+            return scopeOfOperation;
+        }
+
+        public void setScopeOfOperation(String scopeOfOperation) {
+            this.scopeOfOperation = scopeOfOperation;
+        }
+
+        public String getHouseholdName() {
+            return householdName;
+        }
+
+        public void setHouseholdName(String householdName) {
+            this.householdName = householdName;
+        }
+
+        public String getHouseholdPhone() {
+            return householdPhone;
+        }
+
+        public void setHouseholdPhone(String householdPhone) {
+            this.householdPhone = householdPhone;
+        }
+
+        public String getInspectionSite() {
+            return inspectionSite;
+        }
+
+        public void setInspectionSite(String inspectionSite) {
+            this.inspectionSite = inspectionSite;
+        }
+
+        public String getResponsiblePerson() {
+            return responsiblePerson;
+        }
+
+        public void setResponsiblePerson(String responsiblePerson) {
+            this.responsiblePerson = responsiblePerson;
+        }
+
+        public String getHouseId() {
+            return houseId;
+        }
+
+        public void setHouseId(String houseId) {
+            this.houseId = houseId;
+        }
 
         public String getType() {
             return type;
@@ -120,14 +221,6 @@ public class EventDetailBean {
             this.latitude = latitude;
         }
 
-        public String getHouseId() {
-            return houseId;
-        }
-
-        public void setHouseId(String houseId) {
-            this.houseId = houseId;
-        }
-
         public List<QuestionnaireArrBean> getQuestionnaireArr() {
             return questionnaireArr;
         }
@@ -146,7 +239,7 @@ public class EventDetailBean {
 
         public static class QuestionnaireArrBean {
             /**
-             * questionnaire : 其他
+             * questionnaire : 自行描述
              */
 
             private String questionnaire;
@@ -162,7 +255,7 @@ public class EventDetailBean {
 
         public static class FileArrBean {
             /**
-             * imageUrl : http://47.106.72.58:10080/webFile/visit.do?id=2c9286176bd5e9eb016bd60655b90022&showName=afe7643850d44aa5a981eee4a27a5d4a.jpg
+             * imageUrl : http://jfq.zl.yafrm.com/webFile/visit.do?id=2c91808c750afa0b01751060ea800a78&showName=f640d0de7eea48a182f2715cbf0892cf.jpg
              */
 
             private String imageUrl;
@@ -174,6 +267,102 @@ public class EventDetailBean {
             public void setImageUrl(String imageUrl) {
                 this.imageUrl = imageUrl;
             }
+        }
+    }
+
+    public static class DetailsListBean {
+        /**
+         * eventId : 2c91808c750afa0b01751060ec1c0a7b
+         * operationDate : 2020-10-10 10:39:48
+         * flag : N
+         * operationUserId : 2c91808274dcc9050174dd3abd570043
+         * designateSubUserId :
+         * imageUrls : []
+         * stauts :
+         * describe : 节后安全生产巡查
+         * represent : 上报:张建光
+         */
+
+        private String eventId;
+        private String operationDate;
+        private String flag;
+        private String operationUserId;
+        private String designateSubUserId;
+        private String stauts;
+        private String describe;
+        private String represent;
+        private List<String> imageUrls;
+
+        public String getEventId() {
+            return eventId;
+        }
+
+        public void setEventId(String eventId) {
+            this.eventId = eventId;
+        }
+
+        public String getOperationDate() {
+            return operationDate;
+        }
+
+        public void setOperationDate(String operationDate) {
+            this.operationDate = operationDate;
+        }
+
+        public String getFlag() {
+            return flag;
+        }
+
+        public void setFlag(String flag) {
+            this.flag = flag;
+        }
+
+        public String getOperationUserId() {
+            return operationUserId;
+        }
+
+        public void setOperationUserId(String operationUserId) {
+            this.operationUserId = operationUserId;
+        }
+
+        public String getDesignateSubUserId() {
+            return designateSubUserId;
+        }
+
+        public void setDesignateSubUserId(String designateSubUserId) {
+            this.designateSubUserId = designateSubUserId;
+        }
+
+        public String getStauts() {
+            return stauts;
+        }
+
+        public void setStauts(String stauts) {
+            this.stauts = stauts;
+        }
+
+        public String getDescribe() {
+            return describe;
+        }
+
+        public void setDescribe(String describe) {
+            this.describe = describe;
+        }
+
+        public String getRepresent() {
+            return represent;
+        }
+
+        public void setRepresent(String represent) {
+            this.represent = represent;
+        }
+
+        public List<?> getImageUrls() {
+            return imageUrls;
+        }
+
+        public void setImageUrls(List<String> imageUrls) {
+            this.imageUrls = imageUrls;
         }
     }
 }

@@ -30,6 +30,7 @@ import com.yaheen.cis.activity.base.PermissionActivity;
 import com.yaheen.cis.adapter.CommonImgAdapter;
 import com.yaheen.cis.adapter.EventImgAdapter;
 import com.yaheen.cis.adapter.EventProblemAdapter;
+import com.yaheen.cis.adapter.FlowRecordAdapter;
 import com.yaheen.cis.entity.EventDetailBean;
 import com.yaheen.cis.entity.HouseBean;
 import com.yaheen.cis.entity.ReportBean;
@@ -64,13 +65,15 @@ public class HandleDetailActivity extends MapActivity {
 
     private BaiduMap mBaiduMap;
 
-    private RecyclerView rvProblem, rvImg, rvHouseImg;
+    private RecyclerView rvProblem, rvImg, rvHouseImg, rvFlowRecord;
 
     private EventProblemAdapter problemAdapter;
 
     private EventImgAdapter imgAdapter;
 
     private CommonImgAdapter commonImgAdapter;
+
+    private FlowRecordAdapter flowRecordAdapter;
 
     //图片链接列表
     private List<EventDetailBean.TbEventBean.FileArrBean> imgUrlList = new ArrayList<>();
@@ -116,6 +119,7 @@ public class HandleDetailActivity extends MapActivity {
         initHouseData();
         initHouseImgView();
         initMapView();
+        initFlowRecordList();
         initQuestion();
         initImgUpload();
     }
@@ -139,7 +143,6 @@ public class HandleDetailActivity extends MapActivity {
         tvUrgency = findViewById(R.id.tv_urgency);
         ivUrgency = findViewById(R.id.iv_urgency);
         llBtnFour = findViewById(R.id.ll_btn_four);
-        llHouse = findViewById(R.id.ll_house_data);
         tvUsername = findViewById(R.id.tv_username);
         tvDescribe = findViewById(R.id.tv_describe);
         llBtnThree = findViewById(R.id.ll_btn_three);
@@ -312,6 +315,35 @@ public class HandleDetailActivity extends MapActivity {
         });
     }
 
+    private void initFlowRecordList() {
+
+        rvFlowRecord = findViewById(R.id.rv_flow_record);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvFlowRecord.setLayoutManager(layoutManager);
+
+        flowRecordAdapter = new FlowRecordAdapter();
+        rvFlowRecord.setAdapter(flowRecordAdapter);
+
+        flowRecordAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+//                if (view instanceof ImageView) {
+//                    if (((ImageView) view).getDrawable() == null)
+//                        return;
+//                    ArrayList<String> urls = new ArrayList<String>();
+//                    urls.add(imgUrlList2.get(position));
+//                    new PhotoPagerUtils.Builder(HandleDetailActivity.this)
+//                            .setBigImageUrls(urls)
+//                            .setBigBitmap(((ImageView) view).getDrawable())
+//                            .setSavaImage(true)
+//                            .build();
+//                }
+            }
+        });
+    }
+
     private void initQuestion() {
         rvProblem = findViewById(R.id.rv_problem);
         rvProblem.setLayoutManager(new GridLayoutManager(this, 1));
@@ -362,6 +394,7 @@ public class HandleDetailActivity extends MapActivity {
     private void getEventInfo() {
         RequestParams requestParams = new RequestParams(eventUrl);
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
         requestParams.addQueryStringParameter("eventId", eventId);
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
@@ -370,6 +403,7 @@ public class HandleDetailActivity extends MapActivity {
                 EventDetailBean data = gson.fromJson(result, EventDetailBean.class);
                 if (data != null && data.isResult()) {
                     setEventData(data.getTbEvent());
+                    setRvFlowRecord(data);
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(HandleDetailActivity.this, LoginActivity.class));
                     finish();
@@ -395,7 +429,7 @@ public class HandleDetailActivity extends MapActivity {
 
     private void setEventData(EventDetailBean.TbEventBean data) {
 
-        getHouseData(data.getHouseId());
+//        getHouseData(data.getHouseId());
         tvType.setText(data.getType());
         imgUrlList = (data.getFileArr());
         tvDescribe.setText(data.getDescribe());
@@ -405,6 +439,12 @@ public class HandleDetailActivity extends MapActivity {
         problemAdapter.setDatas(data.getQuestionnaireArr());
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());
+
+    }
+
+    private void setRvFlowRecord(EventDetailBean data) {
+        flowRecordAdapter.setDatas(data.getDetailsList());
+        flowRecordAdapter.notifyDataSetChanged();
     }
 
     private void getHouseData(String houseId) {
