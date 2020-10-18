@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -75,6 +76,8 @@ public class HandleDetailActivity extends MapActivity {
 
     private FlowRecordAdapter flowRecordAdapter;
 
+    private View headerView = null;
+
     //图片链接列表
     private List<EventDetailBean.TbEventBean.FileArrBean> imgUrlList = new ArrayList<>();
 
@@ -102,7 +105,7 @@ public class HandleDetailActivity extends MapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_handle_detail);
+        setContentView(R.layout.activity_handle_detail2);
         setRightBtnVisible(true);
 
         showTrack = getIntent().getBooleanExtra("showTrack", false);
@@ -115,13 +118,13 @@ public class HandleDetailActivity extends MapActivity {
         }
 
         initData();
-        initView();
-        initHouseData();
-        initHouseImgView();
-        initMapView();
         initFlowRecordList();
-        initQuestion();
-        initImgUpload();
+        initView(getHeaderView());
+        initHouseData(getHeaderView());
+        initHouseImgView(getHeaderView());
+        initMapView(getHeaderView());
+        initQuestion(getHeaderView());
+        initImgUpload(getHeaderView());
     }
 
     private void initData() {
@@ -131,9 +134,9 @@ public class HandleDetailActivity extends MapActivity {
         mHhouseUrl = getHouseUrl() + "/separationSub/getRangeHouseNumberFromApplets.do";
     }
 
-    private void initView() {
+    private void initView(View view) {
         llBack = findViewById(R.id.back);
-        tvType = findViewById(R.id.tv_type);
+        tvType = view.findViewById(R.id.tv_type);
         tvCommit = findViewById(R.id.tv_commit);
         tvUpload = findViewById(R.id.tv_upload);
         llBtnOne = findViewById(R.id.ll_btn_one);
@@ -141,11 +144,11 @@ public class HandleDetailActivity extends MapActivity {
         llTrust = findViewById(R.id.ll_trust);
         llCommit = findViewById(R.id.ll_commit);
         tvTrust = findViewById(R.id.tv_trust);
-        tvUrgency = findViewById(R.id.tv_urgency);
-        ivUrgency = findViewById(R.id.iv_urgency);
-        tvUsername = findViewById(R.id.tv_username);
-        tvDescribe = findViewById(R.id.tv_describe);
-        tvLocation = findViewById(R.id.tv_location_describe);
+        tvUrgency = view.findViewById(R.id.tv_urgency);
+        ivUrgency = view.findViewById(R.id.iv_urgency);
+        tvUsername = view.findViewById(R.id.tv_username);
+        tvDescribe = view.findViewById(R.id.tv_describe);
+        tvLocation = view.findViewById(R.id.tv_location_describe);
 
         tvUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,32 +195,32 @@ public class HandleDetailActivity extends MapActivity {
         }
     }
 
-    private void initHouseData() {
-        tvHNumber = findViewById(R.id.tv_house_number);
-        tvHAdderss = findViewById(R.id.tv_house_address);
-        tvHOwner = findViewById(R.id.tv_patrol_username);
-        tvHAreaType = findViewById(R.id.tv_house_area_type);
-        tvHInspectionPoint = findViewById(R.id.tv_house_inspection_point);
+    private void initHouseData(View view) {
+        tvHNumber = view.findViewById(R.id.tv_house_number);
+        tvHAdderss = view.findViewById(R.id.tv_house_address);
+        tvHOwner = view.findViewById(R.id.tv_patrol_username);
+        tvHAreaType = view.findViewById(R.id.tv_house_area_type);
+        tvHInspectionPoint = view.findViewById(R.id.tv_house_inspection_point);
 
-        tvPTime = findViewById(R.id.tv_party_time);
-        tvPPhone = findViewById(R.id.tv_party_phone);
-        tvPUser = findViewById(R.id.tv_party_username);
-        tvPPosition = findViewById(R.id.tv_party_position);
-        tvPCommitment = findViewById(R.id.tv_party_commitment);
+        tvPTime = view.findViewById(R.id.tv_party_time);
+        tvPPhone = view.findViewById(R.id.tv_party_phone);
+        tvPUser = view.findViewById(R.id.tv_party_username);
+        tvPPosition = view.findViewById(R.id.tv_party_position);
+        tvPCommitment = view.findViewById(R.id.tv_party_commitment);
 
-        tvMName = findViewById(R.id.tv_merchant_name);
-        tvMType = findViewById(R.id.tv_merchant_type);
-        tvMUser = findViewById(R.id.tv_merchant_user);
-        tvMTime = findViewById(R.id.tv_merchant_time);
-        tvMOwner = findViewById(R.id.tv_merchant_owner);
+        tvMName = view.findViewById(R.id.tv_merchant_name);
+        tvMType = view.findViewById(R.id.tv_merchant_type);
+        tvMUser = view.findViewById(R.id.tv_merchant_user);
+        tvMTime = view.findViewById(R.id.tv_merchant_time);
+        tvMOwner = view.findViewById(R.id.tv_merchant_owner);
 
-        llHouse = findViewById(R.id.ll_house_data);
-        llParty = findViewById(R.id.ll_party_data);
-        llMerchant = findViewById(R.id.ll_merchant_data);
+        llHouse = view.findViewById(R.id.ll_house_data);
+        llParty = view.findViewById(R.id.ll_party_data);
+        llMerchant = view.findViewById(R.id.ll_merchant_data);
     }
 
-    private void initHouseImgView() {
-        rvHouseImg = findViewById(R.id.rv_house_img);
+    private void initHouseImgView(View view) {
+        rvHouseImg = view.findViewById(R.id.rv_house_img);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -273,15 +276,29 @@ public class HandleDetailActivity extends MapActivity {
         });
     }
 
-    private void initQuestion() {
-        rvProblem = findViewById(R.id.rv_problem);
+    private View getHeaderView() {
+        if (headerView == null) {
+            headerView = getLayoutInflater().inflate(R.layout.header_handle_detail,
+                    (ViewGroup) rvFlowRecord.getParent(), false);
+        }
+        return headerView;
+    }
+
+    private View getRooterView() {
+        View view = getLayoutInflater().inflate(R.layout.header_handle_detail,
+                (ViewGroup) rvFlowRecord.getParent(), false);
+        return view;
+    }
+
+    private void initQuestion(View view) {
+        rvProblem = view.findViewById(R.id.rv_problem);
         rvProblem.setLayoutManager(new GridLayoutManager(this, 1));
         problemAdapter = new EventProblemAdapter();
         rvProblem.setAdapter(problemAdapter);
     }
 
-    private void initImgUpload() {
-        rvImg = findViewById(R.id.rv_img);
+    private void initImgUpload(View view) {
+        rvImg = view.findViewById(R.id.rv_img);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -308,8 +325,8 @@ public class HandleDetailActivity extends MapActivity {
         });
     }
 
-    private void initMapView() {
-        mapView = findViewById(R.id.detail_map_view);
+    private void initMapView(View view) {
+        mapView = view.findViewById(R.id.detail_map_view);
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
@@ -359,15 +376,15 @@ public class HandleDetailActivity extends MapActivity {
 
     private void checkBottomButton(EventDetailBean data) {
 
-        if(data.getStamp().equals("YES")){
+        if (data.getStamp().equals("YES")) {
             llUpload.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             llUpload.setVisibility(View.GONE);
         }
 
-        if(data.getReporting().equals("YES")){
+        if (data.getReporting().equals("YES")) {
             llTrust.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             llTrust.setVisibility(View.GONE);
         }
     }
@@ -383,6 +400,7 @@ public class HandleDetailActivity extends MapActivity {
         problemAdapter.setDatas(data.getQuestionnaireArr());
         searchAddress(data.getLatitude(), data.getLongitude());
         setLocationData(data.getLatitude(), data.getLongitude());
+        flowRecordAdapter.setHeaderView(getHeaderView());
     }
 
     private void setRvFlowRecord(EventDetailBean data) {
