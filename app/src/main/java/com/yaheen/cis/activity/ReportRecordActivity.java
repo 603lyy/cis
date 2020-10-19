@@ -206,18 +206,26 @@ public class ReportRecordActivity extends PermissionActivity {
                         }
                     }
 
-                    if(recordAdapter.getData().get(position).getFlag().equals("N")){
+                    if (recordAdapter.getData().get(position).getFlag().equals("N")) {
                         intent.putExtra("showTrack", true);
                     }
                     startActivity(intent);
-                } else if (view.getId() == R.id.tv_state && DefaultPrefsUtil.getRole().equals("LEADER")) {
-                    if ((recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER"))) {
+                } else if (view.getId() == R.id.tv_state) {
+                    if (recordAdapter.getData().get(position).getFlag().equals("N") && !(recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER") && DefaultPrefsUtil.getRole().equals("VILLAGELEADER"))) {
                         showLoadingDialog();
                         Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
                         intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
                         startActivity(intent);
                     }
                 }
+//                else if (view.getId() == R.id.tv_state && DefaultPrefsUtil.getRole().equals("LEADER")) {
+//                    if ((recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER"))) {
+//                        showLoadingDialog();
+//                        Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
+//                        intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+//                        startActivity(intent);
+//                    }
+//                }
             }
         });
     }

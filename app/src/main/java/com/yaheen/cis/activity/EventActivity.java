@@ -199,6 +199,7 @@ public class EventActivity extends MapActivity {
         requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
         requestParams.addQueryStringParameter("recordId", recordId);
         requestParams.addQueryStringParameter("eventId", eventId);
+        requestParams.addQueryStringParameter("role", DefaultPrefsUtil.getRole());
 
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
