@@ -273,7 +273,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/ic_turn_record"
+                    android:background="@drawable/ic_turn_setting"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="18dp" />
