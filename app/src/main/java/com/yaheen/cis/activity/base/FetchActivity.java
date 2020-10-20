@@ -169,6 +169,7 @@ public class FetchActivity extends PermissionActivity {
                     getHouseId(result, houseId);
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(FetchActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     cancelLoadingDialog();

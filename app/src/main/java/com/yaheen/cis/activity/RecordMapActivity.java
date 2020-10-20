@@ -214,6 +214,7 @@ public class RecordMapActivity extends MapActivity {
                     addMarkers(data.getRecordObject(), data.getEventList(), data.getCoordinateList());
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(RecordMapActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }

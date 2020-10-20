@@ -353,6 +353,7 @@ public class HandleDetailActivity extends MapActivity {
                     setRvFlowRecord(data);
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(HandleDetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }
@@ -382,10 +383,16 @@ public class HandleDetailActivity extends MapActivity {
             llUpload.setVisibility(View.GONE);
         }
 
-        if (data.getReporting().equals("YES")) {
+        if (data.getReporting().equals("YES") && !DefaultPrefsUtil.getRole().equals("PATROLLER")) {
             llTrust.setVisibility(View.VISIBLE);
         } else {
             llTrust.setVisibility(View.GONE);
+        }
+
+        if(handle){
+            llCommit.setVisibility(View.GONE);
+        }else {
+            llCommit.setVisibility(View.VISIBLE);
         }
     }
 
@@ -659,6 +666,7 @@ public class HandleDetailActivity extends MapActivity {
 //                    finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(HandleDetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.detail_commit_fail);

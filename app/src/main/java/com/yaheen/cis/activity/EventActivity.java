@@ -218,6 +218,7 @@ public class EventActivity extends MapActivity {
                     getHouseData(data.getTbEvent().getHouseId());
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(EventActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }

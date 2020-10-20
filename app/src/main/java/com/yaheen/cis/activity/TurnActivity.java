@@ -194,6 +194,7 @@ public class TurnActivity extends PermissionActivity {
                     startActivity(intent);
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(TurnActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     cancelLoadingDialog();

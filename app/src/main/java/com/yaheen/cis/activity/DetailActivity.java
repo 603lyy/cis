@@ -597,6 +597,7 @@ public class DetailActivity extends FetchActivity {
                     clearData();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.get_question_empty);
@@ -659,6 +660,7 @@ public class DetailActivity extends FetchActivity {
 
                             if (data.getCode() == 1002) {
                                 startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                                 finish();
                             }
 
@@ -794,6 +796,7 @@ public class DetailActivity extends FetchActivity {
                     }
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.detail_commit_fail);
@@ -901,6 +904,7 @@ public class DetailActivity extends FetchActivity {
                     }
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.detail_save_fail);
@@ -958,6 +962,7 @@ public class DetailActivity extends FetchActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.detail_finish_fail);

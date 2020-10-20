@@ -194,16 +194,15 @@ public class ReportRecordActivity extends PermissionActivity {
                     Intent intent = new Intent(ReportRecordActivity.this, HandleDetailActivity.class);
                     intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
 
-                    if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER")) {
-                        //领导角色，网格长上报还没处理
-                        if (DefaultPrefsUtil.getRole().equals("LEADER")) {
+                    if (recordAdapter.getData().get(position).getFlag().equals("N")) {
+                        if (recordAdapter.getData().get(position).getDetailFlag().equals("eventSave")
+                                || (recordAdapter.getData().get(position).getDetailFlag().equals("report") && DefaultPrefsUtil.getRole().equals("VILLAGELEADER"))
+                                || recordAdapter.getData().get(position).getDetailFlag().equals("stamp") && recordAdapter.getData().get(position).getDesignateFlag().equals("Y")) {
+
                             intent.putExtra("handle", false);
                         }
-                    } else if (recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("PATROLLER")) {
-                        //网格长角色，巡查员上报还没处理或再上报
-                        if (DefaultPrefsUtil.getRole().equals("VILLAGELEADER")) {
-                            intent.putExtra("handle", false);
-                        }
+                    }else {
+                        intent.putExtra("handle", true);
                     }
 
                     if (recordAdapter.getData().get(position).getFlag().equals("N")) {
@@ -211,21 +210,17 @@ public class ReportRecordActivity extends PermissionActivity {
                     }
                     startActivity(intent);
                 } else if (view.getId() == R.id.tv_state) {
-                    if (recordAdapter.getData().get(position).getFlag().equals("N") && !(recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER") && DefaultPrefsUtil.getRole().equals("VILLAGELEADER"))) {
-                        showLoadingDialog();
-                        Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
-                        intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
-                        startActivity(intent);
+                    if (recordAdapter.getData().get(position).getFlag().equals("N")) {
+                        if (recordAdapter.getData().get(position).getDetailFlag().equals("eventSave")
+                                || (recordAdapter.getData().get(position).getDetailFlag().equals("report") && DefaultPrefsUtil.getRole().equals("VILLAGELEADER"))
+                                || recordAdapter.getData().get(position).getDetailFlag().equals("stamp") && recordAdapter.getData().get(position).getDesignateFlag().equals("Y")) {
+                            showLoadingDialog();
+                            Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
+                            intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
+                            startActivity(intent);
+                        }
                     }
                 }
-//                else if (view.getId() == R.id.tv_state && DefaultPrefsUtil.getRole().equals("LEADER")) {
-//                    if ((recordAdapter.getData().get(position).getFlag().equals("N") && recordAdapter.getData().get(position).getStatus().equals("VILLAGELEADER"))) {
-//                        showLoadingDialog();
-//                        Intent intent = new Intent(ReportRecordActivity.this, HandleActivity.class);
-//                        intent.putExtra("eventId", recordAdapter.getData().get(position).getId());
-//                        startActivity(intent);
-//                    }
-//                }
             }
         });
     }
@@ -248,6 +243,7 @@ public class ReportRecordActivity extends PermissionActivity {
 //                    }
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(ReportRecordActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }
@@ -305,6 +301,7 @@ public class ReportRecordActivity extends PermissionActivity {
                     recordAdapter.notifyDataSetChanged();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(ReportRecordActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }

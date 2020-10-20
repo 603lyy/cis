@@ -197,6 +197,7 @@ public class HandleActivity extends FetchActivity {
 
                             if (data.getCode() == 1002) {
                                 startActivity(new Intent(HandleActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                                 finish();
                             }
 
@@ -335,6 +336,7 @@ public class HandleActivity extends FetchActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(HandleActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }

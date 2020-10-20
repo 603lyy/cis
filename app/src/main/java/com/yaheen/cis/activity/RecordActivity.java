@@ -92,6 +92,7 @@ public class RecordActivity extends PermissionActivity {
                     recordAdapter.notifyDataSetChanged();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(RecordActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }

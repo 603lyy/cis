@@ -172,6 +172,7 @@ public class PatrolSettingActivity extends BaseActivity {
                     settingAdapter.notifyDataSetChanged();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(PatrolSettingActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }
@@ -248,6 +249,7 @@ public class PatrolSettingActivity extends BaseActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(PatrolSettingActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else if (data != null && data.getCode() == 1003) {
                     showToast(data.getMsg());

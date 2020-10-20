@@ -740,6 +740,7 @@ public class DetailPointActivity extends PermissionActivity {
                     clearData();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailPointActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.get_question_empty);
@@ -802,6 +803,7 @@ public class DetailPointActivity extends PermissionActivity {
 
                             if (data.getCode() == 1002) {
                                 startActivity(new Intent(DetailPointActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                                 finish();
                             }
 
@@ -933,6 +935,7 @@ public class DetailPointActivity extends PermissionActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(DetailPointActivity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.detail_commit_fail);

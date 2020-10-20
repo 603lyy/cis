@@ -223,6 +223,7 @@ public class Handle2Activity extends PermissionActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(Handle2Activity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.detail_commit_fail);
@@ -267,6 +268,7 @@ public class Handle2Activity extends PermissionActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(Handle2Activity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 } else {
                     showToast(R.string.handle_trust_fail);
@@ -313,6 +315,7 @@ public class Handle2Activity extends PermissionActivity {
                     finish();
                 } else if (data != null && data.getCode() == 1002) {
                     startActivity(new Intent(Handle2Activity.this, LoginActivity.class));
+                    showToast("该账号被别人登陆了");
                     finish();
                 }
             }
