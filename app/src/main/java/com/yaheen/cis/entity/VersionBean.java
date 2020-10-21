@@ -3,7 +3,7 @@ package com.yaheen.cis.entity;
 public class VersionBean {
 
     private int version;
-    private String url;
+    private String Nurl;
 
     public int getVersion() {
         return version;
@@ -14,10 +14,10 @@ public class VersionBean {
     }
 
     public String getUrl() {
-        return url;
+        return Nurl;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.Nurl = url;
     }
 }
