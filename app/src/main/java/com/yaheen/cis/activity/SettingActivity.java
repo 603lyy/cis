@@ -37,7 +37,7 @@ public class SettingActivity extends PermissionActivity {
         llCheckVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VersionUtils.checkVersion(getApplicationContext(), true);
+                VersionUtils.checkVersion(SettingActivity.this, true);
             }
         });
 
