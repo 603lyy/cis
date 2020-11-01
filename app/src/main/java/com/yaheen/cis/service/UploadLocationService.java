@@ -122,7 +122,7 @@ public class UploadLocationService extends Service {
         }
         timerUtils = CountDownTimerUtils.getCountDownTimer()
                 .setMillisInFuture(7 * 24 * 60 * 60 * 1000)
-                .setCountDownInterval(30 * 1000)
+                .setCountDownInterval(20 * 1000)
                 .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                     @Override
                     public void onTick(long pMillisUntilFinished) {
@@ -160,12 +160,12 @@ public class UploadLocationService extends Service {
         }
 
         curPoint = new LatLng(BDMapUtils.getLocation().getLatitude(), BDMapUtils.getLocation().getLongitude());
-        if (DistanceUtil.getDistance(lastPoint, curPoint) < 40) {
-            if (lastPoint == null) {
-                lastPoint = curPoint;
-            }
-            return;
-        }
+//        if (DistanceUtil.getDistance(lastPoint, curPoint) < 40) {
+//            if (lastPoint == null) {
+//                lastPoint = curPoint;
+//            }
+//            return;
+//        }
 
         lastPoint = curPoint;
 
