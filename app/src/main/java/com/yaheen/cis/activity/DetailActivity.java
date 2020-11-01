@@ -77,6 +77,7 @@ import com.yaheen.cis.widget.webview.WebJavaScriptProvider;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -782,7 +783,7 @@ public class DetailActivity extends FetchActivity {
             requestParams.addParameter("point", true);
         }
 
-
+        sendRealLocation();
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -819,7 +820,6 @@ public class DetailActivity extends FetchActivity {
             }
         });
     }
-
 
     private void saveReport() {
 
@@ -890,7 +890,7 @@ public class DetailActivity extends FetchActivity {
             requestParams.addParameter("point", true);
         }
 
-
+        sendRealLocation();
         HttpUtils.getPostHttp(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -982,6 +982,51 @@ public class DetailActivity extends FetchActivity {
             @Override
             public void onFinished() {
                 cancelLoadingDialog();
+            }
+        });
+    }
+
+    private void sendRealLocation() {
+
+        if (BDMapUtils.getLocation() == null) {
+            BDMapUtils.startLocation();
+            return;
+        }
+
+        if (BDMapUtils.getLocation().getLatitude() < 1 || BDMapUtils.getLocation().getLongitude() < 1) {
+            return;
+        }
+
+        RequestParams requestParams = new RequestParams("https://jfq.zl.yafrm.com/eapi/realtimeUpload.do");
+        requestParams.addQueryStringParameter("longitude",
+                BDMapUtils.getLocation().getLongitude() + "");
+        requestParams.addQueryStringParameter("latitude",
+                BDMapUtils.getLocation().getLatitude() + "");
+        requestParams.addQueryStringParameter("token", DefaultPrefsUtil.getToken());
+        requestParams.addQueryStringParameter("recordId", recordId);
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        requestParams.setConnectTimeout(60 * 1000);
+        requestParams.setReadTimeout(60 * 1000);
+
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }

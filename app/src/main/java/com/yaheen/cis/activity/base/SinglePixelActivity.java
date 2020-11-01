@@ -41,7 +41,7 @@ public class SinglePixelActivity extends Activity {
         if (!FreeHandSystemUtil.isAppAlive(this, "com.yaheen.cis")) {
             Intent intentAlive = new Intent(this, ScreenActivity.class);
             intentAlive.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intentAlive);
+//            startActivity(intentAlive);
             Log.i(TAG, "SinglePixelActivity---->APP被干掉了，我要重启它");
         }
         super.onDestroy();
