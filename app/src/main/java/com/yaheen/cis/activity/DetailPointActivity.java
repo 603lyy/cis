@@ -901,8 +901,8 @@ public class DetailPointActivity extends PermissionActivity {
         jsonObject.addProperty("questionaireIds", problemAdapter.getQuestionStr());
         jsonObject.addProperty("emergency", urgencyAdapter.geUrgencyId());
         jsonObject.addProperty("describe", etDescribe.getText().toString());
-        jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude());
-        jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude());
+        jsonObject.addProperty("longitude", BDMapUtils.getLocation().getLongitude()+"");
+        jsonObject.addProperty("latitude", BDMapUtils.getLocation().getLatitude()+"");
         jsonObject.addProperty("area", BDMapUtils.getLocation().getAddrStr());
         jsonObject.addProperty("webFileids", s);
         jsonObject.addProperty("houseId", houseId);
