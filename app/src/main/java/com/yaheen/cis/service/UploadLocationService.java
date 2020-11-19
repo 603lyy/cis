@@ -1,6 +1,7 @@
 package com.yaheen.cis.service;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -54,6 +56,8 @@ public class UploadLocationService extends Service {
 
     private CountDownTimerUtils timerUtils;
 
+    private Notification nf;
+
     //记录开始巡查的时间戳,方便计算时间
     private long startTime;
 
@@ -91,8 +95,40 @@ public class UploadLocationService extends Service {
         }
         startCountTime();
         setNotification();
+        //edit by xszyou on 20201105
+        new FlashNFThread().start();
+
         super.onCreate();
     }
+
+    private class FlashNFThread extends Thread{
+        @Override
+        public void run() {
+            while (true){
+                try{
+                    Thread.sleep(5000);
+                    mHander.sendEmptyMessage(1);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private Handler mHander = new Handler(){
+        public void handlerMessage(android.os.Message msg){
+            mBuilder.setVibrate(new long[]{0, 0, 0, 0})
+                    .setContentText("坐标:"+BDMapUtils.getLocation().getLongitude()+","+BDMapUtils.getLocation().getLatitude())
+                    .setSmallIcon(R.mipmap.ic_logo)
+                    .setContentTitle("实时定位")
+                    .setAutoCancel(true)
+                    .setOngoing(true);
+            nf =  mBuilder.build();
+            mNotificationManager.notify(NOTIFY_ID, nf);
+        }
+    };
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -223,12 +259,13 @@ public class UploadLocationService extends Service {
 
         mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL);
         mBuilder.setVibrate(new long[]{0, 0, 0, 0})
-                .setContentText("定时上传当前坐标")
+                .setContentText("坐标:"+BDMapUtils.getLocation().getLongitude()+","+BDMapUtils.getLocation().getLatitude())
                 .setSmallIcon(R.mipmap.ic_logo)
                 .setContentTitle("实时定位")
                 .setAutoCancel(true)
                 .setOngoing(true);
-        mNotificationManager.notify(NOTIFY_ID, mBuilder.build());
+        nf =  mBuilder.build();
+        mNotificationManager.notify(NOTIFY_ID, nf);
     }
 
     private void connect() {
